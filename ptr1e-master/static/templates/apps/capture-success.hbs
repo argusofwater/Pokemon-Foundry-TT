@@ -1,0 +1,23 @@
+<form class="capture-success" autocomplete="off" onsubmit="event.preventDefault();">
+    <p class="instructions">{{localize "PTU.Dialog.CaptureSuccess.Hint"}}</p>
+    <div class="form-group">
+        <label for="trainer">{{localize "PTU.Dialog.CaptureSuccess.Trainer.Name"}}</label>
+        <div class="form-fields">
+            <select name="trainer">
+                {{#each trainers as |trainer|}}
+                    <option value="{{trainer._id}}" data-style="url(/{{trainer.img}})">{{trainer.name}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <p class="notes">{{localize "PTU.Dialog.CaptureSuccess.Trainer.Hint"}}</p>
+    </div>
+    <div class="form-group">
+        <label for="party-choice">{{localize "PTU.Dialog.CaptureSuccess.PartyChoice.Name"}}</label>
+        <div class="form-fields">
+            <select name="location">
+                {{selectOptions locationOptions selected=location localize=true}}
+            </select>
+        </div>
+        <p class="notes">{{localize "PTU.Dialog.CaptureSuccess.PartyChoice.Hint"}}</p>
+    </div>
+</form>

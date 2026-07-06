@@ -1,0 +1,42 @@
+name: PTR 1e CD
+
+on:
+  workflow_run:
+    workflows: ["PTR 1e CI"]
+    types:
+        - completed
+    branches:
+        - master
+  push:
+    branches: [master]
+
+jobs:
+    release:
+        if: github.event.repository.fork == false
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Update Manifest
+              run: |
+                  SYSTEM_VERSION=$(grep -oP '(?<="version": ")[^"]+' system.json | tr -d '\n')
+                  perl -pi -E "s|latest/download/system\\.zip|download/$SYSTEM_VERSION/system.zip|" system.json
+                  echo "systemVersion=$SYSTEM_VERSION" >> $GITHUB_ENV
+
+            - name: Zip Files
+              working-directory: .
+              run: |
+                  7z a -tzip system.zip ./*
+
+            - name: Create Version Release
+              id: create_version_release
+              uses: ncipollo/release-action@v1
+              with:
+                  name: ${{ env.systemVersion }}
+                  allowUpdates: false
+                  draft: false
+                  prerelease: false
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  artifacts: "./system.json,./system.zip"
+                  tag: ${{ env.systemVersion }}

@@ -1,0 +1,11 @@
+<form class="contested-check" autocomplete="off" onsubmit="event.preventDefault();">
+    {{!-- <p class="instructions">{{localize "PTU.Dialog.ContestedCheck.Hint"}}</p> --}}
+    <div class="form-group">
+        <label for="skill">{{localize "PTU.Dialog.ContestedCheck.Skill"}}</label>
+        <div class="form-fields">
+            <select name="skill">
+                {{selectOptions skillOptions selected=skill localize=true}}
+            </select>
+        </div>
+    </div>
+</form>
