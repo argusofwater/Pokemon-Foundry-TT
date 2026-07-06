@@ -19,12 +19,21 @@ This file records private-table changes made on top of Pokémon Tabletop Reunite
 - Removed automatic update and download links aimed at the upstream public release, preventing this private fork from being silently overwritten.
 - Pointed project and changelog metadata at the private development repository.
 
+### Rules redesign
+
+- Added a rules-first audit identifying the main sources of player burden: stacked numeric layers, three evasions, Damage Base resolution, injury thresholds, parallel advancement, frequency bookkeeping, action exceptions, and sheet density.
+- Added the first player-lite rules draft.
+- Proposed two defenses, Guard and Reflex, instead of three evasions.
+- Proposed a Main, Move, and Reaction action economy.
+- Proposed compressed damage tiers, simplified combat stages, four recharge categories, and Wounds as the default durability consequence.
+- Defined a first vertical-slice playtest using three mechanically distinct Pokémon.
+
 ### Next targets
 
-- Settings cleanup and a dedicated Commander Build configuration panel.
-- Actor-sheet usability pass for trainers and Pokémon.
-- Combat workflow audit covering targeting, accuracy, damage, conditions, and capture.
-- Optional refined-rules profile kept separate from baseline PTR behavior.
+- Decide the final attack and defense math.
+- Decide whether Pokémon progression remains 1–100 or is compressed.
+- Build a Foundry rules-profile setting so baseline PTR and player-lite rules can coexist during testing.
+- Prototype Guard, Reflex, Wounds, and the new action economy.
 - Determine whether the unregistered `dex-entries` and `maneuvers` databases are obsolete, internal-only, or should be exposed.
 - Add semantic validation for species and move data.
 - Smoke-test the packaged system in Foundry V13.
