@@ -1,4 +1,5 @@
 @import url("./commander-combat.css");
+@import url("./commander-team.css");
 
 :root {
   --commander-friendship-pink: #ff6fae;
