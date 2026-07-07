@@ -1,0 +1,36 @@
+<header class="commander-header">
+  <img class="commander-portrait" src="{{actor.img}}" alt="{{actor.name}}" data-edit="img">
+
+  <div class="commander-identity">
+    <p class="commander-kicker">Commander Build</p>
+    <h1>{{actor.name}}</h1>
+    {{#if (eq sheetType "trainer")}}
+      <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.role}} • {{system.identity.specialty}}</p>
+    {{else}}
+      <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.speciesName}} • {{system.identity.trainingPath}}</p>
+      <div>
+        {{#each system.identity.types as |type|}}<span class="commander-type-chip">{{type}}</span>{{/each}}
+      </div>
+    {{/if}}
+  </div>
+
+  <div>
+    <div class="commander-header-stats">
+      <div class="commander-orb">
+        <strong>{{system.health.hp.value}} / {{system.health.hp.max}}</strong>
+        <span>HP</span>
+      </div>
+      <div class="commander-orb">
+        <strong>{{system.health.wounds}}</strong>
+        <span>Wounds</span>
+      </div>
+      <div class="commander-orb">
+        <strong>{{system.health.fatigue}}</strong>
+        <span>Fatigue</span>
+      </div>
+    </div>
+    <button type="button" class="commander-mode-toggle" data-action="toggleMode">
+      {{#if (eq mode "play")}}Edit Mode{{else}}Play Mode{{/if}}
+    </button>
+  </div>
+</header>
