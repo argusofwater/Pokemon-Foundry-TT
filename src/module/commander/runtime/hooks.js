@@ -1,28 +1,34 @@
 import { CommanderDamageService } from "./damage-service.js";
 
-export function registerCommanderRuntimeHooks() {
-  Hooks.on("renderChatMessageHTML", (message, html) => {
-    const root = html instanceof HTMLElement ? html : html?.[0];
-    if (!root) return;
+function bindCommanderChatControls(html) {
+  const root = html instanceof HTMLElement ? html : html?.[0];
+  if (!root || root.dataset.commanderControlsBound === "true") return;
+  root.dataset.commanderControlsBound = "true";
 
-    root.querySelectorAll("[data-commander-apply-damage]").forEach(button => {
-      button.addEventListener("click", async event => {
-        event.preventDefault();
-        const actor = await fromUuid(button.dataset.actorUuid);
-        const amount = Number(button.dataset.amount ?? 0);
-        await CommanderDamageService.applyDamage(actor, amount);
-        ui.notifications.info(`Applied ${amount} damage to ${actor?.name ?? "target"}.`);
-      });
-    });
-
-    root.querySelectorAll("[data-commander-apply-healing]").forEach(button => {
-      button.addEventListener("click", async event => {
-        event.preventDefault();
-        const actor = await fromUuid(button.dataset.actorUuid);
-        const amount = Number(button.dataset.amount ?? 0);
-        await CommanderDamageService.applyHealing(actor, amount);
-        ui.notifications.info(`Restored ${amount} HP to ${actor?.name ?? "target"}.`);
-      });
+  root.querySelectorAll("[data-commander-apply-damage]").forEach(button => {
+    button.addEventListener("click", async event => {
+      event.preventDefault();
+      const actor = await fromUuid(button.dataset.actorUuid);
+      const amount = Number(button.dataset.amount ?? 0);
+      if (!actor) return ui.notifications.warn("The target actor could not be resolved.");
+      await CommanderDamageService.applyDamage(actor, amount);
+      ui.notifications.info(`Applied ${amount} damage to ${actor.name}.`);
     });
   });
+
+  root.querySelectorAll("[data-commander-apply-healing]").forEach(button => {
+    button.addEventListener("click", async event => {
+      event.preventDefault();
+      const actor = await fromUuid(button.dataset.actorUuid);
+      const amount = Number(button.dataset.amount ?? 0);
+      if (!actor) return ui.notifications.warn("The target actor could not be resolved.");
+      await CommanderDamageService.applyHealing(actor, amount);
+      ui.notifications.info(`Restored ${amount} HP to ${actor.name}.`);
+    });
+  });
+}
+
+export function registerCommanderRuntimeHooks() {
+  Hooks.on("renderChatMessageHTML", (message, html) => bindCommanderChatControls(html));
+  Hooks.on("renderChatMessage", (message, html) => bindCommanderChatControls(html));
 }
