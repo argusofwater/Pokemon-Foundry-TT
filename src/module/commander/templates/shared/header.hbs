@@ -7,6 +7,20 @@
     {{#if (eq sheetType "trainer")}}
       <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.role}} • {{system.identity.specialty}}</p>
     {{else}}
+      <div class="commander-friendship-header {{#if friendship.canUseResolve}}resolve-ready{{/if}}" title="Friendship {{friendship.value}} / 255 • {{friendship.tier}}">
+        <div class="commander-friendship-hearts" role="meter" aria-label="Friendship" aria-valuemin="0" aria-valuemax="255" aria-valuenow="{{friendship.value}}">
+          {{#each friendshipHearts as |heart|}}
+            <span class="commander-heart" aria-hidden="true">
+              <span class="commander-heart-fill" style="width: {{heart.percent}}%;"></span>
+              <span class="commander-heart-outline">♥</span>
+            </span>
+          {{/each}}
+        </div>
+        <div class="commander-friendship-caption">
+          <span>{{friendship.tier}}</span>
+          <span>{{friendship.value}} / 255</span>
+        </div>
+      </div>
       <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.speciesName}} • {{system.identity.trainingPath}}</p>
       <div>
         {{#each system.identity.types as |type|}}<span class="commander-type-chip">{{type}}</span>{{/each}}
