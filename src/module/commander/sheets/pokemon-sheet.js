@@ -42,7 +42,8 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     navigation: { template: "systems/ptu/src/module/commander/templates/shared/navigation.hbs" },
     overview: { template: "systems/ptu/src/module/commander/templates/pokemon/overview.hbs" },
     moves: { template: "systems/ptu/src/module/commander/templates/pokemon/moves.hbs" },
-    bond: { template: "systems/ptu/src/module/commander/templates/pokemon/bond.hbs" }
+    bond: { template: "systems/ptu/src/module/commander/templates/pokemon/bond.hbs" },
+    effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" }
   };
 
   async _prepareContext(options) {
