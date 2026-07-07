@@ -51,13 +51,22 @@ This file records private-table changes made on top of Pokémon Tabletop Reunite
 - Limited normal Pokémon progression to five Talents by level 100, with evolution and milestones able to grant suitable extras.
 - Standardized ability suppression, copying, stealing, replacement, Entry triggers, and form-change profiles.
 - Added Foundry automation requirements for triggers, Reactions, recharge, temporary ability states, Talent prerequisites, and form application.
+- Locked one Held Item per Pokémon, five Held Item categories, flat typed-item bonuses, automatic consumable berries, and item suppression.
+- Added trainer equipment slots for Outfit, Accessory, Tool, Weapon, and Pack.
+- Replaced detailed encumbrance with Bulk and bundled small consumables.
+- Made standard TMs reusable, Technical Records consumable, and learned moves part of the archived move library.
+- Limited Tutor Modifications to one per move by default.
+- Required player consent for evolution and added trade-evolution substitutes.
+- Added crafting disciplines, rarity bands, availability controls, inventory locations, and automatic item tracking requirements.
+- Added a Foundry compendium architecture plan for rules, moves, abilities, Talents, items, TMs, species, effects, and encounter tools.
 - Deferred character-sheet design until the rules stabilize.
 
 ### Next targets
 
-- Design held items, trainer equipment, TMs, tutors, evolution items, and item economy.
+- Design encounter structure, wild Pokémon behavior, bosses, and trainer battles.
+- Define the first Commander Build compendium schemas and stable entry slugs.
 - Build a Foundry rules-profile setting so baseline PTR and player-lite rules can coexist during testing.
-- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, capture roll, recovery, environment controller, and ability state handling.
+- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, capture roll, recovery, environment controller, ability state handling, and inventory automation.
 - Determine whether the unregistered `dex-entries` and `maneuvers` databases are obsolete, internal-only, or should be exposed.
-- Add semantic validation for species and move data.
+- Add semantic validation for species, moves, abilities, items, and Talent data.
 - Smoke-test the packaged system in Foundry V13.
