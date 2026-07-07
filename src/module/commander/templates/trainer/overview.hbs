@@ -1,0 +1,58 @@
+{{#if (eq activeTab "overview")}}
+<section class="commander-content">
+  <div class="commander-grid">
+    <article class="commander-card accent-red">
+      <h2>Trainer Profile</h2>
+      <div class="commander-stat-row"><span>Background</span><span class="commander-value">{{system.identity.background}}</span></div>
+      <div class="commander-stat-row"><span>Role</span><span class="commander-value">{{system.identity.role}}</span></div>
+      <div class="commander-stat-row"><span>Specialty</span><span class="commander-value">{{system.identity.specialty}}</span></div>
+      <div class="commander-stat-row"><span>Level</span><span class="commander-value">{{system.identity.level}}</span></div>
+    </article>
+
+    <article class="commander-card">
+      <h2>Attributes</h2>
+      {{#each system.attributes as |attribute key|}}
+        <div class="commander-stat-row">
+          <span>{{capitalize key}}</span>
+          <span class="commander-value" title="Base {{attribute.base}} + Bonus {{attribute.bonus}}">{{attribute.final}}</span>
+        </div>
+      {{/each}}
+    </article>
+
+    <article class="commander-card">
+      <h2>Defenses</h2>
+      <div class="commander-stat-row"><span>Physical</span><span class="commander-value">{{system.defenses.physical.final}}</span></div>
+      <div class="commander-stat-row"><span>Special</span><span class="commander-value">{{system.defenses.special.final}}</span></div>
+      <div class="commander-stat-row"><span>Reflex</span><span class="commander-value">{{system.defenses.reflex.final}}</span></div>
+    </article>
+
+    <article class="commander-card wide accent-red">
+      <h2>Command Center</h2>
+      <div class="commander-action-pips">
+        <span class="commander-pip {{#if system.actions.mainUsed}}used{{else}}ready{{/if}}">Trainer Main</span>
+        <span class="commander-pip {{#if system.actions.moveUsed}}used{{else}}ready{{/if}}">Trainer Move</span>
+        <span class="commander-pip {{#if system.actions.reactionUsed}}used{{else}}ready{{/if}}">Reaction</span>
+        <span class="commander-pip ready">Pair Main {{system.actions.sharedMainRemaining}} / 2</span>
+        <span class="commander-pip ready">Pair Move {{system.actions.sharedMoveRemaining}} / 2</span>
+      </div>
+
+      {{#if activeCompanion}}
+        <div class="commander-resource-row">
+          <span><strong>{{activeCompanion.name}}</strong><br>{{activeCompanion.system.identity.speciesName}}</span>
+          <span class="commander-value">{{activeCompanion.system.health.hp.value}} / {{activeCompanion.system.health.hp.max}} HP</span>
+        </div>
+      {{else}}
+        <div class="commander-empty-state">Drop a creature actor onto the Team tab, then set it active.</div>
+      {{/if}}
+    </article>
+
+    <article class="commander-card">
+      <h2>Resources</h2>
+      <div class="commander-resource-row"><span>Supply Units</span><span class="commander-value">{{system.inventory.supplyUnits}}</span></div>
+      <div class="commander-resource-row"><span>Medical Supplies</span><span class="commander-value">{{system.inventory.medicalSupplies}}</span></div>
+      <div class="commander-resource-row"><span>Downtime Actions</span><span class="commander-value">{{system.campaign.downtimeActions}}</span></div>
+      <div class="commander-resource-row"><span>Bulk Capacity</span><span class="commander-value">{{system.inventory.bulkCapacity}}</span></div>
+    </article>
+  </div>
+</section>
+{{/if}}
