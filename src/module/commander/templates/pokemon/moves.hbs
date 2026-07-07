@@ -27,7 +27,7 @@
               </div>
               <div class="commander-row-actions">
                 <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}">Roll</button>
-                <button type="button" data-action="openEmbedded" data-item-id="{{move.id}}">Open</button>
+                <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
               </div>
             {{else}}
               <span class="commander-empty-slot">Drop a move here</span>
@@ -48,7 +48,7 @@
                 <strong>{{move.name}}</strong>
                 <span>{{move.system.type}} · {{move.system.category}}</span>
               </div>
-              <button type="button" data-action="openEmbedded" data-item-id="{{move.id}}">Open</button>
+              <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
             {{else}}
               <span class="commander-empty-slot">Reserve slot</span>
             {{/if}}
@@ -72,7 +72,7 @@
             <span>{{move.system.recharge.category}}</span>
             <div class="commander-row-actions">
               <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}">Roll</button>
-              <button type="button" data-action="openEmbedded" data-item-id="{{move.id}}">Open</button>
+              <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
               {{#if ../editable}}<button type="button" data-action="deleteEmbedded" data-item-id="{{move.id}}">Delete</button>{{/if}}
             </div>
           </div>
