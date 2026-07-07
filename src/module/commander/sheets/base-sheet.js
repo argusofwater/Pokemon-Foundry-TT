@@ -54,9 +54,10 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     const app = resolveApplication(target, this);
     const tab = target.dataset.tab;
     if (!tab) return;
-    app._commanderActiveTab = tab;
     const parts = app.constructor.PARTS ?? {};
-    return parts[tab] ? app.render({ parts: ["navigation", tab] }) : app.render();
+    if (!parts[tab]) return ui.notifications.info(`${target.textContent?.trim() || tab} is not implemented yet.`);
+    app._commanderActiveTab = tab;
+    return app.render({ parts: ["navigation", tab] });
   }
 
   static async spendAction(event, target) {
