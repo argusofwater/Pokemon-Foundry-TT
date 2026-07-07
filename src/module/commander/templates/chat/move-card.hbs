@@ -11,5 +11,24 @@
     <div><dt>Power</dt><dd>{{power}}</dd></div>
     <div><dt>Recharge</dt><dd>{{recharge}}</dd></div>
   </dl>
+  {{#if targets.length}}
+    <section class="commander-target-results">
+      <h4>Targets</h4>
+      {{#each targets as |result|}}
+        <article class="commander-target-result">
+          <strong>{{result.target.name}}</strong>
+          {{#if result.hit}}
+            <span>{{result.total}} damage</span>
+            <button type="button" data-commander-apply-damage data-actor-uuid="{{result.target.uuid}}" data-amount="{{result.total}}">Apply</button>
+            <button type="button" data-commander-apply-damage data-actor-uuid="{{result.target.uuid}}" data-amount="{{floor (divide result.total 2)}}">Half</button>
+          {{else}}
+            <span>Miss</span>
+          {{/if}}
+        </article>
+      {{/each}}
+    </section>
+  {{else}}
+    <p>No token targets selected.</p>
+  {{/if}}
   {{#if system.description}}<p>{{system.description}}</p>{{/if}}
 </section>
