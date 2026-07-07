@@ -167,6 +167,11 @@ function buildDocument(entry, formIndex) {
   return null;
 }
 
+function runtimePack(entry, document) {
+  if (entry.type === "talents") return document.type === "pokeedge" ? "poke-edges" : "feats";
+  return entry.config.pack;
+}
+
 function makeReport(validation, packs) {
   const recordsByType = {};
   for (const entry of validation.records) recordsByType[entry.type] = (recordsByType[entry.type] ?? 0) + 1;
@@ -208,7 +213,8 @@ export async function buildCompendiums() {
     if (["forms", "evolutions", "compatibility"].includes(entry.type)) continue;
     const document = buildDocument(entry, formIndex);
     if (!document) continue;
-    const pack = entry.config.pack;
+    const pack = runtimePack(entry, document);
+    if (!pack) continue;
     packs[pack] ??= [];
     packs[pack].push(document);
   }
