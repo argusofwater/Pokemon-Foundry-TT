@@ -2,26 +2,12 @@ name: Fetch pre-ZA compendium snapshots
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - codex/foundry-base-pass
-    paths:
-      - ".github/workflows/fetch-compendium-snapshots.yml"
-      - "tools/commander/fetch-raw-snapshots.mjs"
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - codex/foundry-v13-baseline
-    paths:
-      - ".github/workflows/fetch-compendium-snapshots.yml"
-      - "tools/commander/fetch-raw-snapshots.mjs"
 
 permissions:
   contents: write
 
 jobs:
   fetch:
-    if: github.head_ref == 'codex/foundry-base-pass' || github.ref_name == 'codex/foundry-base-pass'
     runs-on: ubuntu-latest
     steps:
       - name: Check out branch
@@ -32,7 +18,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Fetch frozen raw snapshots
         env:
