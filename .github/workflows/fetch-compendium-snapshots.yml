@@ -1,0 +1,44 @@
+name: Fetch pre-ZA compendium snapshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/foundry-base-pass
+    paths:
+      - ".github/workflows/fetch-compendium-snapshots.yml"
+      - "tools/commander/fetch-raw-snapshots.mjs"
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/foundry-base-pass
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch frozen raw snapshots
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node tools/commander/fetch-raw-snapshots.mjs
+
+      - name: Commit snapshot files
+        run: |
+          git config user.name "Commander Build Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add temp/compendium-raw
+          if git diff --cached --quiet; then
+            echo "No snapshot changes to commit."
+            exit 0
+          fi
+          git commit -m "Store frozen pre-ZA compendium source snapshots"
+          git push origin HEAD:codex/foundry-base-pass
