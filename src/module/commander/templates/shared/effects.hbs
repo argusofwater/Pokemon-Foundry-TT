@@ -1,0 +1,33 @@
+<section class="commander-tab commander-effects-tab {{#unless (eq activeTab 'effects')}}hidden{{/unless}}" data-tab="effects">
+  <header class="commander-section-header">
+    <div>
+      <h2>Conditions</h2>
+      <p>Toggle common battle conditions and review active effects.</p>
+    </div>
+  </header>
+
+  <div class="commander-condition-grid">
+    {{#each commanderConditions as |condition|}}
+      <button type="button" class="commander-condition-button {{#if condition.active}}active{{/if}}" data-action="toggleCondition" data-condition-id="{{condition.id}}" {{#unless ../editable}}disabled{{/unless}}>
+        <img src="{{condition.icon}}" alt="">
+        <span>{{condition.label}}</span>
+      </button>
+    {{/each}}
+  </div>
+
+  <h3>Active Effects</h3>
+  {{#if effects.length}}
+    <div class="commander-effect-list">
+      {{#each effects as |effect|}}
+        <article class="commander-effect-row">
+          <img src="{{effect.img}}" alt="{{effect.name}}">
+          <strong>{{effect.name}}</strong>
+          <span>{{#if effect.disabled}}Disabled{{else}}Active{{/if}}</span>
+          {{#if ../editable}}<button type="button" data-action="removeEffect" data-effect-id="{{effect.id}}">Remove</button>{{/if}}
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <p>No active effects.</p>
+  {{/if}}
+</section>
