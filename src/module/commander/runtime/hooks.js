@@ -1,4 +1,5 @@
 import { CommanderDamageService } from "./damage-service.js";
+import { registerCommanderCombatIntegration } from "./combat-integration.js";
 
 function bindCommanderChatControls(html) {
   const root = html instanceof HTMLElement ? html : html?.[0];
@@ -12,7 +13,7 @@ function bindCommanderChatControls(html) {
       const amount = Number(button.dataset.amount ?? 0);
       if (!actor) return ui.notifications.warn("The target actor could not be resolved.");
       await CommanderDamageService.applyDamage(actor, amount);
-      ui.notifications.info(`Applied ${amount} damage to ${actor.name}.`);
+      ui.notifications.info("Applied " + amount + " damage to " + actor.name + ".");
     });
   });
 
@@ -23,12 +24,13 @@ function bindCommanderChatControls(html) {
       const amount = Number(button.dataset.amount ?? 0);
       if (!actor) return ui.notifications.warn("The target actor could not be resolved.");
       await CommanderDamageService.applyHealing(actor, amount);
-      ui.notifications.info(`Restored ${amount} HP to ${actor.name}.`);
+      ui.notifications.info("Restored " + amount + " HP to " + actor.name + ".");
     });
   });
 }
 
 export function registerCommanderRuntimeHooks() {
+  registerCommanderCombatIntegration();
   Hooks.on("renderChatMessageHTML", (message, html) => bindCommanderChatControls(html));
   Hooks.on("renderChatMessage", (message, html) => bindCommanderChatControls(html));
 }
