@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-07-07T15:38:25.552Z",
+  "cutoff": "gen9-sv-dlc-pre-za",
+  "moveRecords": 898,
+  "excludedRecords": 55,
+  "byCategory": {
+    "special": 256,
+    "physical": 372,
+    "status": 270
+  },
+  "byRecharge": {
+    "expedition": 35,
+    "at-will": 614,
+    "cooldown": 175,
+    "encounter": 74
+  },
+  "byAutomation": {
+    "manual": 635,
+    "structured": 263
+  },
+  "byType": {
+    "electric": 48,
+    "grass": 58,
+    "rock": 25,
+    "poison": 35,
+    "flying": 30,
+    "normal": 197,
+    "psychic": 78,
+    "fighting": 56,
+    "fairy": 31,
+    "steel": 37,
+    "water": 48,
+    "fire": 46,
+    "dark": 51,
+    "ghost": 33,
+    "bug": 33,
+    "ice": 32,
+    "ground": 30,
+    "dragon": 30
+  },
+  "structuredEffects": 300,
+  "reviewRequired": 898,
+  "retainedPastMoves": 188,
+  "retainedZMoves": 35,
+  "exclusions": {
+    "max-or-gmax": 52,
+    "cap-content": 3
+  },
+  "notes": [
+    "Gen 9 Power, accuracy, category, type, and canonical source metadata are preserved.",
+    "Max, G-Max, and CAP-only moves are excluded.",
+    "Past and Z-Moves are retained as tagged archival content.",
+    "Ranges, defenses, recharge, and complex effects remain reviewable Commander translations."
+  ]
+}
