@@ -12,6 +12,7 @@
     "compendium:build": "node tools/commander/build-compendiums.mjs",
     "compendium:import-legacy": "node tools/commander/import-legacy-export.mjs",
     "compendium:translate-species": "node tools/commander/translate-species.mjs",
+    "compendium:translate-abilities": "node tools/commander/translate-abilities.mjs",
     "compendium:test-conversions": "node tools/commander/conversion-rules.test.mjs"
   },
   "devDependencies": {
