@@ -1,5 +1,6 @@
 import { CommanderActionTracker } from "../runtime/action-tracker.js";
 import { CommanderRollService } from "../runtime/roll-service.js";
+import { CommanderConditionService } from "../runtime/condition-service.js";
 
 function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
@@ -18,7 +19,9 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
       resetActions: CommanderActorSheetBase.resetActions,
       rollCheck: CommanderActorSheetBase.rollCheck,
       openDocument: CommanderActorSheetBase.openDocument,
-      deleteEmbedded: CommanderActorSheetBase.deleteEmbedded
+      deleteEmbedded: CommanderActorSheetBase.deleteEmbedded,
+      toggleCondition: CommanderActorSheetBase.toggleCondition,
+      removeEffect: CommanderActorSheetBase.removeEffect
     }
   };
 
@@ -35,6 +38,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
       mode: system.ui?.mode ?? "play",
       activeTab: this._commanderActiveTab ?? system.ui?.activeTab ?? "overview",
       effects: this.actor.effects?.contents ?? [],
+      commanderConditions: CommanderConditionService.getSheetContext(this.actor),
       actions: system.actions ?? {},
       isGM: Boolean(game.user?.isGM)
     };
@@ -105,6 +109,21 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
       content: `<p>Remove <strong>${item.name}</strong> from ${app.actor.name}?</p>`
     });
     if (confirmed) return item.delete();
+  }
+
+  static async toggleCondition(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
+    await CommanderConditionService.toggle(app.actor, target.dataset.conditionId);
+    return app.render({ parts: ["effects"] });
+  }
+
+  static async removeEffect(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
+    const effect = app.actor.effects.get(target.dataset.effectId);
+    if (effect) await effect.delete();
+    return app.render({ parts: ["effects"] });
   }
 
   async _onDrop(event) {
