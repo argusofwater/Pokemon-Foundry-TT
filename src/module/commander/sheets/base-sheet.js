@@ -1,3 +1,6 @@
+import { CommanderActionTracker } from "../runtime/action-tracker.js";
+import { CommanderRollService } from "../runtime/roll-service.js";
+
 export class CommanderActorSheetBase extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["ptu", "commander-sheet"],
@@ -5,9 +8,17 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     form: { closeOnSubmit: false, submitOnChange: true },
     actions: {
       toggleMode: CommanderActorSheetBase.toggleMode,
-      changeTab: CommanderActorSheetBase.changeTab
+      changeTab: CommanderActorSheetBase.changeTab,
+      spendAction: CommanderActorSheetBase.spendAction,
+      restoreAction: CommanderActorSheetBase.restoreAction,
+      resetActions: CommanderActorSheetBase.resetActions,
+      rollCheck: CommanderActorSheetBase.rollCheck,
+      openEmbedded: CommanderActorSheetBase.openEmbedded,
+      deleteEmbedded: CommanderActorSheetBase.deleteEmbedded
     }
   };
+
+  _commanderActiveTab = null;
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
@@ -18,22 +29,78 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
       system,
       editable: this.isEditable,
       mode: system.ui?.mode ?? "play",
-      activeTab: system.ui?.activeTab ?? "overview",
-      effects: this.actor.effects?.contents ?? []
+      activeTab: this._commanderActiveTab ?? system.ui?.activeTab ?? "overview",
+      effects: this.actor.effects?.contents ?? [],
+      actions: system.actions ?? {}
     };
   }
 
+  static getApplication(target, fallback) {
+    return target.closest(".application")?.application ?? fallback;
+  }
+
   static async toggleMode(event, target) {
-    const app = target.closest(".application")?.application ?? this;
+    const app = this.getApplication(target, this);
     const current = app.actor.system.ui?.mode ?? "play";
     await app.actor.update({ "system.ui.mode": current === "play" ? "edit" : "play" });
   }
 
   static async changeTab(event, target) {
-    const app = target.closest(".application")?.application ?? this;
+    const app = this.getApplication(target, this);
     const tab = target.dataset.tab;
     if (!tab) return;
-    await app.actor.update({ "system.ui.activeTab": tab });
+    app._commanderActiveTab = tab;
+    return app.render({ parts: ["navigation", tab] });
+  }
+
+  static async spendAction(event, target) {
+    const app = this.getApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
+    return CommanderActionTracker.spend(app.actor, target.dataset.actionType);
+  }
+
+  static async restoreAction(event, target) {
+    const app = this.getApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
+    return CommanderActionTracker.restore(app.actor, target.dataset.actionType);
+  }
+
+  static async resetActions(event, target) {
+    const app = this.getApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
+    return CommanderActionTracker.reset(app.actor);
+  }
+
+  static async rollCheck(event, target) {
+    const app = this.getApplication(target, this);
+    const modifier = Number(target.dataset.modifier ?? 0);
+    const targetNumber = target.dataset.target ? Number(target.dataset.target) : null;
+    return CommanderRollService.rollCheck({
+      actor: app.actor,
+      label: target.dataset.label ?? "Commander Check",
+      modifier,
+      target: targetNumber,
+      favored: target.dataset.favored === "true",
+      hindered: target.dataset.hindered === "true"
+    });
+  }
+
+  static async openEmbedded(event, target) {
+    const app = this.getApplication(target, this);
+    const item = app.actor.items.get(target.dataset.itemId);
+    return item?.sheet?.render(true);
+  }
+
+  static async deleteEmbedded(event, target) {
+    const app = this.getApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
+    const item = app.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `Delete ${item.name}?` },
+      content: `<p>Remove <strong>${item.name}</strong> from ${app.actor.name}?</p>`
+    });
+    if (confirmed) return item.delete();
   }
 
   async _onDrop(event) {
