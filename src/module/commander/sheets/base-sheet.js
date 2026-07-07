@@ -48,6 +48,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     const app = resolveApplication(target, this);
     const current = app.actor.system.ui?.mode ?? "play";
     await app.actor.update({ "system.ui.mode": current === "play" ? "edit" : "play" });
+    return app.render();
   }
 
   static async changeTab(event, target) {
@@ -82,21 +83,12 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     const app = resolveApplication(target, this);
     const modifier = Number(target.dataset.modifier ?? 0);
     const targetNumber = target.dataset.target ? Number(target.dataset.target) : null;
-    return CommanderRollService.rollCheck({
-      actor: app.actor,
-      label: target.dataset.label ?? "Commander Check",
-      modifier,
-      target: targetNumber,
-      favored: target.dataset.favored === "true",
-      hindered: target.dataset.hindered === "true"
-    });
+    return CommanderRollService.rollCheck({ actor: app.actor, label: target.dataset.label ?? "Commander Check", modifier, target: targetNumber, favored: target.dataset.favored === "true", hindered: target.dataset.hindered === "true" });
   }
 
   static async openDocument(event, target) {
     const app = resolveApplication(target, this);
-    const document = target.dataset.uuid
-      ? await fromUuid(target.dataset.uuid)
-      : app.actor.items.get(target.dataset.itemId);
+    const document = target.dataset.uuid ? await fromUuid(target.dataset.uuid) : app.actor.items.get(target.dataset.itemId);
     return document?.sheet?.render(true);
   }
 
@@ -105,10 +97,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
     const item = app.actor.items.get(target.dataset.itemId);
     if (!item) return;
-    const confirmed = await foundry.applications.api.DialogV2.confirm({
-      window: { title: `Delete ${item.name}?` },
-      content: `<p>Remove <strong>${item.name}</strong> from ${app.actor.name}?</p>`
-    });
+    const confirmed = await foundry.applications.api.DialogV2.confirm({ window: { title: `Delete ${item.name}?` }, content: `<p>Remove <strong>${item.name}</strong> from ${app.actor.name}?</p>` });
     if (confirmed) return item.delete();
   }
 
