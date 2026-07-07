@@ -32,7 +32,7 @@ export class CommanderDamageService {
     return { ...preview, total: roll.total, roll };
   }
 
-  static async applyDamage(actor, amount) {
+  static async applyDamage(actor, amount, { damageType = "", sourceType = "attack", conditionId = "" } = {}) {
     if (!actor?.isOwner && !game.user?.isGM) return ui.notifications.warn(`You cannot modify ${actor?.name ?? "that actor"}.`);
     const hp = actor.system.health?.hp;
     if (!hp) return ui.notifications.warn(`${actor.name} has no Commander HP resource.`);
@@ -55,10 +55,17 @@ export class CommanderDamageService {
       }
     }
 
-    return actor.update({
+    const result = await actor.update({
       "system.health.temporaryHp": temporary - absorbed,
       "system.health.hp.value": nextHp
     });
+
+    if (remaining > 0 && sourceType !== "condition") {
+      const { CommanderConditionMechanics } = await import("./condition-mechanics.js");
+      await CommanderConditionMechanics.onDamageTaken(actor, { damageType, amount: remaining, conditionId });
+    }
+
+    return result;
   }
 
   static async applyHealing(actor, amount) {
