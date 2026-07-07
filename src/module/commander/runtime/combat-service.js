@@ -1,5 +1,6 @@
 import { CommanderActionTracker } from "./action-tracker.js";
 import { CommanderFriendshipService } from "./friendship-service.js";
+import { CommanderConditionMechanics } from "./condition-mechanics.js";
 
 export class CommanderCombatService {
   static isCommanderActor(actor) {
@@ -12,8 +13,10 @@ export class CommanderCombatService {
 
   static getSpeed(actor) {
     if (!actor) return 0;
-    if (actor.type === "pokemon") return Number(actor.system.stats?.speed?.final ?? 0);
-    return Number(actor.system.attributes?.agility?.final ?? actor.system.defenses?.reflex?.final ?? 0);
+    const base = actor.type === "pokemon"
+      ? Number(actor.system.stats?.speed?.final ?? 0)
+      : Number(actor.system.attributes?.agility?.final ?? actor.system.defenses?.reflex?.final ?? 0);
+    return Math.floor(base * CommanderConditionMechanics.getSpeedMultiplier(actor));
   }
 
   static getInitiativeModifier(actor) {
@@ -108,17 +111,33 @@ export class CommanderCombatService {
   static async onTurnStart(combatant) {
     const actor = combatant?.actor;
     if (!this.isCommanderActor(actor)) return false;
-
     if (await this.isLinkedActivePokemon(actor)) return true;
 
     await CommanderActionTracker.reset(actor);
     await this.tickRecharge(actor);
+    await CommanderConditionMechanics.onTurnStart(actor);
 
     if (actor.type === "character") {
       const activePokemon = await this.getActivePokemonActor(actor);
-      if (activePokemon) await this.tickRecharge(activePokemon);
+      if (activePokemon) {
+        await this.tickRecharge(activePokemon);
+        await CommanderConditionMechanics.onTurnStart(activePokemon);
+      }
     }
 
+    return true;
+  }
+
+  static async onTurnEnd(combatant) {
+    const actor = combatant?.actor;
+    if (!this.isCommanderActor(actor)) return false;
+    if (await this.isLinkedActivePokemon(actor)) return true;
+
+    await CommanderConditionMechanics.onTurnEnd(actor);
+    if (actor.type === "character") {
+      const activePokemon = await this.getActivePokemonActor(actor);
+      if (activePokemon) await CommanderConditionMechanics.onTurnEnd(activePokemon);
+    }
     return true;
   }
 
