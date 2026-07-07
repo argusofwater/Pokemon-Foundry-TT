@@ -30,6 +30,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
       ...super.DEFAULT_OPTIONS.actions,
       rollMove: CommanderPokemonSheet.rollMove,
       spendMoveAction: CommanderPokemonSheet.spendMoveAction,
+      clearMoveSlot: CommanderPokemonSheet.clearMoveSlot,
       setFriendship: CommanderPokemonSheet.setFriendship,
       adjustFriendship: CommanderPokemonSheet.adjustFriendship,
       resetFriendshipResolve: CommanderPokemonSheet.resetFriendshipResolve
@@ -87,6 +88,84 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     return resolved.slice(0, size);
   }
 
+  _onDragStart(event) {
+    const element = event.currentTarget;
+    const itemUuid = element?.dataset?.itemUuid;
+    if (!itemUuid) return super._onDragStart?.(event);
+
+    const slot = element.closest("[data-move-zone][data-move-index]");
+    const dragData = slot
+      ? {
+          type: "CommanderMoveSlot",
+          actorUuid: this.actor.uuid,
+          itemUuid,
+          zone: slot.dataset.moveZone,
+          index: Number(slot.dataset.moveIndex)
+        }
+      : { type: "Item", uuid: itemUuid };
+
+    event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+  }
+
+  async _onDrop(event) {
+    const slot = event.target.closest?.("[data-move-zone][data-move-index]");
+    if (!slot) return super._onDrop(event);
+    if (!this.isEditable) return ui.notifications.warn("You do not have permission to edit this Pokémon.");
+
+    const data = TextEditor.getDragEventData(event);
+    const targetZone = slot.dataset.moveZone;
+    const targetIndex = Number(slot.dataset.moveIndex);
+
+    if (data.type === "CommanderMoveSlot") {
+      if (data.actorUuid !== this.actor.uuid) return ui.notifications.warn("Move slots can only be rearranged on the same Pokémon.");
+      return this.#moveSlot(data.zone, Number(data.index), targetZone, targetIndex);
+    }
+
+    if (data.type !== "Item") return ui.notifications.warn("Only Move Items can be assigned to move slots.");
+    const dropped = await Item.implementation.fromDropData(data);
+    if (!dropped || dropped.type !== "move") return ui.notifications.warn("Only Move Items can be assigned to move slots.");
+
+    const item = dropped.parent?.uuid === this.actor.uuid
+      ? dropped
+      : await Item.create(dropped.toObject(), { parent: this.actor });
+    if (!item) return;
+
+    return this.#assignMoveToSlot(item.uuid, targetZone, targetIndex);
+  }
+
+  async #moveSlot(sourceZone, sourceIndex, targetZone, targetIndex) {
+    const equipped = [...(this.actor.system.loadout?.equippedMoveUuids ?? ["", "", "", ""])];
+    const reserve = [...(this.actor.system.loadout?.reserveMoveUuids ?? ["", ""])];
+    const source = sourceZone === "active" ? equipped : reserve;
+    const target = targetZone === "active" ? equipped : reserve;
+    const sourceUuid = source[sourceIndex] ?? "";
+    const targetUuid = target[targetIndex] ?? "";
+    source[sourceIndex] = targetUuid;
+    target[targetIndex] = sourceUuid;
+    await this.actor.update({
+      "system.loadout.equippedMoveUuids": equipped,
+      "system.loadout.reserveMoveUuids": reserve
+    });
+    return this.render({ parts: ["moves"] });
+  }
+
+  async #assignMoveToSlot(uuid, zone, index) {
+    const equipped = [...(this.actor.system.loadout?.equippedMoveUuids ?? ["", "", "", ""])];
+    const reserve = [...(this.actor.system.loadout?.reserveMoveUuids ?? ["", ""])];
+
+    for (let i = 0; i < equipped.length; i += 1) if (equipped[i] === uuid) equipped[i] = "";
+    for (let i = 0; i < reserve.length; i += 1) if (reserve[i] === uuid) reserve[i] = "";
+
+    const target = zone === "active" ? equipped : reserve;
+    target[index] = uuid;
+
+    await this.actor.update({
+      "system.loadout.equippedMoveUuids": equipped,
+      "system.loadout.reserveMoveUuids": reserve
+    });
+    return this.render({ parts: ["moves"] });
+  }
+
   static async rollMove(event, target) {
     const app = resolveApplication(target, this);
     const item = await fromUuid(target.dataset.itemUuid);
@@ -97,7 +176,19 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
   static async spendMoveAction(event, target) {
     const app = resolveApplication(target, this);
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
-    return CommanderActionTracker.spend(app.actor, "main");
+    return CommanderActionTracker.spend(app.actor, "move");
+  }
+
+  static async clearMoveSlot(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
+    const zone = target.dataset.moveZone;
+    const index = Number(target.dataset.moveIndex);
+    const path = zone === "active" ? "system.loadout.equippedMoveUuids" : "system.loadout.reserveMoveUuids";
+    const slots = [...(foundry.utils.getProperty(app.actor, path) ?? [])];
+    slots[index] = "";
+    await app.actor.update({ [path]: slots });
+    return app.render({ parts: ["moves"] });
   }
 
   static async setFriendship(event, target) {
