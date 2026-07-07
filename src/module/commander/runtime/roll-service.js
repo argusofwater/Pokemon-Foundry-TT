@@ -26,7 +26,7 @@ export class CommanderRollService {
     const previews = [];
     for (const target of targets) {
       const damage = await CommanderDamageService.rollDamage({ attacker: actor, target, move: item, rollTotal: total });
-      previews.push({ target, ...damage });
+      previews.push({ target, ...damage, half: Math.floor(Number(damage.total ?? 0) / 2) });
     }
 
     const content = await renderTemplate("systems/ptu/src/module/commander/templates/chat/move-card.hbs", {
