@@ -96,7 +96,6 @@ async function main() {
   const manifest = {
     cutoff: CUTOFF,
     cutoffLabel: "gen9-sv-dlc-pre-za",
-    generatedAt: new Date().toISOString(),
     untouchedRawSnapshots: true,
     sources: []
   };
