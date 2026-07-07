@@ -1,0 +1,54 @@
+name: Translate Commander move staging data
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/foundry-base-pass
+    paths:
+      - "tools/commander/translate-moves.mjs"
+      - "tools/commander/conversion-rules.mjs"
+      - "package.json"
+      - "temp/compendium-raw/pokemon-showdown/data/moves.ts"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commander-compendium-writer
+  cancel-in-progress: false
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/foundry-base-pass
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install translation dependency
+        run: npm install --no-audit --no-fund
+
+      - name: Test conversion rules
+        run: npm run compendium:test-conversions
+
+      - name: Translate moves
+        run: npm run compendium:translate-moves
+
+      - name: Commit translated staging data
+        run: |
+          git config user.name "Commander Build Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add package-lock.json temp/compendium-translated/moves
+          if git diff --cached --quiet; then
+            echo "No translated move changes to commit."
+            exit 0
+          fi
+          git commit -m "Translate Gen 9 moves into staging data"
+          git push origin HEAD:codex/foundry-base-pass
