@@ -1,4 +1,5 @@
 import { CommanderDamageService } from "./damage-service.js";
+import { CommanderCombatService } from "./combat-service.js";
 import { registerCommanderCombatIntegration } from "./combat-integration.js";
 
 function bindCommanderChatControls(html) {
@@ -33,4 +34,11 @@ export function registerCommanderRuntimeHooks() {
   registerCommanderCombatIntegration();
   Hooks.on("renderChatMessageHTML", (message, html) => bindCommanderChatControls(html));
   Hooks.on("renderChatMessage", (message, html) => bindCommanderChatControls(html));
+  Hooks.on("updateActor", (actor, changed) => {
+    if (!CommanderCombatService.isCommanderActor(actor)) return;
+    if (!game.combat) return;
+    const systemChange = changed.system || {};
+    if (!systemChange.actions && !systemChange.health && !systemChange.team && !systemChange.identity) return;
+    if (ui.combat && ui.combat.render) ui.combat.render({ parts: ["tracker"] });
+  });
 }
