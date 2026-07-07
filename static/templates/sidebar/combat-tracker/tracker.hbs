@@ -17,6 +17,17 @@
                 <span class="commander-combat-pill friendship">♥ {{commander.friendship.value}}</span>
                 {{/if}}
             </div>
+            {{#if isOwner}}
+            <div class="commander-combat-actions">
+                <button type="button" data-action="spendCommanderAction" data-action-type="main" title="Spend Main Action">M−</button>
+                <button type="button" data-action="restoreCommanderAction" data-action-type="main" title="Restore Main Action">M+</button>
+                <button type="button" data-action="spendCommanderAction" data-action-type="move" title="Spend Move Action">V−</button>
+                <button type="button" data-action="restoreCommanderAction" data-action-type="move" title="Restore Move Action">V+</button>
+                <button type="button" data-action="spendCommanderAction" data-action-type="reaction" title="Spend Reaction">R−</button>
+                <button type="button" data-action="restoreCommanderAction" data-action-type="reaction" title="Restore Reaction">R+</button>
+                <button type="button" data-action="resetCommanderActions" title="Reset Commander Actions">Reset</button>
+            </div>
+            {{/if}}
             {{/if}}
             <div class="combatant-controls">
                 {{#if @root.user.isGM}}
