@@ -1,12 +1,13 @@
 {
   "name": "pokemon-foundry-tt-private-workspace",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "description": "Private development and validation tooling for the PTR 1e Foundry system.",
   "scripts": {
     "validate": "node tools/validate-system.mjs",
     "validate:strict": "node tools/validate-system.mjs --strict",
+    "audit:commander-runtime": "node tools/audit-commander-runtime.mjs",
     "package": "node tools/package-system.mjs",
     "compendium:validate": "node tools/commander/validate-source.mjs",
     "compendium:build": "node tools/commander/build-compendiums.mjs",
