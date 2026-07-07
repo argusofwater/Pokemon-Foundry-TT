@@ -1,3 +1,5 @@
+import { CommanderFriendshipService } from "./friendship-service.js";
+
 export class CommanderDamageService {
   static getTargetActors() {
     return [...(game.user?.targets ?? [])].map(token => token.actor).filter(Boolean);
@@ -34,15 +36,29 @@ export class CommanderDamageService {
     if (!actor?.isOwner && !game.user?.isGM) return ui.notifications.warn(`You cannot modify ${actor?.name ?? "that actor"}.`);
     const hp = actor.system.health?.hp;
     if (!hp) return ui.notifications.warn(`${actor.name} has no Commander HP resource.`);
+
     let remaining = Math.max(0, Number(amount) || 0);
     const temporary = Number(actor.system.health?.temporaryHp ?? 0);
     const absorbed = Math.min(temporary, remaining);
     remaining -= absorbed;
-    const updates = {
+    let nextHp = Math.max(0, Number(hp.value ?? 0) - remaining);
+
+    if (actor.type === "pokemon" && nextHp === 0 && Number(hp.value ?? 0) > 0 && game.user?.isGM) {
+      const useFriendship = await CommanderFriendshipService.confirmResolve(actor);
+      if (useFriendship) {
+        nextHp = 1;
+        await CommanderFriendshipService.useResolve(actor);
+        await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<section class="commander-chat-card commander-friendship-card"><strong>${actor.name}</strong><p>It held on because it does not want you to worry.</p></section>`
+        });
+      }
+    }
+
+    return actor.update({
       "system.health.temporaryHp": temporary - absorbed,
-      "system.health.hp.value": Math.max(0, Number(hp.value ?? 0) - remaining)
-    };
-    return actor.update(updates);
+      "system.health.hp.value": nextHp
+    });
   }
 
   static async applyHealing(actor, amount) {
