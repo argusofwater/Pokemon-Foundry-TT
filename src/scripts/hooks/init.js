@@ -6,6 +6,7 @@ import { registerSheets } from "../sheets.js"
 import { registerTemplates } from "../templates.js"
 import { insurgenceData, sageData, uraniumData } from "../config/data/fangame-species-data.js"
 import { measureDistances } from "../../module/canvas/helpers.js"
+import { registerCommanderRuntimeHooks } from "../../module/commander/runtime/hooks.js"
 
 
 export const Init = {
@@ -70,6 +71,7 @@ export const Init = {
 
             // Register stuff with the Foundry client
             registerSheets();
+            registerCommanderRuntimeHooks();
             // registerFonts();
             registerHandlebarsHelpers();
             // registerKeybindings();
@@ -107,4 +109,4 @@ function _onDragStart(event) {
         data: item.toObject()
     }
     event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
-  }
+    }
