@@ -7,6 +7,20 @@ function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
 }
 
+function buildFriendshipHearts(value, count = 10) {
+  const normalized = Math.max(0, Math.min(255, Number(value) || 0));
+  const perHeart = 255 / count;
+  return Array.from({ length: count }, (_, index) => {
+    const fill = Math.max(0, Math.min(1, (normalized - (index * perHeart)) / perHeart));
+    return {
+      index,
+      percent: Math.round(fill * 100),
+      filled: fill >= 1,
+      partial: fill > 0 && fill < 1
+    };
+  });
+}
+
 export class CommanderPokemonSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
     ...super.DEFAULT_OPTIONS,
@@ -51,6 +65,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     const reserveMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.reserveMoveUuids ?? [], 2);
     const embeddedMoves = this.actor.items.filter(item => item.type === "move");
     const friendship = CommanderFriendshipService.getState(this.actor);
+    const friendshipHearts = buildFriendshipHearts(friendship.value);
 
     return {
       ...context,
@@ -60,7 +75,8 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
       equippedMoves,
       reserveMoves,
       embeddedMoves,
-      friendship
+      friendship,
+      friendshipHearts
     };
   }
 
@@ -89,7 +105,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     if (!game.user?.isGM) return ui.notifications.warn("Only the GM can change Friendship.");
     const input = app.element?.querySelector?.("[name='commanderFriendshipValue']");
     await CommanderFriendshipService.setValue(app.actor, input?.value ?? app.actor.getFlag("ptu", "commanderFriendship")?.value ?? 0);
-    return app.render({ parts: ["bond"] });
+    return app.render();
   }
 
   static async adjustFriendship(event, target) {
@@ -97,12 +113,12 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     if (!game.user?.isGM) return ui.notifications.warn("Only the GM can change Friendship.");
     const current = CommanderFriendshipService.getState(app.actor).value;
     await CommanderFriendshipService.setValue(app.actor, current + Number(target.dataset.amount ?? 0));
-    return app.render({ parts: ["bond"] });
+    return app.render();
   }
 
   static async resetFriendshipResolve(event, target) {
     const app = resolveApplication(target, this);
     await CommanderFriendshipService.resetResolve(app.actor);
-    return app.render({ parts: ["bond"] });
+    return app.render();
   }
 }
