@@ -10,7 +10,12 @@
     "package": "node tools/package-system.mjs",
     "compendium:validate": "node tools/commander/validate-source.mjs",
     "compendium:build": "node tools/commander/build-compendiums.mjs",
-    "compendium:import-legacy": "node tools/commander/import-legacy-export.mjs"
+    "compendium:import-legacy": "node tools/commander/import-legacy-export.mjs",
+    "compendium:translate-species": "node tools/commander/translate-species.mjs",
+    "compendium:test-conversions": "node tools/commander/conversion-rules.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3"
   },
   "engines": {
     "node": ">=20"
