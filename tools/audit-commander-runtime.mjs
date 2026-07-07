@@ -37,8 +37,10 @@ const requiredFiles = [
   "src/module/commander/sheets/trainer-sheet.js",
   "src/module/commander/templates/chat/check-card.hbs",
   "src/module/commander/templates/chat/move-card.hbs",
+  "src/module/commander/templates/shared/header.hbs",
   "src/module/commander/templates/pokemon/bond.hbs",
-  "src/module/commander/templates/pokemon/moves.hbs"
+  "src/module/commander/templates/pokemon/moves.hbs",
+  "static/css/commander-friendship.css"
 ];
 
 for (const file of requiredFiles) assert(await exists(file), `Missing required runtime file: ${file}`);
@@ -51,6 +53,18 @@ const pokemonSheet = await read("src/module/commander/sheets/pokemon-sheet.js");
 assert(pokemonSheet.includes('bond: { template: "systems/ptu/src/module/commander/templates/pokemon/bond.hbs" }'), "Pokemon bond part is not registered.");
 assert(pokemonSheet.includes("CommanderFriendshipService"), "Pokemon sheet does not expose Friendship state.");
 assert(pokemonSheet.includes("Only the GM can change Friendship"), "Friendship controls are not explicitly GM restricted.");
+assert(pokemonSheet.includes("buildFriendshipHearts"), "Pokemon sheet does not build gradual Friendship hearts.");
+assert(pokemonSheet.includes("friendshipHearts"), "Friendship heart data is not added to sheet context.");
+
+const header = await read("src/module/commander/templates/shared/header.hbs");
+assert(header.includes("commander-friendship-hearts"), "Pokemon header does not display Friendship hearts.");
+assert(header.includes('aria-valuemax="255"'), "Friendship heart meter lacks a 0-255 accessibility scale.");
+assert(header.includes("heart.percent"), "Friendship hearts do not support partial fill percentages.");
+
+const friendshipCss = await read("static/css/commander-friendship.css");
+assert(friendshipCss.includes("--commander-friendship-pink"), "Friendship heart palette is missing.");
+assert(friendshipCss.includes("commander-heart-fill"), "Friendship heart fill styling is missing.");
+assert(friendshipCss.includes("prefers-reduced-motion"), "Friendship Resolve animation lacks reduced-motion support.");
 
 const damage = await read("src/module/commander/runtime/damage-service.js");
 assert(damage.includes("confirmResolve"), "Lethal damage does not check Friendship Resolve.");
@@ -75,6 +89,7 @@ assert(hooks.includes('Hooks.on("renderChatMessageHTML"'), "V14 chat render hook
 warn(hooks.includes('Hooks.on("renderChatMessage"'), "Legacy chat render compatibility hook is missing.");
 
 const system = JSON.parse(await read("system.json"));
+assert(system.styles?.includes("static/css/commander-friendship.css"), "Friendship heart stylesheet is not loaded by system.json.");
 warn(Number(system.compatibility?.verified ?? 0) >= 14, "system.json is not yet verified for Foundry V14.");
 warn(Number(system.compatibility?.minimum ?? 0) >= 14, "system.json still permits pre-V14 installation.");
 
