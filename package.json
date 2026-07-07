@@ -7,7 +7,9 @@
   "scripts": {
     "validate": "node tools/validate-system.mjs",
     "validate:strict": "node tools/validate-system.mjs --strict",
-    "package": "node tools/package-system.mjs"
+    "package": "node tools/package-system.mjs",
+    "compendium:validate": "node tools/commander/validate-source.mjs",
+    "compendium:build": "node tools/commander/build-compendiums.mjs"
   },
   "engines": {
     "node": ">=20"
