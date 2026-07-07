@@ -11,6 +11,7 @@
     "compendium:validate": "node tools/commander/validate-source.mjs",
     "compendium:build": "node tools/commander/build-compendiums.mjs",
     "compendium:import-legacy": "node tools/commander/import-legacy-export.mjs",
+    "compendium:translate": "npm run compendium:translate-species && npm run compendium:translate-abilities",
     "compendium:translate-species": "node tools/commander/translate-species.mjs",
     "compendium:translate-abilities": "node tools/commander/translate-abilities.mjs",
     "compendium:test-conversions": "node tools/commander/conversion-rules.test.mjs"
@@ -19,6 +20,6 @@
     "typescript": "5.8.3"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   }
 }
