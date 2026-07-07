@@ -1,0 +1,55 @@
+<section class="commander-tab commander-team-tab {{#unless (eq activeTab 'team')}}hidden{{/unless}}" data-tab="team">
+  <header class="commander-section-header">
+    <div>
+      <h2>Pokémon Team</h2>
+      <p>Drag Pokémon actors onto this sheet to add them. The active Pokémon shares the Trainer's initiative and action pool.</p>
+    </div>
+  </header>
+
+  {{#if team.length}}
+    <div class="commander-team-grid">
+      {{#each team as |member|}}
+        <article class="commander-team-card {{#if member.isActive}}active{{/if}}">
+          <div class="commander-team-portrait-wrap">
+            <img class="commander-team-portrait" src="{{member.actor.img}}" alt="{{member.actor.name}}">
+            {{#if member.isActive}}<span class="commander-team-active-badge">Active</span>{{/if}}
+          </div>
+
+          <div class="commander-team-details">
+            <div class="commander-team-name-row">
+              <strong>{{member.actor.name}}</strong>
+              <span>Lv. {{member.actor.system.identity.level}}</span>
+            </div>
+            <span class="commander-team-species">{{member.actor.system.identity.speciesName}}</span>
+
+            <div class="commander-team-hp-row">
+              <span>HP {{member.actor.system.health.hp.value}} / {{member.actor.system.health.hp.max}}</span>
+              <span>{{member.actor.system.identity.lifecycle}}</span>
+            </div>
+            <div class="commander-team-hp-meter">
+              <span style="width: {{member.hpPercent}}%;"></span>
+            </div>
+
+            <div class="commander-team-friendship">
+              <span>♥ {{member.friendship.value}}</span>
+              <span>{{member.friendship.tier}}</span>
+            </div>
+          </div>
+
+          <div class="commander-team-actions">
+            <button type="button" data-action="openPokemon" data-uuid="{{member.actor.uuid}}">Open</button>
+            {{#unless member.isActive}}
+              {{#if ../editable}}<button type="button" data-action="setActivePokemon" data-uuid="{{member.actor.uuid}}">Make Active</button>{{/if}}
+            {{/unless}}
+            {{#if ../editable}}<button type="button" class="danger" data-action="removePokemon" data-uuid="{{member.actor.uuid}}">Remove</button>{{/if}}
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="commander-empty-state">
+      <strong>No Pokémon assigned.</strong>
+      <p>Drag a Pokémon Actor from the sidebar onto this Trainer sheet.</p>
+    </div>
+  {{/if}}
+</section>
