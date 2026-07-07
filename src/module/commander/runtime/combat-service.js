@@ -40,6 +40,12 @@ export class CommanderCombatService {
     return activeUuid ? fromUuid(activeUuid) : null;
   }
 
+  static async isLinkedActivePokemon(actor) {
+    if (actor?.type !== "pokemon") return false;
+    const trainer = await this.getTrainerActor(actor);
+    return Boolean(trainer && trainer.system.team?.activePokemonUuid === actor.uuid);
+  }
+
   static async getInitiativeGroup(combat, combatant) {
     const actor = combatant?.actor;
     if (!this.isCommanderActor(actor)) return { leader: combatant, members: [combatant] };
@@ -102,8 +108,17 @@ export class CommanderCombatService {
   static async onTurnStart(combatant) {
     const actor = combatant?.actor;
     if (!this.isCommanderActor(actor)) return false;
+
+    if (await this.isLinkedActivePokemon(actor)) return true;
+
     await CommanderActionTracker.reset(actor);
     await this.tickRecharge(actor);
+
+    if (actor.type === "character") {
+      const activePokemon = await this.getActivePokemonActor(actor);
+      if (activePokemon) await this.tickRecharge(activePokemon);
+    }
+
     return true;
   }
 
