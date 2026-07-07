@@ -1,4 +1,5 @@
 import { CommanderFriendshipService } from "./friendship-service.js";
+import { CommanderConditionService } from "./condition-service.js";
 
 export class CommanderDamageService {
   static getTargetActors() {
@@ -7,7 +8,11 @@ export class CommanderDamageService {
 
   static defenseValue(actor, defense) {
     if (!actor || defense === "none") return 0;
-    return Number(actor.system.defenses?.[defense]?.final ?? 0);
+    const key = String(defense).toLowerCase();
+    let value = Number(actor.system.defenses?.[defense]?.final ?? actor.system.defenses?.[key]?.final ?? 0);
+    if (CommanderConditionService.hasCondition(actor, "vulnerable") && ["physical", "special", "reflex"].includes(key)) value -= 2;
+    if (CommanderConditionService.hasCondition(actor, "restrained") && key === "reflex") value -= 2;
+    return Math.max(0, value);
   }
 
   static estimateDamage({ attacker, target, move, rollTotal = null } = {}) {
@@ -21,7 +26,7 @@ export class CommanderDamageService {
     const power = Number(system.power ?? 0);
     const dice = Math.max(0, Math.min(8, Math.ceil(power / 20)));
     const flat = Math.max(0, attack - defense);
-    return { dice, flat, defenseKey, hit: rollTotal == null || defenseKey === "none" || Number(rollTotal) >= defense };
+    return { dice, flat, defenseKey, defense, hit: rollTotal == null || defenseKey === "none" || Number(rollTotal) >= defense };
   }
 
   static async rollDamage({ attacker, target, move, rollTotal = null } = {}) {
