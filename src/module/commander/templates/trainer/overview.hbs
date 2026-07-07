@@ -1,5 +1,4 @@
-{{#if (eq activeTab "overview")}}
-<section class="commander-content">
+<section class="commander-content {{#unless (eq activeTab 'overview')}}hidden{{/unless}}" data-tab="overview">
   <div class="commander-grid">
     <article class="commander-card accent-red">
       <h2>Trainer Profile</h2>
@@ -55,4 +54,3 @@
     </article>
   </div>
 </section>
-{{/if}}
