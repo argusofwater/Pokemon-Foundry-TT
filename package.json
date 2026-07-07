@@ -9,7 +9,8 @@
     "validate:strict": "node tools/validate-system.mjs --strict",
     "package": "node tools/package-system.mjs",
     "compendium:validate": "node tools/commander/validate-source.mjs",
-    "compendium:build": "node tools/commander/build-compendiums.mjs"
+    "compendium:build": "node tools/commander/build-compendiums.mjs",
+    "compendium:import-legacy": "node tools/commander/import-legacy-export.mjs"
   },
   "engines": {
     "node": ">=20"
