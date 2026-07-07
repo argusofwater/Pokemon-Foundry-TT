@@ -1,0 +1,122 @@
+.commander-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 0.75rem;
+}
+
+.commander-team-card {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 0.7rem;
+  padding: 0.7rem;
+  background: var(--commander-panel);
+  border: 2px solid var(--commander-line);
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(34, 49, 58, 0.09);
+}
+
+.commander-team-card.active {
+  border-color: var(--commander-gold);
+  box-shadow: 0 0 0 2px rgba(240, 198, 79, 0.22), 0 5px 14px rgba(34, 49, 58, 0.13);
+}
+
+.commander-team-portrait-wrap {
+  position: relative;
+}
+
+.commander-team-portrait {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  background: #fff;
+  border: 2px solid var(--commander-line);
+  border-radius: 50%;
+}
+
+.commander-team-card.active .commander-team-portrait {
+  border-color: var(--commander-gold);
+}
+
+.commander-team-active-badge {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  padding: 0.12rem 0.4rem;
+  color: var(--commander-ink);
+  background: var(--commander-gold);
+  border: 1px solid #fff;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.commander-team-details {
+  min-width: 0;
+}
+
+.commander-team-name-row,
+.commander-team-hp-row,
+.commander-team-friendship {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.commander-team-name-row strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commander-team-species,
+.commander-team-hp-row,
+.commander-team-friendship {
+  color: var(--commander-muted);
+  font-size: 0.75rem;
+}
+
+.commander-team-hp-meter {
+  height: 8px;
+  margin: 0.3rem 0;
+  overflow: hidden;
+  background: #dce4e9;
+  border: 1px solid #aebcc6;
+  border-radius: 999px;
+}
+
+.commander-team-hp-meter > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--commander-ready), #75c58b);
+}
+
+.commander-team-friendship {
+  color: var(--commander-friendship-pink-dark, #c93d78);
+  font-weight: 800;
+}
+
+.commander-team-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.commander-team-actions button {
+  flex: 1 1 auto;
+}
+
+.commander-team-actions button.danger {
+  color: #fff;
+  background: var(--commander-danger);
+}
+
+@media (max-width: 520px) {
+  .commander-team-grid {
+    grid-template-columns: 1fr;
+  }
+}
