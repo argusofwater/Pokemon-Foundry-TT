@@ -1,0 +1,15 @@
+<section class="commander-chat-card commander-move-card">
+  <header>
+    <strong>{{actor.name}}</strong>
+    <span>{{item.name}}</span>
+  </header>
+  <div class="commander-chat-total">{{total}}</div>
+  <dl>
+    <div><dt>Type</dt><dd>{{system.type}}</dd></div>
+    <div><dt>Category</dt><dd>{{system.category}}</dd></div>
+    <div><dt>Defense</dt><dd>{{defense}}</dd></div>
+    <div><dt>Power</dt><dd>{{power}}</dd></div>
+    <div><dt>Recharge</dt><dd>{{recharge}}</dd></div>
+  </dl>
+  {{#if system.description}}<p>{{system.description}}</p>{{/if}}
+</section>
