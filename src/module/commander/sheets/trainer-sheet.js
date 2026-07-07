@@ -22,7 +22,8 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     header: { template: "systems/ptu/src/module/commander/templates/shared/header.hbs" },
     navigation: { template: "systems/ptu/src/module/commander/templates/shared/navigation.hbs" },
     overview: { template: "systems/ptu/src/module/commander/templates/trainer/overview.hbs" },
-    team: { template: "systems/ptu/src/module/commander/templates/trainer/team.hbs" }
+    team: { template: "systems/ptu/src/module/commander/templates/trainer/team.hbs" },
+    effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" }
   };
 
   async _prepareContext(options) {
