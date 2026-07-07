@@ -28,6 +28,8 @@ function warn(condition, message) {
 
 const requiredFiles = [
   "src/module/commander/runtime/action-tracker.js",
+  "src/module/commander/runtime/combat-integration.js",
+  "src/module/commander/runtime/combat-service.js",
   "src/module/commander/runtime/damage-service.js",
   "src/module/commander/runtime/friendship-service.js",
   "src/module/commander/runtime/hooks.js",
@@ -40,7 +42,10 @@ const requiredFiles = [
   "src/module/commander/templates/shared/header.hbs",
   "src/module/commander/templates/pokemon/bond.hbs",
   "src/module/commander/templates/pokemon/moves.hbs",
-  "static/css/commander-friendship.css"
+  "src/module/commander/templates/trainer/team.hbs",
+  "static/css/commander-combat.css",
+  "static/css/commander-friendship.css",
+  "static/css/commander-team.css"
 ];
 
 for (const file of requiredFiles) assert(await exists(file), `Missing required runtime file: ${file}`);
@@ -56,6 +61,19 @@ assert(pokemonSheet.includes("Only the GM can change Friendship"), "Friendship c
 assert(pokemonSheet.includes("buildFriendshipHearts"), "Pokemon sheet does not build gradual Friendship hearts.");
 assert(pokemonSheet.includes("friendshipHearts"), "Friendship heart data is not added to sheet context.");
 
+const trainerSheet = await read("src/module/commander/sheets/trainer-sheet.js");
+assert(trainerSheet.includes('team: { template: "systems/ptu/src/module/commander/templates/trainer/team.hbs" }'), "Trainer team part is not registered.");
+assert(trainerSheet.includes("setActivePokemon"), "Trainer sheet lacks active Pokemon selection.");
+assert(trainerSheet.includes('"system.identity.trainerUuid"'), "Trainer team assignment does not back-link Pokemon.");
+assert(trainerSheet.includes('"system.team.activePokemonUuid"'), "Trainer sheet does not persist active Pokemon selection.");
+assert(trainerSheet.includes("removePokemon"), "Trainer sheet lacks team removal controls.");
+
+const teamTemplate = await read("src/module/commander/templates/trainer/team.hbs");
+assert(teamTemplate.includes('data-action="setActivePokemon"'), "Team template lacks Make Active control.");
+assert(teamTemplate.includes('data-action="removePokemon"'), "Team template lacks Remove control.");
+assert(teamTemplate.includes("member.friendship.value"), "Team cards do not display Friendship.");
+assert(teamTemplate.includes("member.actor.system.health.hp.value"), "Team cards do not display HP.");
+
 const header = await read("src/module/commander/templates/shared/header.hbs");
 assert(header.includes("commander-friendship-hearts"), "Pokemon header does not display Friendship hearts.");
 assert(header.includes('aria-valuemax="255"'), "Friendship heart meter lacks a 0-255 accessibility scale.");
@@ -65,6 +83,7 @@ const friendshipCss = await read("static/css/commander-friendship.css");
 assert(friendshipCss.includes("--commander-friendship-pink"), "Friendship heart palette is missing.");
 assert(friendshipCss.includes("commander-heart-fill"), "Friendship heart fill styling is missing.");
 assert(friendshipCss.includes("prefers-reduced-motion"), "Friendship Resolve animation lacks reduced-motion support.");
+assert(friendshipCss.includes('commander-team.css'), "Trainer team stylesheet is not imported.");
 
 const damage = await read("src/module/commander/runtime/damage-service.js");
 assert(damage.includes("confirmResolve"), "Lethal damage does not check Friendship Resolve.");
@@ -75,6 +94,10 @@ const friendship = await read("src/module/commander/runtime/friendship-service.j
 assert(friendship.includes("value >= 180"), "Friendship Resolve threshold is not locked at 180.");
 assert(friendship.includes("heldOnUsed"), "Friendship Resolve usage is not persisted.");
 assert(friendship.includes("game.user?.isGM"), "Friendship mutation is not GM gated.");
+
+const combat = await read("src/module/commander/runtime/combat-service.js");
+assert(combat.includes("getInitiativeGroup"), "Commander combat does not group Trainer and active Pokemon initiative.");
+assert(combat.includes("isLinkedActivePokemon"), "Commander combat does not prevent duplicate linked turn resets.");
 
 const movesTemplate = await read("src/module/commander/templates/pokemon/moves.hbs");
 assert(!movesTemplate.includes('data-action="openEmbedded"'), "Moves template still references removed openEmbedded action.");
