@@ -1,3 +1,5 @@
+import { registerCommanderSheets } from "../module/commander/sheets/register.js";
+
 function registerSheets() {
     // Register sheet application classes
     foundry.documents.collections.Actors.unregisterSheet("core", foundry.appv1.sheets.ActorSheet);
@@ -19,6 +21,10 @@ function registerSheets() {
       });
 
     foundry.applications.apps.DocumentSheetConfig.registerSheet(CONFIG.PTU.Token.documentClass, "ptu", CONFIG.PTU.Token.sheetClass, { makeDefault: true });
+
+    const commanderEnabled = game.settings.get("ptu", "commanderEnabled");
+    const migrationConfirmed = game.settings.get("ptu", "commanderMigrationConfirmed");
+    if (commanderEnabled && migrationConfirmed) registerCommanderSheets();
 }
 
 export { registerSheets }
