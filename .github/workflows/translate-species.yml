@@ -11,12 +11,22 @@ on:
       - "package.json"
       - "temp/compendium-raw/pokemon-showdown/data/pokedex.ts"
       - "temp/compendium-raw/pokeapi/data/v2/csv/pokemon_species.csv"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - codex/foundry-v13-baseline
+    paths:
+      - ".github/workflows/translate-species.yml"
+      - "tools/commander/translate-species.mjs"
+      - "tools/commander/conversion-rules.mjs"
+      - "package.json"
 
 permissions:
   contents: write
 
 jobs:
   translate:
+    if: github.head_ref == 'codex/foundry-base-pass' || github.ref_name == 'codex/foundry-base-pass'
     runs-on: ubuntu-latest
     steps:
       - name: Check out branch
