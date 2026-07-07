@@ -50,7 +50,7 @@ export class CommanderDamageService {
         await CommanderFriendshipService.useResolve(actor);
         await ChatMessage.create({
           speaker: ChatMessage.getSpeaker({ actor }),
-          content: `<section class="commander-chat-card commander-friendship-card"><strong>${actor.name}</strong><p>It held on because it does not want you to worry.</p></section>`
+          content: `<section class="commander-chat-card commander-friendship-card"><strong>${actor.name}</strong><p>It held on because it doesn&#39;t want you to worry.</p></section>`
         });
       }
     }
