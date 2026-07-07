@@ -1,0 +1,83 @@
+.commander-move-slots {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.commander-move-slot {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: center;
+  min-height: 68px;
+  padding: 0.55rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px dashed rgba(70, 112, 140, 0.4);
+  border-radius: 12px;
+  transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+}
+
+.commander-move-slot:hover {
+  border-color: rgba(47, 111, 165, 0.8);
+  background: rgba(235, 247, 255, 0.92);
+}
+
+.commander-move-slot img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  cursor: grab;
+}
+
+.commander-move-drag {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  cursor: grab;
+}
+
+.commander-move-drag:active,
+.commander-move-slot img:active,
+.commander-table-row[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.commander-empty-slot {
+  grid-column: 1 / -1;
+  color: var(--commander-muted, #6d7d88);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.commander-move-library .commander-table-row[draggable="true"] {
+  cursor: grab;
+}
+
+.commander-move-slot .commander-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+@media (max-width: 620px) {
+  .commander-move-slot {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .commander-move-slot img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .commander-move-slot .commander-row-actions {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+
+  .commander-move-slot .commander-row-actions button {
+    flex: 1 1 auto;
+  }
+}
