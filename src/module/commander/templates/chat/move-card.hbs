@@ -19,8 +19,8 @@
           <strong>{{result.target.name}}</strong>
           {{#if result.hit}}
             <span>{{result.total}} damage</span>
-            <button type="button" data-commander-apply-damage data-actor-uuid="{{result.target.uuid}}" data-amount="{{result.total}}">Apply</button>
-            <button type="button" data-commander-apply-damage data-actor-uuid="{{result.target.uuid}}" data-amount="{{result.half}}">Half</button>
+            <button type="button" data-commander-apply-damage data-actor-uuid="{{result.target.uuid}}" data-amount="{{result.total}}" data-damage-type="{{../system.type}}">Apply</button>
+            <button type="button" data-commander-apply-damage data-actor-uuid="{{result.target.uuid}}" data-amount="{{result.half}}" data-damage-type="{{../system.type}}">Half</button>
           {{else}}
             <span>Miss</span>
           {{/if}}
