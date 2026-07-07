@@ -19,19 +19,33 @@ export function registerCommanderCombatIntegration() {
 
   const originalRollInitiative = PTUCombat.prototype.rollInitiative;
   PTUCombat.prototype.rollInitiative = async function(ids, options = {}) {
-    const commanderCombatants = ids
+    const requested = ids
       .map(id => this.combatants.get(id))
-      .filter(combatant => CommanderCombatService.isCommanderActor(combatant?.actor));
-
+      .filter(Boolean);
+    const commanderCombatants = requested.filter(combatant => CommanderCombatService.isCommanderActor(combatant?.actor));
     const rollMode = options.messageOptions?.rollMode ?? options.rollMode ?? game.settings.get("core", "rollMode");
+    const processed = new Set();
     const initiatives = [];
+
     for (const combatant of commanderCombatants) {
-      const roll = await CommanderCombatService.rollInitiative(combatant, { rollMode });
-      if (roll) initiatives.push({ id: combatant.id, value: roll.total });
+      if (processed.has(combatant.id)) continue;
+      const group = await CommanderCombatService.getInitiativeGroup(this, combatant);
+      const leaderActor = group.trainer ?? group.leader?.actor ?? combatant.actor;
+      const roll = await CommanderCombatService.rollInitiative(group.leader ?? combatant, {
+        rollMode,
+        actorOverride: leaderActor
+      });
+      if (!roll) continue;
+
+      for (const member of group.members) {
+        initiatives.push({ id: member.id, value: roll.total });
+        processed.add(member.id);
+      }
     }
+
     if (initiatives.length) await this.setMultipleInitiatives(initiatives);
 
-    const remaining = ids.filter(id => !commanderCombatants.some(combatant => combatant.id === id));
+    const remaining = ids.filter(id => !processed.has(id) && !commanderCombatants.some(combatant => combatant.id === id));
     if (remaining.length) return originalRollInitiative.call(this, remaining, options);
     return this;
   };
