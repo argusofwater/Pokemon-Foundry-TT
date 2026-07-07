@@ -7,6 +7,9 @@
             <strong class="name">{{ name }}</strong>
             {{#if commander}}
             <div class="commander-combat-state">
+                {{#if commander.linkedInitiative}}
+                <span class="commander-combat-pill linked">Linked Initiative</span>
+                {{/if}}
                 <span class="commander-combat-pill">Main {{commander.mainRemaining}}/2</span>
                 <span class="commander-combat-pill">Move {{commander.moveRemaining}}/2</span>
                 <span class="commander-combat-pill {{#if commander.reactionReady}}ready{{else}}used{{/if}}">Reaction {{#if commander.reactionReady}}Ready{{else}}Used{{/if}}</span>
