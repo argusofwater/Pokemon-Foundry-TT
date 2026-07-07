@@ -1,0 +1,61 @@
+{{#if (eq activeTab "overview")}}
+<section class="commander-content">
+  <div class="commander-grid">
+    <article class="commander-card accent-red">
+      <h2>Creature Profile</h2>
+      <div class="commander-stat-row"><span>Species</span><span class="commander-value">{{system.identity.speciesName}}</span></div>
+      <div class="commander-stat-row"><span>Level</span><span class="commander-value">{{system.identity.level}}</span></div>
+      <div class="commander-stat-row"><span>Nature</span><span class="commander-value">{{system.identity.nature}}</span></div>
+      <div class="commander-stat-row"><span>Training Path</span><span class="commander-value">{{system.identity.trainingPath}}</span></div>
+      <div class="commander-stat-row"><span>Bond</span><span class="commander-value">{{system.bond.level}}</span></div>
+    </article>
+
+    <article class="commander-card wide">
+      <h2>Combat Profile</h2>
+      <div class="commander-grid">
+        {{#each statList as |stat|}}
+          <div class="commander-card">
+            <h3>{{stat.label}}</h3>
+            <div class="commander-value" title="Species {{stat.species}} + Level {{stat.level}} + Path {{stat.path}} + Nature {{stat.nature}} + Bonus {{stat.bonus}}">{{stat.final}}</div>
+          </div>
+        {{/each}}
+      </div>
+    </article>
+
+    <article class="commander-card">
+      <h2>Defenses</h2>
+      <div class="commander-stat-row"><span>Physical</span><span class="commander-value">{{system.defenses.physical.final}}</span></div>
+      <div class="commander-stat-row"><span>Special</span><span class="commander-value">{{system.defenses.special.final}}</span></div>
+      <div class="commander-stat-row"><span>Reflex</span><span class="commander-value">{{system.defenses.reflex.final}}</span></div>
+    </article>
+
+    <article class="commander-card wide accent-red">
+      <h2>Move Dock</h2>
+      <div class="commander-move-grid">
+        {{#each equippedMoves as |move index|}}
+          {{#if move}}
+            <div class="commander-move-card" data-item-id="{{move.id}}">
+              <h4>{{move.name}}</h4>
+              <span class="commander-type-chip">{{move.system.type}}</span>
+              <span class="commander-tag">{{move.system.category}}</span>
+              <div class="commander-move-row"><span>Power</span><strong>{{move.system.power}}</strong></div>
+              <div class="commander-move-row"><span>Defense</span><strong>{{move.system.target.defense}}</strong></div>
+            </div>
+          {{else}}
+            <div class="commander-move-card empty">Drop a move here</div>
+          {{/if}}
+        {{/each}}
+      </div>
+    </article>
+
+    <article class="commander-card">
+      <h2>Action State</h2>
+      <div class="commander-action-pips">
+        <span class="commander-pip {{#if system.actions.mainUsed}}used{{else}}ready{{/if}}">Main</span>
+        <span class="commander-pip {{#if system.actions.moveUsed}}used{{else}}ready{{/if}}">Move</span>
+        <span class="commander-pip {{#if system.actions.reactionUsed}}used{{else}}ready{{/if}}">Reaction</span>
+      </div>
+    </article>
+  </div>
+</section>
+{{/if}}
