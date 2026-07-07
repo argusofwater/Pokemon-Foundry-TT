@@ -1,0 +1,47 @@
+.combat-tracker .commander-combatant .token-name {
+  min-width: 0;
+}
+
+.commander-combat-state {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.18rem;
+  margin-top: 0.18rem;
+}
+
+.commander-combat-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 18px;
+  padding: 0.05rem 0.32rem;
+  color: #dfeaf2;
+  background: rgba(47, 111, 165, 0.48);
+  border: 1px solid rgba(151, 196, 229, 0.5);
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.commander-combat-pill.ready {
+  color: #eaffef;
+  background: rgba(78, 155, 99, 0.58);
+  border-color: rgba(134, 217, 154, 0.7);
+}
+
+.commander-combat-pill.used {
+  color: #d8dde1;
+  background: rgba(95, 103, 109, 0.58);
+  border-color: rgba(174, 183, 190, 0.45);
+}
+
+.commander-combat-pill.friendship {
+  color: #ffe7f1;
+  background: rgba(201, 61, 120, 0.58);
+  border-color: rgba(255, 166, 204, 0.72);
+}
+
+.combat-tracker .commander-combatant.active {
+  box-shadow: inset 3px 0 0 #f0c64f;
+}
