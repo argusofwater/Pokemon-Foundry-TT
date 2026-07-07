@@ -1,0 +1,30 @@
+name: Package Commander Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/foundry-base-pass]
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Foundry package
+        run: |
+          mkdir -p build
+          zip -r build/ptu.zip . -x '.git/*' '.github/*' 'build/*' 'node_modules/*' 'temp/*' '*.zip'
+          unzip -l build/ptu.zip | grep 'system.json'
+
+      - name: Publish rolling prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: commander-test
+          name: Commander Build Test
+          prerelease: true
+          make_latest: false
+          files: build/ptu.zip
