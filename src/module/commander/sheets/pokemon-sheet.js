@@ -1,6 +1,11 @@
 import { CommanderActorSheetBase } from "./base-sheet.js";
 import { CommanderActionTracker } from "../runtime/action-tracker.js";
 import { CommanderRollService } from "../runtime/roll-service.js";
+import { CommanderFriendshipService } from "../runtime/friendship-service.js";
+
+function resolveApplication(target, fallback) {
+  return target?.closest?.(".application")?.application ?? fallback;
+}
 
 export class CommanderPokemonSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
@@ -10,7 +15,10 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     actions: {
       ...super.DEFAULT_OPTIONS.actions,
       rollMove: CommanderPokemonSheet.rollMove,
-      spendMoveAction: CommanderPokemonSheet.spendMoveAction
+      spendMoveAction: CommanderPokemonSheet.spendMoveAction,
+      setFriendship: CommanderPokemonSheet.setFriendship,
+      adjustFriendship: CommanderPokemonSheet.adjustFriendship,
+      resetFriendshipResolve: CommanderPokemonSheet.resetFriendshipResolve
     }
   };
 
@@ -18,7 +26,8 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     header: { template: "systems/ptu/src/module/commander/templates/shared/header.hbs" },
     navigation: { template: "systems/ptu/src/module/commander/templates/shared/navigation.hbs" },
     overview: { template: "systems/ptu/src/module/commander/templates/pokemon/overview.hbs" },
-    moves: { template: "systems/ptu/src/module/commander/templates/pokemon/moves.hbs" }
+    moves: { template: "systems/ptu/src/module/commander/templates/pokemon/moves.hbs" },
+    bond: { template: "systems/ptu/src/module/commander/templates/pokemon/bond.hbs" }
   };
 
   async _prepareContext(options) {
@@ -41,6 +50,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     const equippedMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.equippedMoveUuids ?? [], 4);
     const reserveMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.reserveMoveUuids ?? [], 2);
     const embeddedMoves = this.actor.items.filter(item => item.type === "move");
+    const friendship = CommanderFriendshipService.getState(this.actor);
 
     return {
       ...context,
@@ -49,7 +59,8 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
       statList,
       equippedMoves,
       reserveMoves,
-      embeddedMoves
+      embeddedMoves,
+      friendship
     };
   }
 
@@ -61,15 +72,37 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
   }
 
   static async rollMove(event, target) {
-    const app = this.getApplication(target, this);
+    const app = resolveApplication(target, this);
     const item = await fromUuid(target.dataset.itemUuid);
     if (!item) return ui.notifications.warn("Move could not be resolved.");
     return CommanderRollService.rollMove({ actor: app.actor, item });
   }
 
   static async spendMoveAction(event, target) {
-    const app = this.getApplication(target, this);
+    const app = resolveApplication(target, this);
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
     return CommanderActionTracker.spend(app.actor, "main");
+  }
+
+  static async setFriendship(event, target) {
+    const app = resolveApplication(target, this);
+    if (!game.user?.isGM) return ui.notifications.warn("Only the GM can change Friendship.");
+    const input = app.element?.querySelector?.("[name='commanderFriendshipValue']");
+    await CommanderFriendshipService.setValue(app.actor, input?.value ?? app.actor.getFlag("ptu", "commanderFriendship")?.value ?? 0);
+    return app.render({ parts: ["bond"] });
+  }
+
+  static async adjustFriendship(event, target) {
+    const app = resolveApplication(target, this);
+    if (!game.user?.isGM) return ui.notifications.warn("Only the GM can change Friendship.");
+    const current = CommanderFriendshipService.getState(app.actor).value;
+    await CommanderFriendshipService.setValue(app.actor, current + Number(target.dataset.amount ?? 0));
+    return app.render({ parts: ["bond"] });
+  }
+
+  static async resetFriendshipResolve(event, target) {
+    const app = resolveApplication(target, this);
+    await CommanderFriendshipService.resetResolve(app.actor);
+    return app.render({ parts: ["bond"] });
   }
 }
