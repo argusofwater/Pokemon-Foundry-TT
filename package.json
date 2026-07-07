@@ -1,6 +1,6 @@
 {
   "name": "pokemon-foundry-tt-private-workspace",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "description": "Private development and validation tooling for the PTR 1e Foundry system.",
@@ -17,7 +17,8 @@
     "compendium:translate-moves": "node tools/commander/translate-moves.mjs",
     "compendium:translate-items": "node tools/commander/translate-items.mjs",
     "compendium:translate-learnsets": "node tools/commander/translate-learnsets.mjs",
-    "compendium:test-conversions": "node tools/commander/conversion-rules.test.mjs"
+    "compendium:test-conversions": "node tools/commander/conversion-rules.test.mjs",
+    "artwork:fetch-pokeapi": "node tools/commander/fetch-pokeapi-artwork.mjs"
   },
   "devDependencies": {
     "typescript": "5.8.3"
