@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-07-07T15:39:41.071Z",
+  "cutoff": "gen9-sv-dlc-pre-za",
+  "itemRecords": 561,
+  "excludedRecords": 2,
+  "byCategory": {
+    "tool": 184,
+    "evolution": 73,
+    "held": 95,
+    "consumable": 77,
+    "pokeball": 32,
+    "tr": 100
+  },
+  "byAutomation": {
+    "manual": 427,
+    "structured": 134
+  },
+  "megaStones": 73,
+  "berries": 77,
+  "zCrystals": 35,
+  "formChangeItems": 61,
+  "reviewRequired": 561,
+  "notes": [
+    "Mega Stones are retained and wired to the Commander Mega activation handler name.",
+    "Type boosters use the locked Commander +2 flat damage rule.",
+    "Complex item hooks remain preserved in source metadata and flagged for review.",
+    "CAP-only items are excluded; canonical nonstandard items are retained and tagged."
+  ]
+}
