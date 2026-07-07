@@ -1,0 +1,111 @@
+[
+  {
+    "schemaVersion": 1,
+    "name": "Kyogre-Primal",
+    "slug": "kyogre-primal",
+    "nationalDex": 382,
+    "types": [
+      "water"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 15,
+      "defense": 9,
+      "specialAttack": 18,
+      "specialDefense": 16,
+      "speed": 9
+    },
+    "abilitySlugs": [
+      "primordial-sea"
+    ],
+    "heightMeters": 9.8,
+    "weightKg": 430,
+    "size": "massive",
+    "weightClass": 3,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "kyogreprimal",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "kyogre",
+    "family": "primal",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "blue-orb",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "kyogre"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/kyogre-primal.png",
+      "token": "systems/ptu/assets/commander/forms/kyogre-primal.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10077"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Groudon-Primal",
+    "slug": "groudon-primal",
+    "nationalDex": 383,
+    "types": [
+      "ground",
+      "fire"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 18,
+      "defense": 16,
+      "specialAttack": 15,
+      "specialDefense": 9,
+      "speed": 9
+    },
+    "abilitySlugs": [
+      "desolate-land"
+    ],
+    "heightMeters": 5,
+    "weightKg": 999.7,
+    "size": "large",
+    "weightClass": 4,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "groudonprimal",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "groudon",
+    "family": "primal",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "red-orb",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "groudon"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/groudon-primal.png",
+      "token": "systems/ptu/assets/commander/forms/groudon-primal.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10078"
+    }
+  }
+]

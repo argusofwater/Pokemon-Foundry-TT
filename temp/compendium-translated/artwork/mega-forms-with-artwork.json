@@ -1,0 +1,4117 @@
+[
+  {
+    "schemaVersion": 1,
+    "name": "Venusaur-Mega",
+    "slug": "venusaur-mega",
+    "nationalDex": 3,
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 10,
+      "defense": 12,
+      "specialAttack": 12,
+      "specialDefense": 12,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "thick-fat"
+    ],
+    "heightMeters": 2.4,
+    "weightKg": 155.5,
+    "size": "medium",
+    "weightClass": 3,
+    "eggGroups": [
+      "monster",
+      "grass"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "venusaurmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "venusaur",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "venusaurite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "venusaur"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/venusaur-mega.png",
+      "token": "systems/ptu/assets/commander/forms/venusaur-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10033"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Charizard-Mega-X",
+    "slug": "charizard-mega-x",
+    "nationalDex": 6,
+    "types": [
+      "fire",
+      "dragon"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 13,
+      "defense": 11,
+      "specialAttack": 13,
+      "specialDefense": 9,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "tough-claws"
+    ],
+    "heightMeters": 1.7,
+    "weightKg": 110.5,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "charizardmegax",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "charizard",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "charizardite-x",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "charizard"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/charizard-mega-x.png",
+      "token": "systems/ptu/assets/commander/forms/charizard-mega-x.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10034"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Charizard-Mega-Y",
+    "slug": "charizard-mega-y",
+    "nationalDex": 6,
+    "types": [
+      "fire",
+      "flying"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 10,
+      "defense": 8,
+      "specialAttack": 16,
+      "specialDefense": 12,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "drought"
+    ],
+    "heightMeters": 1.7,
+    "weightKg": 100.5,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "charizardmegay",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "charizard",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "charizardite-y",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "charizard"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/charizard-mega-y.png",
+      "token": "systems/ptu/assets/commander/forms/charizard-mega-y.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10035"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Blastoise-Mega",
+    "slug": "blastoise-mega",
+    "nationalDex": 9,
+    "types": [
+      "water"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 10,
+      "defense": 12,
+      "specialAttack": 14,
+      "specialDefense": 12,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "mega-launcher"
+    ],
+    "heightMeters": 1.6,
+    "weightKg": 101.1,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "water-1"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "blastoisemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "blastoise",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "blastoisinite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "blastoise"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/blastoise-mega.png",
+      "token": "systems/ptu/assets/commander/forms/blastoise-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10036"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Beedrill-Mega",
+    "slug": "beedrill-mega",
+    "nationalDex": 15,
+    "types": [
+      "bug",
+      "poison"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 15,
+      "defense": 4,
+      "specialAttack": 2,
+      "specialDefense": 8,
+      "speed": 15
+    },
+    "abilitySlugs": [
+      "adaptability"
+    ],
+    "heightMeters": 1.4,
+    "weightKg": 40.5,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "bug"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "beedrillmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "beedrill",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "beedrillite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "beedrill"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/beedrill-mega.png",
+      "token": "systems/ptu/assets/commander/forms/beedrill-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10090"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Pidgeot-Mega",
+    "slug": "pidgeot-mega",
+    "nationalDex": 18,
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 8,
+      "defense": 8,
+      "specialAttack": 14,
+      "specialDefense": 8,
+      "speed": 12
+    },
+    "abilitySlugs": [
+      "no-guard"
+    ],
+    "heightMeters": 2.2,
+    "weightKg": 50.5,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "flying"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "pidgeotmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "pidgeot",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "pidgeotite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "pidgeot"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/pidgeot-mega.png",
+      "token": "systems/ptu/assets/commander/forms/pidgeot-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10073"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Clefable-Mega",
+    "slug": "clefable-mega",
+    "nationalDex": 36,
+    "types": [
+      "fairy",
+      "flying"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 8,
+      "defense": 9,
+      "specialAttack": 14,
+      "specialDefense": 11,
+      "speed": 7
+    },
+    "abilitySlugs": [
+      "cute-charm",
+      "magic-guard",
+      "unaware"
+    ],
+    "heightMeters": 1.7,
+    "weightKg": 42.3,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 6,
+    "rarity": "exceptional",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "clefablemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "clefable",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "clefablite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "clefable"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/clefable-mega.png",
+      "token": "systems/ptu/assets/commander/forms/clefable-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10278"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Alakazam-Mega",
+    "slug": "alakazam-mega",
+    "nationalDex": 65,
+    "types": [
+      "psychic"
+    ],
+    "stats": {
+      "hp": 6,
+      "attack": 5,
+      "defense": 7,
+      "specialAttack": 18,
+      "specialDefense": 11,
+      "speed": 15
+    },
+    "abilitySlugs": [
+      "trace"
+    ],
+    "heightMeters": 1.2,
+    "weightKg": 48,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "human-like"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "alakazammega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "alakazam",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "alakazite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "alakazam"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/alakazam-mega.png",
+      "token": "systems/ptu/assets/commander/forms/alakazam-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10037"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Victreebel-Mega",
+    "slug": "victreebel-mega",
+    "nationalDex": 71,
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 13,
+      "defense": 9,
+      "specialAttack": 14,
+      "specialDefense": 10,
+      "speed": 7
+    },
+    "abilitySlugs": [
+      "chlorophyll",
+      "gluttony"
+    ],
+    "heightMeters": 4.5,
+    "weightKg": 125.5,
+    "size": "large",
+    "weightClass": 2,
+    "eggGroups": [
+      "grass"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "victreebelmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "victreebel",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "victreebelite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "victreebel"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/victreebel-mega.png",
+      "token": "systems/ptu/assets/commander/forms/victreebel-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10279"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Slowbro-Mega",
+    "slug": "slowbro-mega",
+    "nationalDex": 80,
+    "types": [
+      "water",
+      "psychic"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 8,
+      "defense": 18,
+      "specialAttack": 13,
+      "specialDefense": 8,
+      "speed": 3
+    },
+    "abilitySlugs": [
+      "shell-armor"
+    ],
+    "heightMeters": 2,
+    "weightKg": 120,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "water-1"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "slowbromega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "slowbro",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "slowbronite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "slowbro"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/slowbro-mega.png",
+      "token": "systems/ptu/assets/commander/forms/slowbro-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10071"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Gengar-Mega",
+    "slug": "gengar-mega",
+    "nationalDex": 94,
+    "types": [
+      "ghost",
+      "poison"
+    ],
+    "stats": {
+      "hp": 6,
+      "attack": 7,
+      "defense": 8,
+      "specialAttack": 17,
+      "specialDefense": 10,
+      "speed": 13
+    },
+    "abilitySlugs": [
+      "shadow-tag"
+    ],
+    "heightMeters": 1.4,
+    "weightKg": 40.5,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "amorphous"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "gengarmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "gengar",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "gengarite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "gengar"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/gengar-mega.png",
+      "token": "systems/ptu/assets/commander/forms/gengar-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10038"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Kangaskhan-Mega",
+    "slug": "kangaskhan-mega",
+    "nationalDex": 115,
+    "types": [
+      "normal"
+    ],
+    "stats": {
+      "hp": 11,
+      "attack": 13,
+      "defense": 10,
+      "specialAttack": 6,
+      "specialDefense": 10,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "parental-bond"
+    ],
+    "heightMeters": 2.2,
+    "weightKg": 100,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "kangaskhanmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "kangaskhan",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "kangaskhanite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "kangaskhan"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/kangaskhan-mega.png",
+      "token": "systems/ptu/assets/commander/forms/kangaskhan-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10039"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Starmie-Mega",
+    "slug": "starmie-mega",
+    "nationalDex": 121,
+    "types": [
+      "water",
+      "psychic"
+    ],
+    "stats": {
+      "hp": 6,
+      "attack": 14,
+      "defense": 11,
+      "specialAttack": 13,
+      "specialDefense": 11,
+      "speed": 12
+    },
+    "abilitySlugs": [
+      "illuminate",
+      "natural-cure",
+      "analytic"
+    ],
+    "heightMeters": 2.3,
+    "weightKg": 80,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "water-3"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "starmiemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "starmie",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "starminite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "starmie"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/starmie-mega.png",
+      "token": "systems/ptu/assets/commander/forms/starmie-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10280"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Pinsir-Mega",
+    "slug": "pinsir-mega",
+    "nationalDex": 127,
+    "types": [
+      "bug",
+      "flying"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 16,
+      "defense": 12,
+      "specialAttack": 7,
+      "specialDefense": 9,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "aerilate"
+    ],
+    "heightMeters": 1.7,
+    "weightKg": 59,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "bug"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "pinsirmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "pinsir",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "pinsirite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "pinsir"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/pinsir-mega.png",
+      "token": "systems/ptu/assets/commander/forms/pinsir-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10040"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Gyarados-Mega",
+    "slug": "gyarados-mega",
+    "nationalDex": 130,
+    "types": [
+      "water",
+      "dark"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 16,
+      "defense": 11,
+      "specialAttack": 7,
+      "specialDefense": 13,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "mold-breaker"
+    ],
+    "heightMeters": 6.5,
+    "weightKg": 305,
+    "size": "massive",
+    "weightClass": 3,
+    "eggGroups": [
+      "water-2",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "gyaradosmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "gyarados",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "gyaradosite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "gyarados"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/gyarados-mega.png",
+      "token": "systems/ptu/assets/commander/forms/gyarados-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10041"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Aerodactyl-Mega",
+    "slug": "aerodactyl-mega",
+    "nationalDex": 142,
+    "types": [
+      "rock",
+      "flying"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 14,
+      "defense": 9,
+      "specialAttack": 7,
+      "specialDefense": 10,
+      "speed": 15
+    },
+    "abilitySlugs": [
+      "tough-claws"
+    ],
+    "heightMeters": 2.1,
+    "weightKg": 79,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "flying"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "aerodactylmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "aerodactyl",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "aerodactylite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "aerodactyl"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/aerodactyl-mega.png",
+      "token": "systems/ptu/assets/commander/forms/aerodactyl-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10042"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Dragonite-Mega",
+    "slug": "dragonite-mega",
+    "nationalDex": 149,
+    "types": [
+      "dragon",
+      "flying"
+    ],
+    "stats": {
+      "hp": 9,
+      "attack": 12,
+      "defense": 12,
+      "specialAttack": 15,
+      "specialDefense": 13,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "inner-focus",
+      "multiscale"
+    ],
+    "heightMeters": 2.2,
+    "weightKg": 290,
+    "size": "medium",
+    "weightClass": 3,
+    "eggGroups": [
+      "water-1",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "dragonitemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "dragonite",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "dragoninite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "dragonite"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/dragonite-mega.png",
+      "token": "systems/ptu/assets/commander/forms/dragonite-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10281"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Mewtwo-Mega-X",
+    "slug": "mewtwo-mega-x",
+    "nationalDex": 150,
+    "types": [
+      "psychic",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 11,
+      "attack": 19,
+      "defense": 10,
+      "specialAttack": 15,
+      "specialDefense": 10,
+      "speed": 13
+    },
+    "abilitySlugs": [
+      "steadfast"
+    ],
+    "heightMeters": 2.3,
+    "weightKg": 127,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "mewtwomegax",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "mewtwo",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "mewtwonite-x",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "mewtwo"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/mewtwo-mega-x.png",
+      "token": "systems/ptu/assets/commander/forms/mewtwo-mega-x.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10043"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Mewtwo-Mega-Y",
+    "slug": "mewtwo-mega-y",
+    "nationalDex": 150,
+    "types": [
+      "psychic"
+    ],
+    "stats": {
+      "hp": 11,
+      "attack": 15,
+      "defense": 7,
+      "specialAttack": 19,
+      "specialDefense": 12,
+      "speed": 14
+    },
+    "abilitySlugs": [
+      "insomnia"
+    ],
+    "heightMeters": 1.5,
+    "weightKg": 33,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "mewtwomegay",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "mewtwo",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "mewtwonite-y",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "mewtwo"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/mewtwo-mega-y.png",
+      "token": "systems/ptu/assets/commander/forms/mewtwo-mega-y.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10044"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Meganium-Mega",
+    "slug": "meganium-mega",
+    "nationalDex": 154,
+    "types": [
+      "grass",
+      "fairy"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 9,
+      "defense": 12,
+      "specialAttack": 14,
+      "specialDefense": 12,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "overgrow",
+      "leaf-guard"
+    ],
+    "heightMeters": 2.4,
+    "weightKg": 201,
+    "size": "medium",
+    "weightClass": 3,
+    "eggGroups": [
+      "monster",
+      "grass"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "meganiummega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "meganium",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "meganiumite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "meganium"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/meganium-mega.png",
+      "token": "systems/ptu/assets/commander/forms/meganium-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10282"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Feraligatr-Mega",
+    "slug": "feraligatr-mega",
+    "nationalDex": 160,
+    "types": [
+      "water",
+      "dragon"
+    ],
+    "stats": {
+      "hp": 9,
+      "attack": 17,
+      "defense": 13,
+      "specialAttack": 9,
+      "specialDefense": 9,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "torrent",
+      "sheer-force"
+    ],
+    "heightMeters": 2.3,
+    "weightKg": 108.8,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "water-1"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "feraligatrmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "feraligatr",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "feraligite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "feraligatr"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/feraligatr-mega.png",
+      "token": "systems/ptu/assets/commander/forms/feraligatr-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10283"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Ampharos-Mega",
+    "slug": "ampharos-mega",
+    "nationalDex": 181,
+    "types": [
+      "electric",
+      "dragon"
+    ],
+    "stats": {
+      "hp": 9,
+      "attack": 10,
+      "defense": 11,
+      "specialAttack": 17,
+      "specialDefense": 11,
+      "speed": 5
+    },
+    "abilitySlugs": [
+      "mold-breaker"
+    ],
+    "heightMeters": 1.4,
+    "weightKg": 61.5,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "ampharosmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "ampharos",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "ampharosite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "ampharos"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/ampharos-mega.png",
+      "token": "systems/ptu/assets/commander/forms/ampharos-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10045"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Steelix-Mega",
+    "slug": "steelix-mega",
+    "nationalDex": 208,
+    "types": [
+      "steel",
+      "ground"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 13,
+      "defense": 23,
+      "specialAttack": 6,
+      "specialDefense": 10,
+      "speed": 3
+    },
+    "abilitySlugs": [
+      "sand-force"
+    ],
+    "heightMeters": 10.5,
+    "weightKg": 740,
+    "size": "massive",
+    "weightClass": 4,
+    "eggGroups": [
+      "mineral"
+    ],
+    "captureDifficulty": 6,
+    "rarity": "exceptional",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "steelixmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "steelix",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "steelixite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "steelix"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/steelix-mega.png",
+      "token": "systems/ptu/assets/commander/forms/steelix-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10072"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Scizor-Mega",
+    "slug": "scizor-mega",
+    "nationalDex": 212,
+    "types": [
+      "bug",
+      "steel"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 15,
+      "defense": 14,
+      "specialAttack": 7,
+      "specialDefense": 10,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "technician"
+    ],
+    "heightMeters": 2,
+    "weightKg": 125,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "bug"
+    ],
+    "captureDifficulty": 6,
+    "rarity": "exceptional",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "scizormega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "scizor",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "scizorite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "scizor"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/scizor-mega.png",
+      "token": "systems/ptu/assets/commander/forms/scizor-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10046"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Heracross-Mega",
+    "slug": "heracross-mega",
+    "nationalDex": 214,
+    "types": [
+      "bug",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 19,
+      "defense": 12,
+      "specialAttack": 4,
+      "specialDefense": 11,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "skill-link"
+    ],
+    "heightMeters": 1.7,
+    "weightKg": 62.5,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "bug"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "heracrossmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "heracross",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "heracronite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "heracross"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/heracross-mega.png",
+      "token": "systems/ptu/assets/commander/forms/heracross-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10047"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Skarmory-Mega",
+    "slug": "skarmory-mega",
+    "nationalDex": 227,
+    "types": [
+      "steel",
+      "flying"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 14,
+      "defense": 11,
+      "specialAttack": 4,
+      "specialDefense": 10,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "keen-eye",
+      "sturdy",
+      "weak-armor"
+    ],
+    "heightMeters": 1.7,
+    "weightKg": 40.4,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "flying"
+    ],
+    "captureDifficulty": 6,
+    "rarity": "exceptional",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "skarmorymega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "skarmory",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "skarmorite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "skarmory"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/skarmory-mega.png",
+      "token": "systems/ptu/assets/commander/forms/skarmory-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10284"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Houndoom-Mega",
+    "slug": "houndoom-mega",
+    "nationalDex": 229,
+    "types": [
+      "dark",
+      "fire"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 9,
+      "defense": 9,
+      "specialAttack": 14,
+      "specialDefense": 9,
+      "speed": 12
+    },
+    "abilitySlugs": [
+      "solar-power"
+    ],
+    "heightMeters": 1.9,
+    "weightKg": 49.5,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "houndoommega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "houndoom",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "houndoominite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "houndoom"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/houndoom-mega.png",
+      "token": "systems/ptu/assets/commander/forms/houndoom-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10048"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Tyranitar-Mega",
+    "slug": "tyranitar-mega",
+    "nationalDex": 248,
+    "types": [
+      "rock",
+      "dark"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 16,
+      "defense": 15,
+      "specialAttack": 10,
+      "specialDefense": 12,
+      "speed": 7
+    },
+    "abilitySlugs": [
+      "sand-stream"
+    ],
+    "heightMeters": 2.5,
+    "weightKg": 255,
+    "size": "medium",
+    "weightClass": 3,
+    "eggGroups": [
+      "monster"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "tyranitarmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "tyranitar",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "tyranitarite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "tyranitar"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/tyranitar-mega.png",
+      "token": "systems/ptu/assets/commander/forms/tyranitar-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10049"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Sceptile-Mega",
+    "slug": "sceptile-mega",
+    "nationalDex": 254,
+    "types": [
+      "grass",
+      "dragon"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 11,
+      "defense": 8,
+      "specialAttack": 15,
+      "specialDefense": 9,
+      "speed": 15
+    },
+    "abilitySlugs": [
+      "lightning-rod"
+    ],
+    "heightMeters": 1.9,
+    "weightKg": 55.2,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "sceptilemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "sceptile",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "sceptilite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "sceptile"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/sceptile-mega.png",
+      "token": "systems/ptu/assets/commander/forms/sceptile-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10065"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Blaziken-Mega",
+    "slug": "blaziken-mega",
+    "nationalDex": 257,
+    "types": [
+      "fire",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 16,
+      "defense": 8,
+      "specialAttack": 13,
+      "specialDefense": 8,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "speed-boost"
+    ],
+    "heightMeters": 1.9,
+    "weightKg": 52,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "blazikenmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "blaziken",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "blazikenite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "blaziken"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/blaziken-mega.png",
+      "token": "systems/ptu/assets/commander/forms/blaziken-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10050"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Swampert-Mega",
+    "slug": "swampert-mega",
+    "nationalDex": 260,
+    "types": [
+      "water",
+      "ground"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 15,
+      "defense": 11,
+      "specialAttack": 10,
+      "specialDefense": 11,
+      "speed": 7
+    },
+    "abilitySlugs": [
+      "swift-swim"
+    ],
+    "heightMeters": 1.9,
+    "weightKg": 102,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "water-1"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "swampertmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "swampert",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "swampertite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "swampert"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/swampert-mega.png",
+      "token": "systems/ptu/assets/commander/forms/swampert-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10064"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Gardevoir-Mega",
+    "slug": "gardevoir-mega",
+    "nationalDex": 282,
+    "types": [
+      "psychic",
+      "fairy"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 9,
+      "defense": 7,
+      "specialAttack": 17,
+      "specialDefense": 14,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "pixilate"
+    ],
+    "heightMeters": 1.6,
+    "weightKg": 48.4,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "amorphous"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "gardevoirmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "gardevoir",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "gardevoirite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "gardevoir"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/gardevoir-mega.png",
+      "token": "systems/ptu/assets/commander/forms/gardevoir-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10051"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Sableye-Mega",
+    "slug": "sableye-mega",
+    "nationalDex": 302,
+    "types": [
+      "dark",
+      "ghost"
+    ],
+    "stats": {
+      "hp": 5,
+      "attack": 9,
+      "defense": 13,
+      "specialAttack": 9,
+      "specialDefense": 12,
+      "speed": 2
+    },
+    "abilitySlugs": [
+      "magic-bounce"
+    ],
+    "heightMeters": 0.5,
+    "weightKg": 161,
+    "size": "small",
+    "weightClass": 3,
+    "eggGroups": [
+      "human-like"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "sableyemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "sableye",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "sablenite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "sableye"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/sableye-mega.png",
+      "token": "systems/ptu/assets/commander/forms/sableye-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10066"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Mawile-Mega",
+    "slug": "mawile-mega",
+    "nationalDex": 303,
+    "types": [
+      "steel",
+      "fairy"
+    ],
+    "stats": {
+      "hp": 5,
+      "attack": 11,
+      "defense": 13,
+      "specialAttack": 6,
+      "specialDefense": 10,
+      "speed": 5
+    },
+    "abilitySlugs": [
+      "huge-power"
+    ],
+    "heightMeters": 1,
+    "weightKg": 23.5,
+    "size": "small",
+    "weightClass": 1,
+    "eggGroups": [
+      "field",
+      "fairy"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "mawilemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "mawile",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "mawilite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "mawile"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/mawile-mega.png",
+      "token": "systems/ptu/assets/commander/forms/mawile-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10052"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Aggron-Mega",
+    "slug": "aggron-mega",
+    "nationalDex": 306,
+    "types": [
+      "steel"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 14,
+      "defense": 23,
+      "specialAttack": 6,
+      "specialDefense": 8,
+      "speed": 5
+    },
+    "abilitySlugs": [
+      "filter"
+    ],
+    "heightMeters": 2.2,
+    "weightKg": 395,
+    "size": "medium",
+    "weightClass": 3,
+    "eggGroups": [
+      "monster"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "aggronmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "aggron",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "aggronite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "aggron"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/aggron-mega.png",
+      "token": "systems/ptu/assets/commander/forms/aggron-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10053"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Medicham-Mega",
+    "slug": "medicham-mega",
+    "nationalDex": 308,
+    "types": [
+      "fighting",
+      "psychic"
+    ],
+    "stats": {
+      "hp": 6,
+      "attack": 10,
+      "defense": 9,
+      "specialAttack": 8,
+      "specialDefense": 9,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "pure-power"
+    ],
+    "heightMeters": 1.3,
+    "weightKg": 31.5,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "human-like"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "medichammega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "medicham",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "medichamite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "medicham"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/medicham-mega.png",
+      "token": "systems/ptu/assets/commander/forms/medicham-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10054"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Manectric-Mega",
+    "slug": "manectric-mega",
+    "nationalDex": 310,
+    "types": [
+      "electric"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 8,
+      "defense": 8,
+      "specialAttack": 14,
+      "specialDefense": 8,
+      "speed": 14
+    },
+    "abilitySlugs": [
+      "intimidate"
+    ],
+    "heightMeters": 1.8,
+    "weightKg": 44,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "manectricmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "manectric",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "manectite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "manectric"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/manectric-mega.png",
+      "token": "systems/ptu/assets/commander/forms/manectric-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10055"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Sharpedo-Mega",
+    "slug": "sharpedo-mega",
+    "nationalDex": 319,
+    "types": [
+      "water",
+      "dark"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 14,
+      "defense": 7,
+      "specialAttack": 11,
+      "specialDefense": 7,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "strong-jaw"
+    ],
+    "heightMeters": 2.5,
+    "weightKg": 130.3,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "water-2"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "sharpedomega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "sharpedo",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "sharpedonite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "sharpedo"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/sharpedo-mega.png",
+      "token": "systems/ptu/assets/commander/forms/sharpedo-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10070"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Camerupt-Mega",
+    "slug": "camerupt-mega",
+    "nationalDex": 323,
+    "types": [
+      "fire",
+      "ground"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 12,
+      "defense": 10,
+      "specialAttack": 15,
+      "specialDefense": 11,
+      "speed": 2
+    },
+    "abilitySlugs": [
+      "sheer-force"
+    ],
+    "heightMeters": 2.5,
+    "weightKg": 320.5,
+    "size": "medium",
+    "weightClass": 3,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 2,
+    "rarity": "uncommon",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "cameruptmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "camerupt",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "cameruptite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "camerupt"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/camerupt-mega.png",
+      "token": "systems/ptu/assets/commander/forms/camerupt-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10087"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Altaria-Mega",
+    "slug": "altaria-mega",
+    "nationalDex": 334,
+    "types": [
+      "dragon",
+      "fairy"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 11,
+      "defense": 11,
+      "specialAttack": 11,
+      "specialDefense": 11,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "pixilate"
+    ],
+    "heightMeters": 1.5,
+    "weightKg": 20.6,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "flying",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "altariamega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "altaria",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "altarianite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "altaria"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/altaria-mega.png",
+      "token": "systems/ptu/assets/commander/forms/altaria-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10067"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Banette-Mega",
+    "slug": "banette-mega",
+    "nationalDex": 354,
+    "types": [
+      "ghost"
+    ],
+    "stats": {
+      "hp": 6,
+      "attack": 17,
+      "defense": 8,
+      "specialAttack": 9,
+      "specialDefense": 8,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "prankster"
+    ],
+    "heightMeters": 1.2,
+    "weightKg": 13,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "amorphous"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "banettemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "banette",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "banettite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "banette"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/banette-mega.png",
+      "token": "systems/ptu/assets/commander/forms/banette-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10056"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Absol-Mega",
+    "slug": "absol-mega",
+    "nationalDex": 359,
+    "types": [
+      "dark"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 15,
+      "defense": 6,
+      "specialAttack": 12,
+      "specialDefense": 6,
+      "speed": 12
+    },
+    "abilitySlugs": [
+      "magic-bounce"
+    ],
+    "heightMeters": 1.2,
+    "weightKg": 49,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 6,
+    "rarity": "exceptional",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "absolmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "absol",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "absolite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "absol"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/absol-mega.png",
+      "token": "systems/ptu/assets/commander/forms/absol-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10057"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Glalie-Mega",
+    "slug": "glalie-mega",
+    "nationalDex": 362,
+    "types": [
+      "ice"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 12,
+      "defense": 8,
+      "specialAttack": 12,
+      "specialDefense": 8,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "refrigerate"
+    ],
+    "heightMeters": 2.1,
+    "weightKg": 350.2,
+    "size": "medium",
+    "weightClass": 3,
+    "eggGroups": [
+      "fairy",
+      "mineral"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "glaliemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "glalie",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "glalitite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "glalie"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/glalie-mega.png",
+      "token": "systems/ptu/assets/commander/forms/glalie-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10074"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Salamence-Mega",
+    "slug": "salamence-mega",
+    "nationalDex": 373,
+    "types": [
+      "dragon",
+      "flying"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 15,
+      "defense": 13,
+      "specialAttack": 12,
+      "specialDefense": 9,
+      "speed": 12
+    },
+    "abilitySlugs": [
+      "aerilate"
+    ],
+    "heightMeters": 1.8,
+    "weightKg": 112.6,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "salamencemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "salamence",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "salamencite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "salamence"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/salamence-mega.png",
+      "token": "systems/ptu/assets/commander/forms/salamence-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10089"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Metagross-Mega",
+    "slug": "metagross-mega",
+    "nationalDex": 376,
+    "types": [
+      "steel",
+      "psychic"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 15,
+      "defense": 15,
+      "specialAttack": 11,
+      "specialDefense": 11,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "tough-claws"
+    ],
+    "heightMeters": 2.5,
+    "weightKg": 942.9,
+    "size": "medium",
+    "weightClass": 4,
+    "eggGroups": [
+      "mineral"
+    ],
+    "captureDifficulty": 6,
+    "rarity": "exceptional",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "metagrossmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "metagross",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "metagrossite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "metagross"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/metagross-mega.png",
+      "token": "systems/ptu/assets/commander/forms/metagross-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10076"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Latias-Mega",
+    "slug": "latias-mega",
+    "nationalDex": 380,
+    "types": [
+      "dragon",
+      "psychic"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 10,
+      "defense": 12,
+      "specialAttack": 14,
+      "specialDefense": 15,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "levitate"
+    ],
+    "heightMeters": 1.8,
+    "weightKg": 52,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "latiasmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "latias",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "latiasite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "latias"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/latias-mega.png",
+      "token": "systems/ptu/assets/commander/forms/latias-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10062"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Latios-Mega",
+    "slug": "latios-mega",
+    "nationalDex": 381,
+    "types": [
+      "dragon",
+      "psychic"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 13,
+      "defense": 10,
+      "specialAttack": 16,
+      "specialDefense": 12,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "levitate"
+    ],
+    "heightMeters": 2.3,
+    "weightKg": 70,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "latiosmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "latios",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "latiosite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "latios"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/latios-mega.png",
+      "token": "systems/ptu/assets/commander/forms/latios-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10063"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Rayquaza-Mega",
+    "slug": "rayquaza-mega",
+    "nationalDex": 384,
+    "types": [
+      "dragon",
+      "flying"
+    ],
+    "stats": {
+      "hp": 11,
+      "attack": 18,
+      "defense": 10,
+      "specialAttack": 18,
+      "specialDefense": 10,
+      "speed": 12
+    },
+    "abilitySlugs": [
+      "delta-stream"
+    ],
+    "heightMeters": 10.8,
+    "weightKg": 392,
+    "size": "massive",
+    "weightClass": 3,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "rayquazamega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "rayquaza",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "rayquaza"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/rayquaza-mega.png",
+      "token": "systems/ptu/assets/commander/forms/rayquaza-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10079"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Lopunny-Mega",
+    "slug": "lopunny-mega",
+    "nationalDex": 428,
+    "types": [
+      "normal",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 14,
+      "defense": 9,
+      "specialAttack": 5,
+      "specialDefense": 10,
+      "speed": 14
+    },
+    "abilitySlugs": [
+      "scrappy"
+    ],
+    "heightMeters": 1.3,
+    "weightKg": 28.3,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "field",
+      "human-like"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "lopunnymega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "lopunny",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "lopunnite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "lopunny"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/lopunny-mega.png",
+      "token": "systems/ptu/assets/commander/forms/lopunny-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10088"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Garchomp-Mega",
+    "slug": "garchomp-mega",
+    "nationalDex": 445,
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "stats": {
+      "hp": 11,
+      "attack": 17,
+      "defense": 12,
+      "specialAttack": 12,
+      "specialDefense": 10,
+      "speed": 9
+    },
+    "abilitySlugs": [
+      "sand-force"
+    ],
+    "heightMeters": 1.9,
+    "weightKg": 95,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "monster",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "garchompmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "garchomp",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "garchompite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "garchomp"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/garchomp-mega.png",
+      "token": "systems/ptu/assets/commander/forms/garchomp-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10058"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Lucario-Mega",
+    "slug": "lucario-mega",
+    "nationalDex": 448,
+    "types": [
+      "fighting",
+      "steel"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 15,
+      "defense": 9,
+      "specialAttack": 14,
+      "specialDefense": 7,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "adaptability"
+    ],
+    "heightMeters": 1.3,
+    "weightKg": 57.5,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "field",
+      "human-like"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "lucariomega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "lucario",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "lucarionite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "lucario"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/lucario-mega.png",
+      "token": "systems/ptu/assets/commander/forms/lucario-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10059"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Abomasnow-Mega",
+    "slug": "abomasnow-mega",
+    "nationalDex": 460,
+    "types": [
+      "grass",
+      "ice"
+    ],
+    "stats": {
+      "hp": 9,
+      "attack": 13,
+      "defense": 11,
+      "specialAttack": 13,
+      "specialDefense": 11,
+      "speed": 3
+    },
+    "abilitySlugs": [
+      "snow-warning"
+    ],
+    "heightMeters": 2.7,
+    "weightKg": 185,
+    "size": "large",
+    "weightClass": 3,
+    "eggGroups": [
+      "monster",
+      "grass"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "abomasnowmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "abomasnow",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "abomasite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "abomasnow"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/abomasnow-mega.png",
+      "token": "systems/ptu/assets/commander/forms/abomasnow-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10060"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Gallade-Mega",
+    "slug": "gallade-mega",
+    "nationalDex": 475,
+    "types": [
+      "psychic",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 17,
+      "defense": 10,
+      "specialAttack": 7,
+      "specialDefense": 12,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "inner-focus"
+    ],
+    "heightMeters": 1.6,
+    "weightKg": 56.4,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "amorphous"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "gallademega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "gallade",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "galladite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "gallade"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/gallade-mega.png",
+      "token": "systems/ptu/assets/commander/forms/gallade-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10068"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Froslass-Mega",
+    "slug": "froslass-mega",
+    "nationalDex": 478,
+    "types": [
+      "ice",
+      "ghost"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 8,
+      "defense": 7,
+      "specialAttack": 14,
+      "specialDefense": 10,
+      "speed": 12
+    },
+    "abilitySlugs": [
+      "snow-cloak",
+      "cursed-body"
+    ],
+    "heightMeters": 2.6,
+    "weightKg": 29.6,
+    "size": "large",
+    "weightClass": 1,
+    "eggGroups": [
+      "fairy",
+      "mineral"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "froslassmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "froslass",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "froslassite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "froslass"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/froslass-mega.png",
+      "token": "systems/ptu/assets/commander/forms/froslass-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10285"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Emboar-Mega",
+    "slug": "emboar-mega",
+    "nationalDex": 500,
+    "types": [
+      "fire",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 11,
+      "attack": 15,
+      "defense": 8,
+      "specialAttack": 11,
+      "specialDefense": 11,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "blaze",
+      "reckless"
+    ],
+    "heightMeters": 1.8,
+    "weightKg": 180.3,
+    "size": "medium",
+    "weightClass": 3,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "emboarmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "emboar",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "emboarite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "emboar"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/emboar-mega.png",
+      "token": "systems/ptu/assets/commander/forms/emboar-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10286"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Excadrill-Mega",
+    "slug": "excadrill-mega",
+    "nationalDex": 530,
+    "types": [
+      "ground",
+      "steel"
+    ],
+    "stats": {
+      "hp": 11,
+      "attack": 14,
+      "defense": 6,
+      "specialAttack": 5,
+      "specialDefense": 7,
+      "speed": 9
+    },
+    "abilitySlugs": [
+      "sand-rush",
+      "sand-force",
+      "mold-breaker"
+    ],
+    "heightMeters": 0.9,
+    "weightKg": 60,
+    "size": "small",
+    "weightClass": 2,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "excadrillmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "excadrill",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "excadrite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "excadrill"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/excadrill-mega.png",
+      "token": "systems/ptu/assets/commander/forms/excadrill-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10287"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Audino-Mega",
+    "slug": "audino-mega",
+    "nationalDex": 531,
+    "types": [
+      "normal",
+      "fairy"
+    ],
+    "stats": {
+      "hp": 10,
+      "attack": 6,
+      "defense": 13,
+      "specialAttack": 8,
+      "specialDefense": 13,
+      "speed": 5
+    },
+    "abilitySlugs": [
+      "healer"
+    ],
+    "heightMeters": 1.5,
+    "weightKg": 32,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "fairy"
+    ],
+    "captureDifficulty": 0,
+    "rarity": "common",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "audinomega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "audino",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "audinite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "audino"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/audino-mega.png",
+      "token": "systems/ptu/assets/commander/forms/audino-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10069"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Scolipede-Mega",
+    "slug": "scolipede-mega",
+    "nationalDex": 545,
+    "types": [
+      "bug",
+      "poison"
+    ],
+    "stats": {
+      "hp": 6,
+      "attack": 14,
+      "defense": 15,
+      "specialAttack": 8,
+      "specialDefense": 10,
+      "speed": 6
+    },
+    "abilitySlugs": [
+      "poison-point",
+      "swarm",
+      "speed-boost"
+    ],
+    "heightMeters": 3.2,
+    "weightKg": 230.5,
+    "size": "large",
+    "weightClass": 3,
+    "eggGroups": [
+      "bug"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "scolipedemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "scolipede",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "scolipite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "scolipede"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/scolipede-mega.png",
+      "token": "systems/ptu/assets/commander/forms/scolipede-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10288"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Scrafty-Mega",
+    "slug": "scrafty-mega",
+    "nationalDex": 560,
+    "types": [
+      "dark",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 13,
+      "defense": 14,
+      "specialAttack": 6,
+      "specialDefense": 14,
+      "speed": 7
+    },
+    "abilitySlugs": [
+      "shed-skin",
+      "moxie",
+      "intimidate"
+    ],
+    "heightMeters": 1.1,
+    "weightKg": 31,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "field",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "scraftymega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "scrafty",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "scraftinite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "scrafty"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/scrafty-mega.png",
+      "token": "systems/ptu/assets/commander/forms/scrafty-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10289"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Eelektross-Mega",
+    "slug": "eelektross-mega",
+    "nationalDex": 604,
+    "types": [
+      "electric"
+    ],
+    "stats": {
+      "hp": 9,
+      "attack": 15,
+      "defense": 8,
+      "specialAttack": 14,
+      "specialDefense": 9,
+      "speed": 8
+    },
+    "abilitySlugs": [
+      "levitate"
+    ],
+    "heightMeters": 3,
+    "weightKg": 160,
+    "size": "large",
+    "weightClass": 3,
+    "eggGroups": [
+      "amorphous"
+    ],
+    "captureDifficulty": 6,
+    "rarity": "exceptional",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "eelektrossmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "eelektross",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "eelektrossite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "eelektross"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/eelektross-mega.png",
+      "token": "systems/ptu/assets/commander/forms/eelektross-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10290"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Chandelure-Mega",
+    "slug": "chandelure-mega",
+    "nationalDex": 609,
+    "types": [
+      "ghost",
+      "fire"
+    ],
+    "stats": {
+      "hp": 6,
+      "attack": 8,
+      "defense": 11,
+      "specialAttack": 18,
+      "specialDefense": 11,
+      "speed": 9
+    },
+    "abilitySlugs": [
+      "flash-fire",
+      "flame-body",
+      "infiltrator"
+    ],
+    "heightMeters": 2.5,
+    "weightKg": 69.6,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "amorphous"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "chandeluremega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "chandelure",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "chandelurite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "chandelure"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/chandelure-mega.png",
+      "token": "systems/ptu/assets/commander/forms/chandelure-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10291"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Chesnaught-Mega",
+    "slug": "chesnaught-mega",
+    "nationalDex": 652,
+    "types": [
+      "grass",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 9,
+      "attack": 14,
+      "defense": 17,
+      "specialAttack": 7,
+      "specialDefense": 12,
+      "speed": 4
+    },
+    "abilitySlugs": [
+      "overgrow",
+      "bulletproof"
+    ],
+    "heightMeters": 1.6,
+    "weightKg": 90,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "chesnaughtmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "chesnaught",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "chesnaughtite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "chesnaught"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/chesnaught-mega.png",
+      "token": "systems/ptu/assets/commander/forms/chesnaught-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10292"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Delphox-Mega",
+    "slug": "delphox-mega",
+    "nationalDex": 655,
+    "types": [
+      "fire",
+      "psychic"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 7,
+      "defense": 7,
+      "specialAttack": 16,
+      "specialDefense": 13,
+      "speed": 13
+    },
+    "abilitySlugs": [
+      "blaze",
+      "magician"
+    ],
+    "heightMeters": 1.5,
+    "weightKg": 39,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "delphoxmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "delphox",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "delphoxite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "delphox"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/delphox-mega.png",
+      "token": "systems/ptu/assets/commander/forms/delphox-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10293"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Greninja-Mega",
+    "slug": "greninja-mega",
+    "nationalDex": 658,
+    "types": [
+      "water",
+      "dark"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 13,
+      "defense": 8,
+      "specialAttack": 13,
+      "specialDefense": 8,
+      "speed": 14
+    },
+    "abilitySlugs": [
+      "torrent",
+      "protean"
+    ],
+    "heightMeters": 1.5,
+    "weightKg": 40,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "water-1"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "greninjamega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "greninja",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "greninjite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "greninja"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/greninja-mega.png",
+      "token": "systems/ptu/assets/commander/forms/greninja-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10294"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Pyroar-Mega",
+    "slug": "pyroar-mega",
+    "nationalDex": 668,
+    "types": [
+      "fire",
+      "normal"
+    ],
+    "stats": {
+      "hp": 9,
+      "attack": 9,
+      "defense": 9,
+      "specialAttack": 13,
+      "specialDefense": 9,
+      "speed": 13
+    },
+    "abilitySlugs": [
+      "rivalry",
+      "unnerve",
+      "moxie"
+    ],
+    "heightMeters": 1.5,
+    "weightKg": 93.3,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "field"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "pyroarmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "pyroar",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "pyroarite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "pyroar"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/pyroar-mega.png",
+      "token": "systems/ptu/assets/commander/forms/pyroar-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10295"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Floette-Mega",
+    "slug": "floette-mega",
+    "nationalDex": 670,
+    "types": [
+      "fairy"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 9,
+      "defense": 9,
+      "specialAttack": 16,
+      "specialDefense": 15,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "flower-veil",
+      "symbiosis"
+    ],
+    "heightMeters": 0.2,
+    "weightKg": 100.8,
+    "size": "tiny",
+    "weightClass": 2,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 2,
+    "rarity": "uncommon",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "floettemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "floette",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "floettite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "floette"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/floette-mega.png",
+      "token": "systems/ptu/assets/commander/forms/floette-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10296"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Malamar-Mega",
+    "slug": "malamar-mega",
+    "nationalDex": 687,
+    "types": [
+      "dark",
+      "psychic"
+    ],
+    "stats": {
+      "hp": 9,
+      "attack": 10,
+      "defense": 9,
+      "specialAttack": 10,
+      "specialDefense": 12,
+      "speed": 9
+    },
+    "abilitySlugs": [
+      "contrary",
+      "suction-cups",
+      "infiltrator"
+    ],
+    "heightMeters": 2.9,
+    "weightKg": 69.8,
+    "size": "large",
+    "weightClass": 2,
+    "eggGroups": [
+      "water-1",
+      "water-2"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "malamarmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "malamar",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "malamarite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "malamar"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/malamar-mega.png",
+      "token": "systems/ptu/assets/commander/forms/malamar-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10297"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Barbaracle-Mega",
+    "slug": "barbaracle-mega",
+    "nationalDex": 689,
+    "types": [
+      "rock",
+      "fighting"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 14,
+      "defense": 13,
+      "specialAttack": 6,
+      "specialDefense": 11,
+      "speed": 9
+    },
+    "abilitySlugs": [
+      "tough-claws",
+      "sniper",
+      "pickpocket"
+    ],
+    "heightMeters": 2.2,
+    "weightKg": 100,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "water-3"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "barbaraclemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "barbaracle",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "barbaracite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "barbaracle"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/barbaracle-mega.png",
+      "token": "systems/ptu/assets/commander/forms/barbaracle-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10298"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Dragalge-Mega",
+    "slug": "dragalge-mega",
+    "nationalDex": 691,
+    "types": [
+      "poison",
+      "dragon"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 9,
+      "defense": 11,
+      "specialAttack": 13,
+      "specialDefense": 16,
+      "speed": 4
+    },
+    "abilitySlugs": [
+      "poison-point",
+      "poison-touch",
+      "adaptability"
+    ],
+    "heightMeters": 2.1,
+    "weightKg": 100.3,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "water-1",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "dragalgemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "dragalge",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "dragalgite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "dragalge"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/dragalge-mega.png",
+      "token": "systems/ptu/assets/commander/forms/dragalge-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10299"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Hawlucha-Mega",
+    "slug": "hawlucha-mega",
+    "nationalDex": 701,
+    "types": [
+      "fighting",
+      "flying"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 14,
+      "defense": 10,
+      "specialAttack": 7,
+      "specialDefense": 9,
+      "speed": 12
+    },
+    "abilitySlugs": [
+      "limber",
+      "unburden",
+      "mold-breaker"
+    ],
+    "heightMeters": 1,
+    "weightKg": 25,
+    "size": "small",
+    "weightClass": 1,
+    "eggGroups": [
+      "flying",
+      "human-like"
+    ],
+    "captureDifficulty": 2,
+    "rarity": "uncommon",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "hawluchamega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "hawlucha",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "hawluchanite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "hawlucha"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/hawlucha-mega.png",
+      "token": "systems/ptu/assets/commander/forms/hawlucha-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10300"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Zygarde-Mega",
+    "slug": "zygarde-mega",
+    "nationalDex": 718,
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "stats": {
+      "hp": 22,
+      "attack": 7,
+      "defense": 9,
+      "specialAttack": 22,
+      "specialDefense": 9,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "aura-break"
+    ],
+    "heightMeters": 7.7,
+    "weightKg": 610,
+    "size": "massive",
+    "weightClass": 4,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "zygardemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "zygarde",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "zygardite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "zygarde"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Diancie-Mega",
+    "slug": "diancie-mega",
+    "nationalDex": 719,
+    "types": [
+      "rock",
+      "fairy"
+    ],
+    "stats": {
+      "hp": 5,
+      "attack": 16,
+      "defense": 11,
+      "specialAttack": 16,
+      "specialDefense": 11,
+      "speed": 11
+    },
+    "abilitySlugs": [
+      "magic-bounce"
+    ],
+    "heightMeters": 1.1,
+    "weightKg": 27.8,
+    "size": "medium",
+    "weightClass": 1,
+    "eggGroups": [
+      "undiscovered"
+    ],
+    "captureDifficulty": 10,
+    "rarity": "restricted",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "dianciemega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "diancie",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "diancite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "diancie"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/diancie-mega.png",
+      "token": "systems/ptu/assets/commander/forms/diancie-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10075"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Drampa-Mega",
+    "slug": "drampa-mega",
+    "nationalDex": 780,
+    "types": [
+      "normal",
+      "dragon"
+    ],
+    "stats": {
+      "hp": 8,
+      "attack": 9,
+      "defense": 11,
+      "specialAttack": 16,
+      "specialDefense": 12,
+      "speed": 4
+    },
+    "abilitySlugs": [
+      "berserk",
+      "sap-sipper",
+      "cloud-nine"
+    ],
+    "heightMeters": 3,
+    "weightKg": 185,
+    "size": "large",
+    "weightClass": 3,
+    "eggGroups": [
+      "monster",
+      "dragon"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "drampamega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "drampa",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "drampanite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "drampa"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/drampa-mega.png",
+      "token": "systems/ptu/assets/commander/forms/drampa-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10302"
+    }
+  },
+  {
+    "schemaVersion": 1,
+    "name": "Falinks-Mega",
+    "slug": "falinks-mega",
+    "nationalDex": 870,
+    "types": [
+      "fighting"
+    ],
+    "stats": {
+      "hp": 7,
+      "attack": 14,
+      "defense": 14,
+      "specialAttack": 7,
+      "specialDefense": 7,
+      "speed": 10
+    },
+    "abilitySlugs": [
+      "battle-armor",
+      "defiant"
+    ],
+    "heightMeters": 1.6,
+    "weightKg": 99,
+    "size": "medium",
+    "weightClass": 2,
+    "eggGroups": [
+      "fairy",
+      "mineral"
+    ],
+    "captureDifficulty": 4,
+    "rarity": "rare",
+    "source": {
+      "dataset": "pokemon-showdown-gen9-snapshot",
+      "sourceId": "falinksmega",
+      "generation": 9,
+      "cutoff": "gen9-sv-dlc-pre-za"
+    },
+    "tags": [],
+    "baseSpeciesSlug": "falinks",
+    "family": "mega",
+    "temporary": true,
+    "requirements": {
+      "itemSlug": "falinksite",
+      "trainerTalentSlug": "",
+      "trainerItemSlug": "key-stone",
+      "baseSpeciesSlugs": [
+        "falinks"
+      ],
+      "campaignFlag": "mega-evolution-enabled"
+    },
+    "artwork": {
+      "portrait": "systems/ptu/assets/commander/forms/falinks-mega.png",
+      "token": "systems/ptu/assets/commander/forms/falinks-mega.png",
+      "source": "pokeapi-sprites",
+      "sourceId": "10303"
+    }
+  }
+]

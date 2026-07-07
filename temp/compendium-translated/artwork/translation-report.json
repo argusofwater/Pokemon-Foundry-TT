@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-07-07T16:01:44.428Z",
+  "sourceRepository": "PokeAPI/sprites",
+  "sourceCommit": "bf4c47ac82c33b330e33d98b8882d1cedb2f53e7",
+  "species": {
+    "total": 1245,
+    "downloaded": 1245,
+    "missing": 0
+  },
+  "megaForms": {
+    "total": 74,
+    "downloaded": 73,
+    "missing": 1
+  },
+  "primalForms": {
+    "total": 2,
+    "downloaded": 2,
+    "missing": 0
+  },
+  "items": {
+    "total": 561,
+    "downloaded": 54,
+    "missing": 507
+  },
+  "assetRoot": "static/assets/commander",
+  "foundryPathPrefix": "systems/ptu/assets/commander"
+}
