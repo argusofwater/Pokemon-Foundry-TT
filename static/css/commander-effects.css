@@ -1,0 +1,54 @@
+.commander-condition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.commander-condition-button {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem;
+  color: var(--commander-ink);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--commander-line);
+  border-radius: 10px;
+}
+
+.commander-condition-button img {
+  width: 28px;
+  height: 28px;
+}
+
+.commander-condition-button.active {
+  color: #fff;
+  background: rgba(67, 92, 111, 0.92);
+  border-color: #dcecf7;
+  box-shadow: 0 0 0 2px rgba(83, 151, 197, 0.2);
+}
+
+.commander-condition-button:disabled {
+  opacity: 0.75;
+}
+
+.commander-effect-list {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.commander-effect-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.45rem;
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid var(--commander-line);
+  border-radius: 8px;
+}
+
+.commander-effect-row img {
+  width: 32px;
+  height: 32px;
+}
