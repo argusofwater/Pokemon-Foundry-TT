@@ -24,41 +24,53 @@ A single attack can involve accuracy, three possible evasions, move accuracy, cr
 
 The individual pieces are understandable. The burden comes from their interaction and from the number of places a player must inspect to predict an outcome.
 
-### 2. Three evasions create choice without enough player-facing value
+### 2. Three evasions create lookup burden
 
-Physical, Special, and Speed Evasion are each derived from a different stat, then modified independently. The code currently derives them from Defense, Special Defense, and Speed in fifths, caps their stat contribution, applies separate modifiers, and then handles exceptions such as Vulnerable and Stuck.
+Physical, Special, and Speed Evasion are each derived from a different stat, modified independently, and affected by separate exceptions.
 
-This is tactically precise but player-heavy. Most players experience it as three defensive target numbers that must be checked before each attack.
+The redesign keeps three distinct defensive outcomes because they preserve Pokémon identity, but reframes them as Physical Defense, Special Defense, and Reflex. Foundry selects the correct defense automatically so the player no longer performs the lookup.
 
 ### 3. Damage uses a ladder plus several additions and subtractions
 
 Damage begins from a move Damage Base, may be altered before and after STAB, then adds an offensive statistic and bonuses. Defense and damage reduction are applied later, followed by type interactions and a minimum-damage rule.
 
-This preserves PTU lineage but creates a long resolution chain. Foundry can automate it, yet players still struggle to estimate whether a move is weak, strong, or dangerous without opening several details.
+The redesign replaces that visible chain with a Foundry-built d6 pool based on move Power, attacking stat, defending stat, type interaction, STAB, and standardized modifiers.
 
 ### 4. Injuries are both attrition and a second health system
 
 The current implementation can award injuries from massive damage and from crossing repeating HP thresholds. Injuries reduce maximum HP and later impose severe penalties, including damage for taking Standard Actions and eventual death.
 
-This creates dramatic consequences, but it also means one attack may change current HP, maximum HP, injury count, rest eligibility, action costs, and death proximity. That is excellent for a survival campaign and unnecessarily punishing for a default Pokémon adventure.
+The redesign replaces repeating injury thresholds with a five-step Wound track. Classic PTR injuries remain available as an optional gritty module.
 
 ### 5. Trainer and Pokémon advancement are interlocked
 
 Trainer level, advancement tracks, milestones, Pokémon training caps, Pokémon experience, stat points, edges, feats, abilities, and move acquisition all create parallel progression tracks.
 
-The system supports deep customization, but level-up events are dense and maintenance-heavy. Players must understand two character systems at once, often across several active Pokémon.
+The redesign separates trainer and Pokémon progression. Trainers use levels 1–20 with Background, Role, Specialty, and Talents. Pokémon remain levels 1–100 with automatic growth, Training Paths, milestone choices, evolution continuity, and simplified move management.
 
 ### 6. Frequency bookkeeping is pervasive
 
 Moves, features, abilities, items, and effects may refresh at different intervals. Even when Foundry tracks usage, players must understand the meaning and timing of each recharge category.
 
+The redesign standardizes recharge as At-Will, Cooldown, Encounter, and Expedition.
+
 ### 7. The action economy has too many named exceptions
 
-Standard, Shift, Swift, Free, Interrupt, Priority, command restrictions, trainer actions, Pokémon actions, and special move clauses produce friction. Tactical richness is useful; vocabulary proliferation is not.
+Standard, Shift, Swift, Free, Interrupt, Priority, command restrictions, trainer actions, Pokémon actions, and special move clauses produce friction.
 
-### 8. Character sheets expose implementation detail
+The redesign uses shared trainer-Pokémon initiative, two Main Actions, two Move Actions, and one Reaction per individual. Basic commands are free. Reactions replace most interrupt and priority timing.
 
-The sheets contain many fields needed for exact PTU compatibility, but the player-facing hierarchy is weak. Frequently used actions compete visually with derived statistics, injury rules, advancement data, and niche toggles.
+### 8. Capture math is opaque
+
+Canonical-style capture math is difficult to explain, difficult to estimate, and hostile to quick table resolution.
+
+The redesign uses one d20 capture roll against a species difficulty, modified by trainer rank, ball, HP, status, momentum, and visible narrative tags. Capture remains possible during or after combat.
+
+### 9. Character sheets expose implementation detail
+
+The sheets contain many fields needed for exact PTR compatibility, but the player-facing hierarchy is weak. Frequently used actions compete visually with derived statistics, injury rules, advancement data, and niche toggles.
+
+Sheet redesign is intentionally deferred until the rules are stable.
 
 ## Player-lite design constraints
 
@@ -66,47 +78,97 @@ The lighter rules profile should meet these targets:
 
 1. A new player can run one trainer and one active Pokémon after a fifteen-minute explanation.
 2. A normal attack resolves with one attack roll and one damage roll or one combined Foundry action.
-3. Players should not manually calculate derived defenses or type multipliers.
-4. A Pokémon sheet should present no more than six primary combat numbers.
-5. A player should track no more than three expendable resource categories during ordinary play.
-6. Level-up choices should fit on one guided screen.
-7. Conditions should have consistent timing and recovery language.
-8. The GM may use deeper encounter tools, but players should not need system mastery to take competent turns.
+3. Players do not manually calculate derived defenses or type multipliers.
+4. A Pokémon sheet eventually presents only the most important combat information by default.
+5. A player tracks no more than a few meaningful resource categories during ordinary play.
+6. Level-up choices fit on one guided screen.
+7. Conditions use consistent timing and recovery language.
+8. The GM may use deeper encounter tools, but players do not need system mastery to take competent turns.
 
-## Recommended redesign order
+## Locked redesign decisions
 
-### Stage A: Core resolution
+### Core resolution
 
-- Choose whether attacks use one Defense, two defenses, or a unified target number.
-- Replace modifier stacking with a smaller bonus vocabulary.
-- Simplify critical hits and combat stages.
-- Establish one visible attack sequence.
+- Use `1d20 + Rank + situational modifier`.
+- Use Favored, Hindered, ±2, and ±4 as the standard modifier vocabulary.
+- Keep separate Physical Defense, Special Defense, and Reflex values.
+- Let Foundry automatically select the defense.
+- Simplify combat stages to Boosted, Sharply Boosted, Weakened, and Sharply Weakened.
 
-### Stage B: Damage and durability
+### Damage
 
-- Replace or compress the Damage Base ladder.
-- Decide whether defenses reduce damage or modify hit chance, but avoid making both equally prominent.
-- Replace default injuries with a simpler Wound rule, keeping classic injuries as an optional module.
+- Convert move Power to a d6 pool.
+- Compare offensive and defensive stats by percentage bands to add or remove dice.
+- Replace type multipliers with added or removed dice.
+- Keep STAB as a flat bonus based on final damage dice.
+- Standardize optional modifiers and avoid total-damage multipliers.
+- Critical hits maximize one damage die.
 
-### Stage C: Turns and resources
+### Turns
 
-- Reduce actions to Move, Main, and Reaction.
-- Standardize recharge categories.
-- Clarify trainer and Pokémon command flow.
+- Trainer and active Pokémon share initiative.
+- The pair receives two Main Actions and two Move Actions.
+- Each individual receives one Reaction.
+- Basic commands are free.
+- Switching costs a Main Action.
+- Trainers cannot normally be directly targeted by hostile Pokémon while an active conscious Pokémon protects them.
 
-### Stage D: Progression
+### Conditions and durability
 
-- Reduce trainer prerequisite chains.
-- Consolidate Pokémon stat advancement.
-- Replace multiple parallel level-up decisions with guided packages and optional advanced choices.
+- Use Physical, Mental, Elemental, and Positioning categories.
+- Use Save Ends, Fixed Duration, and Persistent timing.
+- Conditions change choices rather than deleting turns.
+- Use a five-step Wound track instead of repeating injury thresholds.
 
-### Stage E: Exploration and capture
+### Progression
 
-- Make capture a short opposed or threshold procedure.
-- Give skills, capabilities, travel, and social play equal structural support.
+- Trainers use levels 1–20.
+- Trainers use Background, Role, Specialty, and Talents.
+- Remove separate Edge and Feature currencies.
+- Pokémon remain levels 1–100.
+- Pokémon use automatic growth, Training Paths, simplified Natures, milestone choices, and preserved evolution builds.
+- Pokémon use four equipped moves, two reserve moves, and an archived move library.
 
-## First conclusion
+### Capture
+
+- Capture works during or after combat.
+- Use one d20 capture roll.
+- Include visible species difficulty, HP, status, ball, Momentum, and narrative modifiers.
+- At 0 HP, capture is easier but not automatic.
+- Specialized balls use simple trigger bonuses and secondary effects.
+
+## Recommended redesign order from here
+
+### Stage A: Healing and recovery
+
+- Define fainting and stabilization.
+- Define short rest, expedition rest, Pokémon Centers, Wound recovery, and condition treatment.
+- Define medicine, healing items, and support features.
+
+### Stage B: Move and ability conversion
+
+- Map existing move Power and effects into the new damage pipeline.
+- Map existing frequencies into the four recharge categories.
+- Convert abilities and Pokémon Edges into standardized abilities and Talents.
+
+### Stage C: Encounter structure
+
+- Establish encounter-building expectations.
+- Define wild Pokémon behavior, bosses, trainers, and group initiative.
+- Test damage and durability across representative level bands.
+
+### Stage D: Exploration and social play
+
+- Give skills, capabilities, travel, contests, research, and social scenes equal structural support.
+
+### Stage E: Foundry interface
+
+- Build the rules-profile toggle.
+- Implement automation and migration.
+- Redesign sheets only after the rules prove stable.
+
+## Current conclusion
 
 The system does not need to become rules-light. It needs to become player-light.
 
-Foundry can carry detailed species data, type logic, targeting, range, conditions, and encounter math. Players should see a clean action, a clear result, and only the choices that matter. The machine may remain intricate beneath the floorboards, provided it stops asking everyone at the table to become a clockmaker.
+Foundry can carry detailed species data, type logic, targeting, range, conditions, damage construction, capture math, and progression bookkeeping. Players should see a clean action, a clear result, and only the choices that matter. The machine may remain intricate beneath the floorboards, provided it stops asking everyone at the table to become a clockmaker.
