@@ -11,11 +11,12 @@
     "compendium:validate": "node tools/commander/validate-source.mjs",
     "compendium:build": "node tools/commander/build-compendiums.mjs",
     "compendium:import-legacy": "node tools/commander/import-legacy-export.mjs",
-    "compendium:translate": "npm run compendium:translate-species && npm run compendium:translate-abilities && npm run compendium:translate-moves && npm run compendium:translate-items",
+    "compendium:translate": "npm run compendium:translate-species && npm run compendium:translate-abilities && npm run compendium:translate-moves && npm run compendium:translate-items && npm run compendium:translate-learnsets",
     "compendium:translate-species": "node tools/commander/translate-species.mjs",
     "compendium:translate-abilities": "node tools/commander/translate-abilities.mjs",
     "compendium:translate-moves": "node tools/commander/translate-moves.mjs",
     "compendium:translate-items": "node tools/commander/translate-items.mjs",
+    "compendium:translate-learnsets": "node tools/commander/translate-learnsets.mjs",
     "compendium:test-conversions": "node tools/commander/conversion-rules.test.mjs"
   },
   "devDependencies": {
