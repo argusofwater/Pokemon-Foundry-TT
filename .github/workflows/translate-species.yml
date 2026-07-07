@@ -24,6 +24,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: commander-compendium-writer
+  cancel-in-progress: false
+
 jobs:
   translate:
     if: github.head_ref == 'codex/foundry-base-pass' || github.ref_name == 'codex/foundry-base-pass'
