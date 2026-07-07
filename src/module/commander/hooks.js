@@ -1,6 +1,6 @@
 import { registerCommanderSettings } from "./settings.js";
 import { registerCommanderDataModels } from "./data/register.js";
-import { collectCommanderMigrationReport, migrateCommanderActors } from "./migration/runner.js";
+import { createCommanderController } from "./controller.js";
 
 export const CommanderHooks = {
   listen() {
@@ -12,11 +12,10 @@ export const CommanderHooks = {
     });
 
     Hooks.once("ready", () => {
-      game.commander = {
-        ...(game.commander ?? {}),
-        collectMigrationReport: collectCommanderMigrationReport,
-        migrateActors: migrateCommanderActors
-      };
+      game.commander = createCommanderController();
+      if (game.user?.isGM && game.commander.enabled) {
+        ui.notifications.info("Commander Build is active for this World.");
+      }
     });
   }
 };
