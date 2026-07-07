@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-07-07T15:21:57.820Z",
+  "cutoff": "gen9-sv-dlc-pre-za",
+  "abilityRecords": 311,
+  "excludedRecords": 3,
+  "countsByType": {
+    "passive": 311
+  },
+  "countsByTier": {
+    "standard": 311
+  },
+  "countsByAutomation": {
+    "manual": 311
+  },
+  "reviewRequired": 311,
+  "notes": [
+    "Canonical descriptions are preserved from the frozen Gen 9 Showdown snapshot.",
+    "Ability type, tier, and automation state are inferred and remain reviewable.",
+    "CAP-only content is excluded. Nonstandard canonical abilities are retained and tagged."
+  ]
+}
