@@ -1,0 +1,15 @@
+<section class="commander-chat-card commander-check-card">
+  <header>
+    <strong>{{actor.name}}</strong>
+    <span>{{label}}</span>
+  </header>
+  <div class="commander-chat-total">{{total}}</div>
+  <dl>
+    <div><dt>Modifier</dt><dd>{{modifier}}</dd></div>
+    {{#if target}}<div><dt>Target</dt><dd>{{target}}</dd></div>{{/if}}
+    {{#if favored}}<div><dt>Roll State</dt><dd>Favored</dd></div>{{/if}}
+    {{#if hindered}}<div><dt>Roll State</dt><dd>Hindered</dd></div>{{/if}}
+  </dl>
+  {{#if success}}<p class="commander-result success">Success</p>{{/if}}
+  {{#if notes}}<p>{{notes}}</p>{{/if}}
+</section>
