@@ -40,13 +40,18 @@ This file records private-table changes made on top of Pokémon Tabletop Reunite
 - Converted Pokémon Edges into Species Talents, Training Talents, capability upgrades, and milestone improvements.
 - Added a one-roll capture system usable during or after combat.
 - Defined capture difficulty, HP and status modifiers, Capture Momentum, critical results, ball bonuses, specialized balls, and narrative wild-Pokémon tags.
+- Locked fainting, Danger Checks, Breather/Camp/Full Rest recovery, Pokémon Center treatment, percentage-based healing items, medicine checks, healing limits, and exact move-recharge timing.
+- Locked one global Weather, one global Terrain, and local Zones with five-round default durations and dice-based environmental modifiers.
+- Defined Sunlight, Rain, Sandstorm, Snow, Harsh Winds, Fog, Electric Terrain, Grassy Terrain, Psychic Terrain, Misty Terrain, Dark Terrain, and representative local Zones.
+- Added optional elemental setup conditions: Soaked, Chilled, Scorched, and Electrified.
+- Added a dedicated Foundry Weather, Terrain, and Zone GUI requirements document covering automatic duration, source tracking, modifiers, token entry, grounded detection, player visibility, and GM controls.
 - Deferred character-sheet design until the rules stabilize.
 
 ### Next targets
 
-- Design healing, rest, recovery, Pokémon Centers, fainting, condition treatment, Wound recovery, medicine, and expedition pacing.
+- Design abilities, Species Talents, Training Talents, and trainer Talents.
 - Build a Foundry rules-profile setting so baseline PTR and player-lite rules can coexist during testing.
-- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, and capture roll.
+- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, capture roll, recovery, and environment controller.
 - Determine whether the unregistered `dex-entries` and `maneuvers` databases are obsolete, internal-only, or should be exposed.
 - Add semantic validation for species and move data.
 - Smoke-test the packaged system in Foundry V13.
