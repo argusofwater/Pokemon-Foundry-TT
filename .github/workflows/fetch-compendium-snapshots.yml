@@ -8,12 +8,20 @@ on:
     paths:
       - ".github/workflows/fetch-compendium-snapshots.yml"
       - "tools/commander/fetch-raw-snapshots.mjs"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - codex/foundry-v13-baseline
+    paths:
+      - ".github/workflows/fetch-compendium-snapshots.yml"
+      - "tools/commander/fetch-raw-snapshots.mjs"
 
 permissions:
   contents: write
 
 jobs:
   fetch:
+    if: github.head_ref == 'codex/foundry-base-pass' || github.ref_name == 'codex/foundry-base-pass'
     runs-on: ubuntu-latest
     steps:
       - name: Check out branch
