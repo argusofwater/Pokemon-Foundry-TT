@@ -1,0 +1,53 @@
+<section class="commander-tab commander-bond-tab {{#unless (eq activeTab 'bond')}}hidden{{/unless}}" data-tab="bond">
+  <header class="commander-section-header">
+    <div>
+      <h2>Bond & Friendship</h2>
+      <p>Friendship is visible to players, but only the GM can change it.</p>
+    </div>
+  </header>
+
+  <section class="commander-friendship-panel">
+    <div class="commander-friendship-summary">
+      <strong>{{friendship.tier}}</strong>
+      <span>{{friendship.value}} / 255</span>
+    </div>
+
+    <div class="commander-friendship-track" role="meter" aria-valuemin="0" aria-valuemax="255" aria-valuenow="{{friendship.value}}">
+      <span style="width: {{friendship.percent}}%;"></span>
+    </div>
+
+    <div class="commander-friendship-status">
+      {{#if friendship.canUseResolve}}
+        <span>Friendship Resolve: Ready</span>
+      {{else if friendship.heldOnUsed}}
+        <span>Friendship Resolve: Used</span>
+      {{else}}
+        <span>Friendship Resolve unlocks at 180</span>
+      {{/if}}
+    </div>
+
+    {{#if isGM}}
+      <div class="commander-gm-controls">
+        <label>
+          Friendship
+          <input type="number" name="commanderFriendshipValue" min="0" max="255" value="{{friendship.value}}">
+        </label>
+        <button type="button" data-action="setFriendship">Set</button>
+        <button type="button" data-action="adjustFriendship" data-amount="-10">-10</button>
+        <button type="button" data-action="adjustFriendship" data-amount="-1">-1</button>
+        <button type="button" data-action="adjustFriendship" data-amount="1">+1</button>
+        <button type="button" data-action="adjustFriendship" data-amount="10">+10</button>
+        <button type="button" data-action="resetFriendshipResolve">Reset Resolve</button>
+      </div>
+    {{/if}}
+  </section>
+
+  <section class="commander-bond-notes">
+    <h3>Bond Notes</h3>
+    {{#if editable}}
+      <prose-mirror name="system.bond.notes" value="{{system.bond.notes}}" toggled></prose-mirror>
+    {{else}}
+      <div class="commander-rich-text">{{{system.bond.notes}}}</div>
+    {{/if}}
+  </section>
+</section>
