@@ -24,6 +24,12 @@
   white-space: nowrap;
 }
 
+.commander-combat-pill.linked {
+  color: #fff7cf;
+  background: rgba(157, 119, 28, 0.62);
+  border-color: rgba(240, 198, 79, 0.82);
+}
+
 .commander-combat-pill.ready {
   color: #eaffef;
   background: rgba(78, 155, 99, 0.58);
