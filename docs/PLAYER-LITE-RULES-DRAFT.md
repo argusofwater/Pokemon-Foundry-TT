@@ -1,22 +1,18 @@
-# Player-Lite Rules Draft 0.1
+# Player-Lite Rules Draft 0.2
 
 ## Design statement
 
-This profile is not intended to erase tactical play. It moves complexity out of the player's hands and into consistent rules and Foundry automation.
+This rules profile is player-light rather than rules-light. Tactical positioning, species identity, typing, moves, trainer expression, evolution, and levels remain important. Foundry carries the arithmetic, targeting logic, defense selection, type interactions, recharge tracking, and progression bookkeeping.
 
-The starting proposal below is deliberately conservative. It preserves the six Pokémon stats, move categories, typing, tactical maps, and individual species identity while reducing the number of derived values and exception chains.
+Players should make meaningful decisions without needing to manually operate the machinery beneath them.
 
 ## 1. Core check
 
 Roll:
 
-`1d20 + Rank + situational bonus`
+`1d20 + Rank + situational modifier`
 
-Compare against a target number.
-
-### Rank
-
-Skills and combat proficiencies use five ranks:
+Ranks:
 
 - Untrained: +0
 - Novice: +2
@@ -24,240 +20,523 @@ Skills and combat proficiencies use five ranks:
 - Expert: +6
 - Master: +8
 
-This replaces several small bonuses with one visible competency value.
+Standard situational language:
 
-### Situational bonus vocabulary
-
-Use only these common states:
-
-- Favored: roll twice and keep the higher result.
-- Hindered: roll twice and keep the lower result.
-- Minor bonus or penalty: ±2.
-- Major bonus or penalty: ±4.
+- Favored: roll twice and keep the higher result
+- Hindered: roll twice and keep the lower result
+- Minor bonus or penalty: ±2
+- Major bonus or penalty: ±4
 
 Bonuses of the same name do not stack. Favored and Hindered cancel one-for-one.
 
 ## 2. Defenses
 
-Replace Physical, Special, and Speed Evasion with two defenses:
+Pokémon retain separate defenses:
 
-- Guard: resistance to direct attacks, based on the better of Defense or Special Defense for the relevant move category.
-- Reflex: resistance to area, trap, environmental, and status attacks, based primarily on Speed.
+- Physical Defense
+- Special Defense
+- Reflex
 
-A move specifies which defense it targets. Foundry calculates the number.
+Foundry automatically selects the correct defense from the move or effect:
 
-Provisional formula:
+- Physical moves use Physical Defense
+- Special moves use Special Defense
+- Hazards, traps, environmental effects, area avoidance, and suitable status effects use Reflex
 
-- Guard = 10 + relevant defensive tier + bonuses
-- Reflex = 10 + Speed tier + bonuses
-
-Stat tiers are derived automatically from total stats. Players never calculate them manually.
-
-### Why two defenses
-
-One defense risks flattening fast and durable Pokémon into the same silhouette. Three evasions create excessive lookup. Two defenses preserve the distinction between enduring a hit and avoiding a danger.
+Players do not manually choose the defense for an attack.
 
 ## 3. Attack sequence
 
-A standard attack follows one visible sequence:
+A normal attack resolves as follows:
 
 1. Choose a move and target.
-2. Foundry validates range, line of effect, and legal targeting.
-3. Roll against Guard or Reflex.
-4. On a hit, roll damage.
-5. Foundry applies typing, resistance, conditions, and secondary effects.
+2. Foundry checks range, targeting, line of effect, and legality.
+3. Roll the attack against the automatically selected defense.
+4. Foundry builds the damage pool.
+5. Roll damage.
+6. Foundry applies conditions and secondary effects.
 
-No separate player-side evasion selection is required.
+## 4. Damage engine
 
-## 4. Combat stages
+Foundry calculates damage using:
 
-Replace seven independent combat-stage tracks with three temporary states:
+- Move Power
+- Relevant offensive stat
+- Relevant defensive stat
+- Type interaction
+- STAB
+- Optional modifiers
 
-- Boosted: +2 to checks using the affected stat family.
-- Sharply Boosted: +4.
-- Weakened: -2.
-- Sharply Weakened: -4.
+### Move Power conversion
 
-Physical Attack and Special Attack may remain separate where a move specifically cares about them. Defense effects map to Guard; Speed effects map to Reflex and movement.
+Move Power converts to a base d6 pool:
 
-Boosts do not accumulate point by point. Applying the same direction upgrades the state one step, to a maximum of ±4. Opposite effects cancel one step.
+- Power 1–30: 1d6
+- Power 31–50: 2d6
+- Power 51–70: 3d6
+- Power 71–90: 4d6
+- Power 91–110: 5d6
+- Power 111–130: 6d6
+- Power 131–150: 7d6
+- Power 151+: 8d6
 
-## 5. Damage
+Status moves deal no normal damage unless specifically written to do so.
 
-Keep Damage Base as move metadata but compress it into damage tiers.
+### Offensive stat versus defensive stat
 
-Provisional tiers:
+Foundry compares the relevant offensive and defensive stats:
 
-- Light: 1d6
-- Standard: 2d6
-- Heavy: 3d6
-- Severe: 4d6
-- Signature: 5d6
+- Offense below 50% of Defense: -2 dice
+- Offense from 50% to 79% of Defense: -1 die
+- Offense from 80% to 124% of Defense: no change
+- Offense from 125% to 199% of Defense: +1 die
+- Offense at 200% or more of Defense: +2 dice
 
-Add the relevant offensive tier. Subtract a small armor value derived from the relevant defense stat.
+Physical moves compare Attack to Defense. Special moves compare Special Attack to Special Defense unless a move explicitly uses different stats.
 
-Foundry handles STAB and type effectiveness automatically.
+### Type interaction
 
-### Type effectiveness
-
-Use multipliers internally, but present the result plainly:
+Type effectiveness changes the damage pool instead of multiplying total damage:
 
 - Immune: 0 damage
-- Resisted: half damage
-- Normal: normal damage
-- Super-effective: double damage
-- Extreme interaction: cap at triple damage unless a specific boss or optional rule says otherwise
+- Double resistance: -2 dice
+- Resistance: -1 die
+- Neutral: no change
+- Super-effective: +1 die
+- Double weakness: +2 dice
 
-This limits explosive quadruple-weakness results while preserving type strategy.
+A damaging move retains at least 1 die unless the target is immune.
 
-## 6. Critical hits
+### STAB
+
+Same-Type Attack Bonus adds a flat bonus equal to +2 damage per final damage die.
+
+### Optional modifiers
+
+Abilities, items, weather, terrain, trainer features, and special effects should use standardized adjustments:
+
+- Add or remove dice
+- Add a flat bonus
+- Upgrade or downgrade the move Power band
+- Add a status or secondary effect
+- Ignore one resistance step
+- Reroll one or more dice
+- Maximize one or more dice
+
+Normal features should not multiply total damage.
+
+### Critical hits
 
 A natural 20 is a critical hit.
 
-Critical hits maximize one damage die and roll the remainder normally. This is faster and less volatile than doubling every component of a multi-layer damage formula.
+On a critical hit, maximize one damage die and roll the remaining dice normally. Expanded critical ranges should remain rare.
 
-Expanded critical ranges become a rare feature rather than a common stacking statistic.
+## 5. Combat stages
 
-## 7. Turns
+Replace long stage ladders with four states:
 
-Each creature receives:
+- Boosted: +2
+- Sharply Boosted: +4
+- Weakened: -2
+- Sharply Weakened: -4
 
-- One Main Action
-- One Move Action
-- One Reaction per round
-- Reasonable free interaction
+Repeated effects move the state one step. Opposite effects cancel one step. Attack, Special Attack, defenses, and Speed may still be affected separately when the move specifically cares about them.
 
-Main Actions include attacking, using a major item, performing a complex maneuver, or commanding a Pokémon when command pressure matters.
+## 6. Action economy
 
-Move Actions include movement, drawing or using simple gear, switching positions, and short tactical interactions.
+A trainer and active Pokémon share one initiative slot.
 
-Reactions replace Interrupt and most Priority exceptions.
+The pair receives:
 
-### Trainer and Pokémon flow
+- 2 Main Actions
+- 2 Move Actions
 
-Default mode:
+Each individual may normally use:
 
-- The trainer and active Pokémon share one initiative entry.
-- Each receives a Move Action.
-- The pair receives two Main Actions total, but no creature may normally take more than one Main Action.
+- 1 Main Action
+- 1 Move Action
+- 1 Reaction per round
 
-This lets both trainer and Pokémon matter without creating two entirely separate turns per player.
+A Main Action may be converted into a Move Action. Move Actions cannot become Main Actions. Reactions cannot be converted.
 
-A noncombat-focused trainer may spend their Main Action supporting, using an item, scanning, switching Pokémon, or assisting.
+### Main Actions
+
+Examples include:
+
+- Use a damaging or major status move
+- Use a major item
+- Attempt capture
+- Switch Pokémon
+- Use a major trainer feature
+- Make a direct trainer attack
+- Perform a complex environmental action
+- Revive or heavily treat an ally
+
+### Move Actions
+
+Examples include:
+
+- Move up to the listed movement value
+- Draw or stow equipment
+- Stand from Prone
+- Mount or dismount
+- Use simple terrain
+- Take cover
+- Make a basic scan or observation
+
+### Reactions
+
+Reactions replace most Interrupt and Priority timing. They may be used for:
+
+- Interception
+- Opportunity attacks
+- Defensive abilities
+- Priority effects
+- Protect-style effects
+- Emergency commands
+- Reactive switching features
+
+### Commands
+
+Basic commands are free. Special commands that grant bonuses, movement, recovery, accuracy, damage, or coordinated tactics cost actions as written.
+
+### Switching
+
+Switching Pokémon costs one Main Action. The incoming Pokémon may use its Move Action and Reaction, but may not normally use a Main Action that turn.
+
+### Trainer protection
+
+A hostile Pokémon may not directly target a trainer while that trainer has an active, conscious Pokémon. The trainer becomes targetable when no active Pokémon is present or capable of protecting them.
+
+Trainers may still be affected by hostile humans, traps, hazards, environmental effects, and explicit bypass abilities.
+
+## 7. Movement and opportunity attacks
+
+Each creature lists its movement modes, such as Walk, Fly, Swim, Burrow, or Climb.
+
+- Diagonal movement costs one square per square
+- Difficult terrain costs 2 movement per square
+- Forced movement does not trigger opportunity attacks unless a feature says otherwise
+
+A creature may spend its Reaction to make a basic opportunity attack when an adjacent enemy willingly leaves its reach.
 
 ## 8. Conditions
 
-Conditions use three templates:
+Every condition lists:
 
-- Save ends: attempt a save at the end of the affected creature's turn.
-- Fixed duration: lasts until a stated turn boundary.
-- Persistent: requires treatment, rest, or a specific action.
+- Effect
+- Duration
+- Recovery
+- Category
 
-Conditions should avoid bespoke timing unless central to their identity.
+Condition categories:
 
-## 9. Wounds instead of default injuries
+- Physical
+- Mental
+- Elemental
+- Positioning
 
-Normal play uses Wounds:
+Duration templates:
 
-- Gain one Wound when reduced to 0 HP.
-- Gain one Wound from an exceptionally severe attack only when a feature explicitly says so.
-- Each Wound reduces maximum HP by 10%.
-- At 3 Wounds, the creature is seriously injured and cannot safely continue adventuring.
-- At 5 Wounds, the creature is dying.
+- Save Ends
+- Fixed Duration
+- Persistent
 
-Classic PTR injuries remain available as an optional gritty module.
+Conditions do not stack with themselves unless specifically designed to. Reapplication either refreshes duration, upgrades severity, or triggers an immediate effect, not all three.
 
-This removes repeated threshold checking and prevents a single attack from awarding multiple overlapping injury consequences.
+Conditions should alter choices rather than erase turns.
 
-## 10. Move frequency
+### Core condition direction
 
-Use four recharge categories:
+- Burned: reduce Physical damage by one die, minimum 1 die, and take minor ongoing fire damage
+- Poisoned: take recurring damage at end of turn
+- Badly Poisoned: recurring damage escalates to a cap
+- Paralyzed: halve movement and reduce Reflex by 2
+- Frozen: movement becomes 0; attacks and Reflex checks are Hindered; regular recovery attempts remain available
+- Asleep: unconscious; attacks against the target are Favored; recovery improves after failed attempts and damage grants an immediate attempt
+- Confused: attacks are Hindered and failed checks restrict hostile targeting without automatic self-damage
+- Flinched: lose Reaction until the start of the next turn
+- Prone: adjacent attacks are Favored, ranged attacks are Hindered, and standing costs movement
+- Restrained: movement 0 and Physical actions Hindered
+- Slowed: movement halved
+- Marked: uses one system-wide interpretation rather than separate class-specific versions
 
-- At-Will: no usage limit.
-- Cooldown: unavailable until the end of the user's next turn.
-- Encounter: once per encounter.
-- Rest: once until a full rest or equivalent recovery.
+Allies may spend a Main Action to assist recovery through treatment, calming, breaking restraints, applying an item, or using an appropriate feature.
 
-Scene, Daily, Extended Action, and bespoke refresh language should be mapped into these categories unless the feature truly requires unique timing.
+## 9. Wounds
 
-## 11. Pokémon progression
+Wounds replace the default repeating injury-threshold system.
 
-Pokémon continue to gain levels, but level-up choices are grouped:
+- Gain one Wound when reduced to 0 HP
+- Certain severe abilities may inflict a Wound directly
+- At 1 Wound: no automatic penalty
+- At 2 Wounds: Hindered on strenuous physical actions
+- At 3 Wounds: seriously injured and unable to continue safely after the encounter
+- At 4 Wounds: unconscious
+- At 5 Wounds: dying
 
-- Automatic species progression
-- One guided stat package
-- Move choice when eligible
-- Ability or edge choice only at milestone levels
+Classic PTR injuries may remain as an optional gritty campaign module.
 
-Suggested stat packages:
+## 10. Recharge categories
+
+Use four standard recharge categories:
+
+- At-Will
+- Cooldown
+- Encounter
+- Expedition
+
+Cooldown effects normally return at the end of the user's next turn. Encounter effects refresh when the encounter ends. Expedition effects refresh after substantial rest or recovery defined by the campaign.
+
+## 11. Trainer progression
+
+Trainers use levels 1–20.
+
+A trainer is built from:
+
+1. Background
+2. Role
+3. Specialty
+4. Talents
+
+### Trainer attributes
+
+- Body
+- Agility
+- Mind
+- Presence
+
+### Core Roles
+
+- Ace
+- Field Expert
+- Tactician
+- Vanguard
+- Mystic
+- Performer
+
+### Backgrounds
+
+Backgrounds grant skill training, one utility feature, equipment or contacts, and a narrative benefit. They do not define the trainer's full combat identity.
+
+### Specialties
+
+Specialties narrow a Role into a specific fantasy, such as Type Specialist, Ranger, Medic, Commander, Weather Strategist, Martial Artist, Guardian, Aura Adept, Coordinator, or similar themes.
+
+### Talents
+
+Talents replace long feature chains and most prerequisite taxes. Talents should be self-contained, immediately useful, and rarely dependent on another Talent.
+
+### Progression cadence
+
+- Level 1: Background, Role, Specialty, starting Role feature, starting Specialty feature
+- Even levels: skill improvement or utility choice
+- Odd levels after 1: Talent
+- Levels 5, 10, 15, and 20: major Role and Specialty advancements
+
+### Skills
+
+Use approximately fifteen consolidated skills:
+
+- Athletics
+- Acrobatics
+- Endurance
+- Stealth
+- Perception
+- Survival
+- Medicine
+- Technology
+- Pokémon Lore
+- Nature
+- Investigation
+- Influence
+- Deception
+- Performance
+- Focus
+
+No separate Edge and Feature currencies. Cross-role Talents replace traditional multiclassing.
+
+Sheet layout is intentionally deferred until the rules are stable.
+
+## 12. Pokémon progression
+
+Pokémon retain levels 1–100 and the six core stats:
+
+- HP
+- Attack
+- Defense
+- Special Attack
+- Special Defense
+- Speed
+
+### Automatic growth
+
+Stat growth is automatic and based on species, level, Training Path, and Nature. Players do not manually assign a point every level unless using the optional Custom path.
+
+### Training Paths
 
 - Striker
+- Specialist
 - Bulwark
 - Swift
-- Specialist
 - Balanced
+- Custom
 
-Advanced players may use manual stat allocation as an optional setting.
+### Natures
 
-## 12. Trainer progression
+Natures provide one Favored growth category, one Hindered growth category, and a personality cue. Foundry applies the growth adjustments automatically.
 
-A trainer chooses:
+### Milestones
 
-- Background
-- Core role
-- Specialty
-- Talents at milestone levels
+Meaningful choices occur at milestone levels rather than every level. Milestone choices may include:
 
-Provisional core roles:
+- Stat emphasis
+- New or upgraded ability
+- Bonus move
+- Movement or capability improvement
+- Species Talent
+- Training Talent
+- Training Path refinement
 
-- Ace: direct Pokémon improvement and command
-- Field Expert: exploration, capture, medicine, and knowledge
-- Tactician: positioning, reactions, and team coordination
-- Combatant: trainer-side battle capability
-- Mystic: supernatural or aura-based abilities
-- Performer: morale, social influence, and contests
+### Evolution
 
-Specialties provide flavor and narrower mechanical identity without requiring long prerequisite chains.
+Evolution remains species-specific and may depend on level, item, bond, location, time, move, story, or player choice. Evolution updates species data while preserving the Pokémon's Training Path and build.
 
-## 13. Player-facing sheet target
+### Abilities
 
-The default Pokémon combat header should show only:
+Pokémon begin with one species ability and may gain up to three active abilities at higher levels. Abilities use standardized tags such as Passive, Triggered, Reaction, Encounter, and Expedition.
 
-- HP and Wounds
-- Guard
-- Reflex
-- Movement
-- Attack tier
-- Special Attack tier
-- Four equipped moves
-- Conditions and limited-use resources
+### Moves
 
-Detailed stats, capabilities, breeding information, tutor lists, and automation diagnostics move to secondary tabs.
+A Pokémon may have:
 
-## Questions requiring playtest decisions
+- Four equipped combat moves
+- Two reserve moves
+- An archived move library
 
-1. Should trainers and Pokémon share two Main Actions, or should the trainer primarily act through commands?
-2. Should Guard use the relevant defensive stat, or should every Pokémon have one fixed Guard value?
-3. Should super-effective damage remain ×2, or shift to bonus dice to reduce spikes?
-4. Should Pokémon retain levels 1–100, compress to 1–20, or use milestone ranks?
-5. How dangerous should trainers be when directly attacked?
-6. Should capture be a combat action, a post-defeat procedure, or support both?
+Moves are not permanently forgotten unless the player chooses to erase them. Changing equipped moves normally requires rest, training, a feature, or an item.
 
-## Recommended first prototype
+### Pokémon Edges
 
-Implement only these changes for the first playable slice:
+Pokémon Edges are converted into:
 
-- Guard and Reflex
-- Main, Move, Reaction
-- Four recharge categories
-- Wounds
-- Compressed damage tiers
-- One trainer and three representative Pokémon
+- Species Talents
+- Training Talents
+- Capability upgrades
+- Milestone improvements
 
-Test with:
+### Bond
 
-- A fast physical attacker
-- A slow defensive Pokémon
-- A special attacker with a status move
+Bond uses four states:
 
-The prototype succeeds when a new player can complete a turn without opening a rulebook and can explain why the result occurred afterward.
+- Wary
+- Trusting
+- Bonded
+- Devoted
+
+Bond supports fiction and limited mechanics without becoming a second detailed experience track.
+
+### Advancement mode
+
+Campaigns may use XP advancement or milestone advancement.
+
+## 13. Capture system
+
+Capture may occur during combat or after combat.
+
+Core roll:
+
+`1d20 + Capture Rank + Ball Bonus + HP Modifier + Status Modifier + Momentum + other modifiers`
+
+versus:
+
+`10 + Species Difficulty`
+
+### Species Difficulty
+
+- Common: +0
+- Uncommon: +2
+- Rare: +4
+- Exceptional: +6
+- Legendary: +10
+- Restricted: no normal capture roll without story permission
+
+### HP modifier
+
+- Above 75% HP: -4
+- 51% to 75% HP: -2
+- 26% to 50% HP: +0
+- 1% to 25% HP: +2
+- 0 HP: +4
+
+### Status modifier
+
+Only the strongest status bonus applies:
+
+- Minor condition: +1
+- Major condition: +2
+- Asleep, Frozen, or fully Restrained: +3
+
+### During combat
+
+Throwing a Poké Ball costs one Main Action.
+
+On failure:
+
+- The ball is consumed
+- The target remains active
+- The trainer gains +1 Capture Momentum against that target, maximum +3
+
+Momentum ends when the target escapes, the encounter ends, another trainer captures it, the trainer changes targets, or the trainer rolls a natural 1.
+
+A natural 20 succeeds unless capture is narratively impossible. A natural 1 fails and resets Momentum.
+
+### Post-combat capture
+
+A Pokémon at 0 HP or peacefully subdued may be captured after combat, but capture is not automatic. Relevant treatment, empathy, handling, or social checks may grant +2, Favored, or automatic capture for a cooperative Pokémon.
+
+Normally only one forced post-combat capture attempt is allowed.
+
+### Poké Balls
+
+Standard balls:
+
+- Poké Ball: +0
+- Great Ball: +2
+- Ultra Ball: +4
+- Master Ball: automatic success when legally usable
+
+Specialized balls usually grant +3 when their condition applies and +0 otherwise, sometimes with a small secondary effect.
+
+Examples include Net, Dusk, Dive, Heavy, Fast, Level, Friend, Heal, Luxury, Quick, Timer, Repeat, Nest, Moon, and crafted regional balls.
+
+### Wild and boss tags
+
+Special Pokémon may use visible tags:
+
+- Stubborn
+- Territorial
+- Intelligent
+- Bonded
+- Legendary
+- Story-Protected
+
+These create narrative capture requirements without hiding extreme numerical bonuses.
+
+## 14. Current locked principles
+
+- Player-light, not rules-light
+- Foundry handles arithmetic and rules lookup
+- Separate Physical, Special, and Reflex defenses remain
+- Type advantage adds or removes damage dice
+- Pokémon remain level 1–100
+- Trainers remain protected from direct Pokémon attacks while an active Pokémon is present
+- Capture works during or after combat
+- Capture uses one clear roll
+- Trainer progression uses Background, Role, Specialty, and Talents
+- Pokémon progression uses automatic growth, Training Paths, milestones, and four equipped moves
+- Sheet design waits until the rules stabilize
+
+## 15. Next design area
+
+Healing, rest, recovery, Pokémon Centers, fainting, condition treatment, Wound recovery, medicine, and expedition pacing.
