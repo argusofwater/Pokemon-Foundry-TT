@@ -1,6 +1,7 @@
 import { PTUCONFIG } from "../config/index.js"
 import { GamePTU } from "../game-ptu.js"
 import { registerSettings } from "../../module/system/index.js"
+import { registerCommanderSettings } from "../../module/commander/settings.js"
 import { registerHandlebarsHelpers } from "../handlebars.js"
 import { registerSheets } from "../sheets.js"
 import { registerTemplates } from "../templates.js"
@@ -70,12 +71,13 @@ export const Init = {
             }
 
             // Register stuff with the Foundry client
+            registerSettings();
+            registerCommanderSettings();
             registerSheets();
             registerCommanderRuntimeHooks();
             // registerFonts();
             registerHandlebarsHelpers();
             // registerKeybindings();
-            registerSettings();
             registerTemplates();
 
             if(game.settings.get("ptu", "devMode")) CONFIG.ui.items.prototype._onDragStart = _onDragStart;
