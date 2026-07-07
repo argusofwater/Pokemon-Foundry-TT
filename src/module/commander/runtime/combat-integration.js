@@ -19,9 +19,7 @@ export function registerCommanderCombatIntegration() {
 
   const originalRollInitiative = PTUCombat.prototype.rollInitiative;
   PTUCombat.prototype.rollInitiative = async function(ids, options = {}) {
-    const requested = ids
-      .map(id => this.combatants.get(id))
-      .filter(Boolean);
+    const requested = ids.map(id => this.combatants.get(id)).filter(Boolean);
     const commanderCombatants = requested.filter(combatant => CommanderCombatService.isCommanderActor(combatant?.actor));
     const rollMode = options.messageOptions?.rollMode ?? options.rollMode ?? game.settings.get("core", "rollMode");
     const processed = new Set();
@@ -31,10 +29,7 @@ export function registerCommanderCombatIntegration() {
       if (processed.has(combatant.id)) continue;
       const group = await CommanderCombatService.getInitiativeGroup(this, combatant);
       const leaderActor = group.trainer ?? group.leader?.actor ?? combatant.actor;
-      const roll = await CommanderCombatService.rollInitiative(group.leader ?? combatant, {
-        rollMode,
-        actorOverride: leaderActor
-      });
+      const roll = await CommanderCombatService.rollInitiative(group.leader ?? combatant, { rollMode, actorOverride: leaderActor });
       if (!roll) continue;
 
       for (const member of group.members) {
@@ -59,6 +54,17 @@ export function registerCommanderCombatIntegration() {
     await this.update({ "flags.ptu.roundOfLastTurn": encounter.round });
     Hooks.callAll("ptu.startTurn", this, encounter, game.user.id);
     Hooks.callAll("commander.startTurn", this, encounter, game.user.id);
+  };
+
+  const originalEndTurn = PTUCombatant.prototype.endTurn;
+  PTUCombatant.prototype.endTurn = async function(options = {}) {
+    if (!CommanderCombatService.isCommanderActor(this.actor)) return originalEndTurn.call(this, options);
+    const { actor, encounter } = this;
+    if (!encounter || !actor) return;
+    await CommanderCombatService.onTurnEnd(this);
+    await this.update({ "flags.ptu.roundOfLastTurnEnd": options.round ?? encounter.round });
+    Hooks.callAll("ptu.endTurn", this, encounter, game.user.id);
+    Hooks.callAll("commander.endTurn", this, encounter, game.user.id);
   };
 
   const originalPrepareTurn = PTUCombatTracker.prototype._prepareTurnContext;
