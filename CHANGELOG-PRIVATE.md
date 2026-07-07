@@ -59,14 +59,21 @@ This file records private-table changes made on top of Pokémon Tabletop Reunite
 - Required player consent for evolution and added trade-evolution substitutes.
 - Added crafting disciplines, rarity bands, availability controls, inventory locations, and automatic item tracking requirements.
 - Added a Foundry compendium architecture plan for rules, moves, abilities, Talents, items, TMs, species, effects, and encounter tools.
+- Locked four encounter types and a Threat-based difficulty scaffold that treats action count as a primary balance factor.
+- Defined wild Pokémon Temperament, Goal, Morale, Instinct, Escape Condition, and combat-role metadata.
+- Added group initiative for minor wild Pokémon and separate handling for leaders, elites, and bosses.
+- Locked symmetrical trainer battle rules, battle formats, NPC trainer tiers, switching behavior, and simplified trainer templates.
+- Added Boss Actions, phase profiles, Condition Resistance, boss-specific Wound triggers, objective mechanics, and environmental control.
+- Added simplified minions without Wound tracking, visible reinforcement triggers, retreat and surrender rules, capture legality, and multiple victory conditions.
+- Added Foundry encounter-builder requirements for Threat, action comparison, morale, goals, phases, timers, ownership, and compendium drag-and-drop.
 - Deferred character-sheet design until the rules stabilize.
 
 ### Next targets
 
-- Design encounter structure, wild Pokémon behavior, bosses, and trainer battles.
+- Design exploration, travel, research, social play, and contests.
 - Define the first Commander Build compendium schemas and stable entry slugs.
 - Build a Foundry rules-profile setting so baseline PTR and player-lite rules can coexist during testing.
-- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, capture roll, recovery, environment controller, ability state handling, and inventory automation.
+- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, capture roll, recovery, environment controller, ability state handling, inventory automation, and encounter builder.
 - Determine whether the unregistered `dex-entries` and `maneuvers` databases are obsolete, internal-only, or should be exposed.
-- Add semantic validation for species, moves, abilities, items, and Talent data.
+- Add semantic validation for species, moves, abilities, items, Talents, and encounter data.
 - Smoke-test the packaged system in Foundry V13.
