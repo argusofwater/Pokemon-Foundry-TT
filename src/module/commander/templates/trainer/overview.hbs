@@ -2,27 +2,24 @@
   <div class="commander-grid">
     <article class="commander-card accent-red">
       <h2>Trainer Profile</h2>
-      <div class="commander-stat-row"><span>Background</span><span class="commander-value">{{system.identity.background}}</span></div>
-      <div class="commander-stat-row"><span>Role</span><span class="commander-value">{{system.identity.role}}</span></div>
-      <div class="commander-stat-row"><span>Specialty</span><span class="commander-value">{{system.identity.specialty}}</span></div>
-      <div class="commander-stat-row"><span>Level</span><span class="commander-value">{{system.identity.level}}</span></div>
+      <div class="commander-stat-row"><span>Background</span>{{#if (eq mode "edit")}}<input name="system.identity.background" value="{{system.identity.background}}">{{else}}<span class="commander-value">{{system.identity.background}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Role</span>{{#if (eq mode "edit")}}<input name="system.identity.role" value="{{system.identity.role}}">{{else}}<span class="commander-value">{{system.identity.role}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Specialty</span>{{#if (eq mode "edit")}}<input name="system.identity.specialty" value="{{system.identity.specialty}}">{{else}}<span class="commander-value">{{system.identity.specialty}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Level</span>{{#if (eq mode "edit")}}<input type="number" name="system.identity.level" value="{{system.identity.level}}" min="1" max="20">{{else}}<span class="commander-value">{{system.identity.level}}</span>{{/if}}</div>
     </article>
 
     <article class="commander-card">
       <h2>Attributes</h2>
       {{#each system.attributes as |attribute key|}}
-        <div class="commander-stat-row">
-          <span>{{capitalize key}}</span>
-          <span class="commander-value" title="Base {{attribute.base}} + Bonus {{attribute.bonus}}">{{attribute.final}}</span>
-        </div>
+        <div class="commander-stat-row"><span>{{capitalize key}}</span>{{#if (eq ../mode "edit")}}<span><input type="number" name="system.attributes.{{key}}.base" value="{{attribute.base}}"><input type="number" name="system.attributes.{{key}}.bonus" value="{{attribute.bonus}}"></span>{{else}}<span class="commander-value">{{attribute.final}}</span>{{/if}}</div>
       {{/each}}
     </article>
 
     <article class="commander-card">
       <h2>Defenses</h2>
-      <div class="commander-stat-row"><span>Physical</span><span class="commander-value">{{system.defenses.physical.final}}</span></div>
-      <div class="commander-stat-row"><span>Special</span><span class="commander-value">{{system.defenses.special.final}}</span></div>
-      <div class="commander-stat-row"><span>Reflex</span><span class="commander-value">{{system.defenses.reflex.final}}</span></div>
+      {{#each system.defenses as |defense key|}}
+        <div class="commander-stat-row"><span>{{capitalize key}}</span>{{#if (eq ../mode "edit")}}<span><input type="number" name="system.defenses.{{key}}.base" value="{{defense.base}}"><input type="number" name="system.defenses.{{key}}.bonus" value="{{defense.bonus}}"></span>{{else}}<span class="commander-value">{{defense.final}}</span>{{/if}}</div>
+      {{/each}}
     </article>
 
     <article class="commander-card wide accent-red">
@@ -34,23 +31,15 @@
         <span class="commander-pip ready">Pair Main {{system.actions.sharedMainRemaining}} / 2</span>
         <span class="commander-pip ready">Pair Move {{system.actions.sharedMoveRemaining}} / 2</span>
       </div>
-
-      {{#if activeCompanion}}
-        <div class="commander-resource-row">
-          <span><strong>{{activeCompanion.name}}</strong><br>{{activeCompanion.system.identity.speciesName}}</span>
-          <span class="commander-value">{{activeCompanion.system.health.hp.value}} / {{activeCompanion.system.health.hp.max}} HP</span>
-        </div>
-      {{else}}
-        <div class="commander-empty-state">Drop a creature actor onto the Team tab, then set it active.</div>
-      {{/if}}
+      {{#if activeCompanion}}<div class="commander-resource-row"><span><strong>{{activeCompanion.name}}</strong><br>{{activeCompanion.system.identity.speciesName}}</span><span class="commander-value">{{activeCompanion.system.health.hp.value}} / {{activeCompanion.system.health.hp.max}} HP</span></div>{{else}}<div class="commander-empty-state">Drop a creature actor onto the Team tab, then set it active.</div>{{/if}}
     </article>
 
     <article class="commander-card">
       <h2>Resources</h2>
-      <div class="commander-resource-row"><span>Supply Units</span><span class="commander-value">{{system.inventory.supplyUnits}}</span></div>
-      <div class="commander-resource-row"><span>Medical Supplies</span><span class="commander-value">{{system.inventory.medicalSupplies}}</span></div>
-      <div class="commander-resource-row"><span>Downtime Actions</span><span class="commander-value">{{system.campaign.downtimeActions}}</span></div>
-      <div class="commander-resource-row"><span>Bulk Capacity</span><span class="commander-value">{{system.inventory.bulkCapacity}}</span></div>
+      <div class="commander-resource-row"><span>Supply Units</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.supplyUnits" value="{{system.inventory.supplyUnits}}" min="0">{{else}}<span class="commander-value">{{system.inventory.supplyUnits}}</span>{{/if}}</div>
+      <div class="commander-resource-row"><span>Medical Supplies</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.medicalSupplies" value="{{system.inventory.medicalSupplies}}" min="0">{{else}}<span class="commander-value">{{system.inventory.medicalSupplies}}</span>{{/if}}</div>
+      <div class="commander-resource-row"><span>Downtime Actions</span>{{#if (eq mode "edit")}}<input type="number" name="system.campaign.downtimeActions" value="{{system.campaign.downtimeActions}}" min="0">{{else}}<span class="commander-value">{{system.campaign.downtimeActions}}</span>{{/if}}</div>
+      <div class="commander-resource-row"><span>Bulk Bonus</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.bulkCapacityBonus" value="{{system.inventory.bulkCapacityBonus}}">{{else}}<span class="commander-value">{{system.inventory.bulkCapacity}}</span>{{/if}}</div>
     </article>
   </div>
 </section>
