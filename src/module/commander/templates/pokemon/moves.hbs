@@ -1,0 +1,85 @@
+<section class="commander-tab commander-moves-tab {{#unless (eq activeTab 'moves')}}hidden{{/unless}}" data-tab="moves">
+  <header class="commander-section-header">
+    <div>
+      <h2>Moves</h2>
+      <p>Four active moves, two reserve moves, and the full embedded move library.</p>
+    </div>
+    <div class="commander-action-pool">
+      <span>Main {{actions.sharedMainRemaining}} / 2</span>
+      <span>Move {{actions.sharedMoveRemaining}} / 2</span>
+      <span>Reaction {{#if actions.reactionUsed}}Used{{else}}Ready{{/if}}</span>
+      {{#if editable}}<button type="button" data-action="resetActions">Reset Turn</button>{{/if}}
+    </div>
+  </header>
+
+  <div class="commander-move-grid">
+    <section>
+      <h3>Active Moves</h3>
+      <div class="commander-move-slots">
+        {{#each equippedMoves as |move index|}}
+          <article class="commander-move-slot" data-slot="{{index}}">
+            {{#if move}}
+              <img src="{{move.img}}" alt="{{move.name}}">
+              <div>
+                <strong>{{move.name}}</strong>
+                <span>{{move.system.type}} · {{move.system.category}}</span>
+                <small>Power {{move.system.power}} · {{move.system.recharge.category}}</small>
+              </div>
+              <div class="commander-row-actions">
+                <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}">Roll</button>
+                <button type="button" data-action="openEmbedded" data-item-id="{{move.id}}">Open</button>
+              </div>
+            {{else}}
+              <span class="commander-empty-slot">Drop a move here</span>
+            {{/if}}
+          </article>
+        {{/each}}
+      </div>
+    </section>
+
+    <section>
+      <h3>Reserve Moves</h3>
+      <div class="commander-move-slots reserve">
+        {{#each reserveMoves as |move index|}}
+          <article class="commander-move-slot" data-reserve-slot="{{index}}">
+            {{#if move}}
+              <img src="{{move.img}}" alt="{{move.name}}">
+              <div>
+                <strong>{{move.name}}</strong>
+                <span>{{move.system.type}} · {{move.system.category}}</span>
+              </div>
+              <button type="button" data-action="openEmbedded" data-item-id="{{move.id}}">Open</button>
+            {{else}}
+              <span class="commander-empty-slot">Reserve slot</span>
+            {{/if}}
+          </article>
+        {{/each}}
+      </div>
+    </section>
+  </div>
+
+  <section class="commander-move-library">
+    <h3>Move Library</h3>
+    {{#if embeddedMoves.length}}
+      <div class="commander-table">
+        {{#each embeddedMoves as |move|}}
+          <div class="commander-table-row" data-item-id="{{move.id}}">
+            <img src="{{move.img}}" alt="{{move.name}}">
+            <strong>{{move.name}}</strong>
+            <span>{{move.system.type}}</span>
+            <span>{{move.system.category}}</span>
+            <span>Power {{move.system.power}}</span>
+            <span>{{move.system.recharge.category}}</span>
+            <div class="commander-row-actions">
+              <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}">Roll</button>
+              <button type="button" data-action="openEmbedded" data-item-id="{{move.id}}">Open</button>
+              {{#if ../editable}}<button type="button" data-action="deleteEmbedded" data-item-id="{{move.id}}">Delete</button>{{/if}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p>No embedded moves yet. Drag a Move Item onto the sheet.</p>
+    {{/if}}
+  </section>
+</section>
