@@ -21,19 +21,32 @@ This file records private-table changes made on top of Pokémon Tabletop Reunite
 
 ### Rules redesign
 
-- Added a rules-first audit identifying the main sources of player burden: stacked numeric layers, three evasions, Damage Base resolution, injury thresholds, parallel advancement, frequency bookkeeping, action exceptions, and sheet density.
-- Added the first player-lite rules draft.
-- Proposed two defenses, Guard and Reflex, instead of three evasions.
-- Proposed a Main, Move, and Reaction action economy.
-- Proposed compressed damage tiers, simplified combat stages, four recharge categories, and Wounds as the default durability consequence.
-- Defined a first vertical-slice playtest using three mechanically distinct Pokémon.
+- Added a rules-first audit identifying the main sources of player burden.
+- Updated the player-lite rules draft to version 0.2 with all currently locked design decisions.
+- Retained separate Physical Defense, Special Defense, and Reflex values, with Foundry automatically selecting the correct defense.
+- Replaced multiplicative type damage with added or removed damage dice.
+- Defined a hidden Foundry damage pipeline using move Power, attacking stat, defending stat, type interaction, STAB, and standardized optional modifiers.
+- Simplified critical hits, combat stages, and modifier vocabulary.
+- Locked a shared trainer-Pokémon initiative model with two Main Actions, two Move Actions, and one Reaction per individual.
+- Made basic commands free, switching a Main Action, and incoming Pokémon unable to take a Main Action on the switch turn by default.
+- Protected trainers from direct hostile Pokémon attacks while they have an active conscious Pokémon.
+- Standardized condition categories, timing, recovery, reapplication, and assistance.
+- Replaced repeating injury thresholds with a five-step Wound track while retaining classic injuries as an optional gritty module.
+- Standardized recharge categories as At-Will, Cooldown, Encounter, and Expedition.
+- Locked trainer progression to levels 1–20 using Background, Role, Specialty, and Talents.
+- Removed separate Edge and Feature currencies and replaced multiclassing with Cross-Role Talents.
+- Locked Pokémon progression to levels 1–100 with automatic growth, Training Paths, simplified Natures, milestone choices, evolution continuity, and XP or milestone advancement.
+- Defined four equipped moves, two reserve moves, and an archived move library.
+- Converted Pokémon Edges into Species Talents, Training Talents, capability upgrades, and milestone improvements.
+- Added a one-roll capture system usable during or after combat.
+- Defined capture difficulty, HP and status modifiers, Capture Momentum, critical results, ball bonuses, specialized balls, and narrative wild-Pokémon tags.
+- Deferred character-sheet design until the rules stabilize.
 
 ### Next targets
 
-- Decide the final attack and defense math.
-- Decide whether Pokémon progression remains 1–100 or is compressed.
+- Design healing, rest, recovery, Pokémon Centers, fainting, condition treatment, Wound recovery, medicine, and expedition pacing.
 - Build a Foundry rules-profile setting so baseline PTR and player-lite rules can coexist during testing.
-- Prototype Guard, Reflex, Wounds, and the new action economy.
+- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, and capture roll.
 - Determine whether the unregistered `dex-entries` and `maneuvers` databases are obsolete, internal-only, or should be exposed.
 - Add semantic validation for species and move data.
 - Smoke-test the packaged system in Foundry V13.
