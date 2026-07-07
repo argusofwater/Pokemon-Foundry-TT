@@ -107,7 +107,7 @@ export function inferRecharge({ power = 0, tags = [], text = "", healingPercent 
 export function inferAbilityType(text = "") {
   const prose = String(text).toLowerCase();
   if (/(transform|changes form|replaces|legendary|cannot be suppressed)/.test(prose)) return "special";
-  if (/(as a reaction|in response to|when targeted|when hit)/.test(prose)) return "reaction";
+  if (/(as a reaction|in response to|when targeted|when(?: the user| this pokemon| it)? is hit|when hit)/.test(prose)) return "reaction";
   if (/(may activate|as an action|the user may use)/.test(prose)) return "activated";
   if (/(when |after |upon |whenever )/.test(prose)) return "triggered";
   return "passive";
