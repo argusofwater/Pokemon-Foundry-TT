@@ -2,7 +2,7 @@
   <header class="commander-section-header">
     <div>
       <h2>Moves</h2>
-      <p>Four active moves, two reserve moves, and the full embedded move library.</p>
+      <p>Drag Move Items or library entries into four active slots and two reserve slots. Drag slotted moves to rearrange them.</p>
     </div>
     <div class="commander-action-pool">
       <span>Main {{actions.sharedMainRemaining}} / 2</span>
@@ -17,10 +17,10 @@
       <h3>Active Moves</h3>
       <div class="commander-move-slots">
         {{#each equippedMoves as |move index|}}
-          <article class="commander-move-slot" data-slot="{{index}}">
+          <article class="commander-move-slot" data-move-zone="active" data-move-index="{{index}}">
             {{#if move}}
-              <img src="{{move.img}}" alt="{{move.name}}">
-              <div>
+              <img src="{{move.img}}" alt="{{move.name}}" draggable="true" data-item-uuid="{{move.uuid}}">
+              <div class="commander-move-drag" draggable="true" data-item-uuid="{{move.uuid}}">
                 <strong>{{move.name}}</strong>
                 <span>{{move.system.type}} · {{move.system.category}}</span>
                 <small>Power {{move.system.power}} · {{move.system.recharge.category}}</small>
@@ -28,6 +28,7 @@
               <div class="commander-row-actions">
                 <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}">Roll</button>
                 <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
+                {{#if ../editable}}<button type="button" data-action="clearMoveSlot" data-move-zone="active" data-move-index="{{index}}">Clear</button>{{/if}}
               </div>
             {{else}}
               <span class="commander-empty-slot">Drop a move here</span>
@@ -41,16 +42,19 @@
       <h3>Reserve Moves</h3>
       <div class="commander-move-slots reserve">
         {{#each reserveMoves as |move index|}}
-          <article class="commander-move-slot" data-reserve-slot="{{index}}">
+          <article class="commander-move-slot" data-move-zone="reserve" data-move-index="{{index}}">
             {{#if move}}
-              <img src="{{move.img}}" alt="{{move.name}}">
-              <div>
+              <img src="{{move.img}}" alt="{{move.name}}" draggable="true" data-item-uuid="{{move.uuid}}">
+              <div class="commander-move-drag" draggable="true" data-item-uuid="{{move.uuid}}">
                 <strong>{{move.name}}</strong>
                 <span>{{move.system.type}} · {{move.system.category}}</span>
               </div>
-              <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
+              <div class="commander-row-actions">
+                <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
+                {{#if ../editable}}<button type="button" data-action="clearMoveSlot" data-move-zone="reserve" data-move-index="{{index}}">Clear</button>{{/if}}
+              </div>
             {{else}}
-              <span class="commander-empty-slot">Reserve slot</span>
+              <span class="commander-empty-slot">Drop a reserve move here</span>
             {{/if}}
           </article>
         {{/each}}
@@ -63,7 +67,7 @@
     {{#if embeddedMoves.length}}
       <div class="commander-table">
         {{#each embeddedMoves as |move|}}
-          <div class="commander-table-row" data-item-id="{{move.id}}">
+          <div class="commander-table-row" data-item-id="{{move.id}}" draggable="true" data-item-uuid="{{move.uuid}}">
             <img src="{{move.img}}" alt="{{move.name}}">
             <strong>{{move.name}}</strong>
             <span>{{move.system.type}}</span>
@@ -79,7 +83,7 @@
         {{/each}}
       </div>
     {{else}}
-      <p>No embedded moves yet. Drag a Move Item onto the sheet.</p>
+      <p>No embedded moves yet. Drag a Move Item onto a slot or anywhere on the sheet.</p>
     {{/if}}
   </section>
 </section>
