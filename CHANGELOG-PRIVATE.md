@@ -45,13 +45,19 @@ This file records private-table changes made on top of Pokémon Tabletop Reunite
 - Defined Sunlight, Rain, Sandstorm, Snow, Harsh Winds, Fog, Electric Terrain, Grassy Terrain, Psychic Terrain, Misty Terrain, Dark Terrain, and representative local Zones.
 - Added optional elemental setup conditions: Soaked, Chilled, Scorched, and Electrified.
 - Added a dedicated Foundry Weather, Terrain, and Zone GUI requirements document covering automatic duration, source tracking, modifiers, token entry, grounded detection, player visibility, and GM controls.
+- Locked five ability types, four recharge categories, and four ability power tiers.
+- Defined Species Talents for natural traits and Training Talents for learned development.
+- Defined General and Role-based trainer Talent lists with minimal prerequisites and limited upgrade chains.
+- Limited normal Pokémon progression to five Talents by level 100, with evolution and milestones able to grant suitable extras.
+- Standardized ability suppression, copying, stealing, replacement, Entry triggers, and form-change profiles.
+- Added Foundry automation requirements for triggers, Reactions, recharge, temporary ability states, Talent prerequisites, and form application.
 - Deferred character-sheet design until the rules stabilize.
 
 ### Next targets
 
-- Design abilities, Species Talents, Training Talents, and trainer Talents.
+- Design held items, trainer equipment, TMs, tutors, evolution items, and item economy.
 - Build a Foundry rules-profile setting so baseline PTR and player-lite rules can coexist during testing.
-- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, capture roll, recovery, and environment controller.
+- Prototype the new defense selection, damage pool, action economy, conditions, Wounds, capture roll, recovery, environment controller, and ability state handling.
 - Determine whether the unregistered `dex-entries` and `maneuvers` databases are obsolete, internal-only, or should be exposed.
 - Add semantic validation for species and move data.
 - Smoke-test the packaged system in Foundry V13.
