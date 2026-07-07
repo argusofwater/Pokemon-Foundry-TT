@@ -89,32 +89,11 @@ export class CommanderTrainerData extends foundry.abstract.TypeDataModel {
         fatigue: new fields.StringField({ required: true, nullable: false, choices: ["fresh", "tired", "exhausted", "spent"], initial: "fresh" })
       }),
       attributes: new fields.SchemaField({
-        body: attributeField(),
-        agility: attributeField(),
-        mind: attributeField(),
-        presence: attributeField()
+        body: attributeField(), agility: attributeField(), mind: attributeField(), presence: attributeField()
       }),
-      defenses: new fields.SchemaField({
-        physical: defenseField(),
-        special: defenseField(),
-        reflex: defenseField()
-      }),
+      defenses: new fields.SchemaField({ physical: defenseField(), special: defenseField(), reflex: defenseField() }),
       skills: new fields.SchemaField({
-        athletics: skillField("body"),
-        acrobatics: skillField("agility"),
-        endurance: skillField("body"),
-        stealth: skillField("agility"),
-        perception: skillField("mind"),
-        survival: skillField("mind"),
-        medicine: skillField("mind"),
-        technology: skillField("mind"),
-        pokemonLore: skillField("mind"),
-        nature: skillField("mind"),
-        investigation: skillField("mind"),
-        influence: skillField("presence"),
-        deception: skillField("presence"),
-        performance: skillField("presence"),
-        focus: skillField("presence")
+        athletics: skillField("body"), acrobatics: skillField("agility"), endurance: skillField("body"), stealth: skillField("agility"), perception: skillField("mind"), survival: skillField("mind"), medicine: skillField("mind"), technology: skillField("mind"), pokemonLore: skillField("mind"), nature: skillField("mind"), investigation: skillField("mind"), influence: skillField("presence"), deception: skillField("presence"), performance: skillField("presence"), focus: skillField("presence")
       }),
       actions: actionStateField(),
       team: new fields.SchemaField({
@@ -127,7 +106,7 @@ export class CommanderTrainerData extends foundry.abstract.TypeDataModel {
         medicalSupplies: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 })
       }),
       campaign: new fields.SchemaField({
-        expeditionRole: new fields.StringField({ required: true, nullable: false, choices: ["", "guide", "scout", "quartermaster", "medic", "researcher", "handler"], initial: "" }),
+        expeditionRole: new fields.StringField({ required: true, nullable: false, blank: true, choices: ["", "guide", "scout", "quartermaster", "medic", "researcher", "handler"], initial: "" }),
         downtimeActions: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
         notes: new fields.HTMLField({ required: true, nullable: false, blank: true, initial: "" })
       }),
@@ -158,71 +137,22 @@ export class CommanderPokemonData extends foundry.abstract.TypeDataModel {
     return {
       schema: schemaVersionField(),
       identity: new fields.SchemaField({
-        speciesUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
-        speciesName: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
-        level: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, max: 100, initial: 1 }),
-        evolutionStage: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
-        types: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] }),
-        nature: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
-        trainingPath: new fields.StringField({ required: true, nullable: false, choices: trainingPathChoices, initial: "balanced" }),
-        lifecycle: new fields.StringField({ required: true, nullable: false, choices: lifecycleChoices, initial: "party" }),
-        trainerUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
+        speciesUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), speciesName: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), level: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, max: 100, initial: 1 }), evolutionStage: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), types: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] }), nature: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), trainingPath: new fields.StringField({ required: true, nullable: false, choices: trainingPathChoices, initial: "balanced" }), lifecycle: new fields.StringField({ required: true, nullable: false, choices: lifecycleChoices, initial: "party" }), trainerUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
       }),
-      health: new fields.SchemaField({
-        hp: resourceField({ value: 10, max: 10 }),
-        temporaryHp: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
-        wounds: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, max: 5, initial: 0 }),
-        fatigue: new fields.StringField({ required: true, nullable: false, choices: ["fresh", "tired", "exhausted", "spent"], initial: "fresh" })
-      }),
-      stats: new fields.SchemaField({
-        hp: pokemonStatField(10),
-        attack: pokemonStatField(),
-        defense: pokemonStatField(),
-        specialAttack: pokemonStatField(),
-        specialDefense: pokemonStatField(),
-        speed: pokemonStatField()
-      }),
-      defenses: new fields.SchemaField({
-        physical: defenseField(),
-        special: defenseField(),
-        reflex: defenseField()
-      }),
-      bond: new fields.SchemaField({
-        level: new fields.StringField({ required: true, nullable: false, choices: bondChoices, initial: "wary" }),
-        progress: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
-        caregiverUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
-        notes: new fields.HTMLField({ required: true, nullable: false, blank: true, initial: "" })
-      }),
+      health: new fields.SchemaField({ hp: resourceField({ value: 10, max: 10 }), temporaryHp: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }), wounds: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, max: 5, initial: 0 }), fatigue: new fields.StringField({ required: true, nullable: false, choices: ["fresh", "tired", "exhausted", "spent"], initial: "fresh" }) }),
+      stats: new fields.SchemaField({ hp: pokemonStatField(10), attack: pokemonStatField(), defense: pokemonStatField(), specialAttack: pokemonStatField(), specialDefense: pokemonStatField(), speed: pokemonStatField() }),
+      defenses: new fields.SchemaField({ physical: defenseField(), special: defenseField(), reflex: defenseField() }),
+      bond: new fields.SchemaField({ level: new fields.StringField({ required: true, nullable: false, choices: bondChoices, initial: "wary" }), progress: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }), caregiverUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), notes: new fields.HTMLField({ required: true, nullable: false, blank: true, initial: "" }) }),
       actions: actionStateField(),
-      loadout: new fields.SchemaField({
-        equippedMoveUuids: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: true }), { required: true, nullable: false, initial: ["", "", "", ""] }),
-        reserveMoveUuids: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: true }), { required: true, nullable: false, initial: ["", ""] }),
-        heldItemUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
-        activeAbilityUuids: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] })
-      }),
-      progression: new fields.SchemaField({
-        mode: new fields.StringField({ required: true, nullable: false, choices: ["xp", "milestone"], initial: "milestone" }),
-        experience: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
-        milestone: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
-        evolutionEligible: new fields.BooleanField({ required: true, nullable: false, initial: false })
-      }),
-      exploration: new fields.SchemaField({
-        capabilities: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] }),
-        mountCapable: new fields.BooleanField({ required: true, nullable: false, initial: false }),
-        incubation: resourceField({ value: 0, max: 0 }),
-        development: resourceField({ value: 0, max: 0 })
-      }),
-      ui: new fields.SchemaField({
-        mode: new fields.StringField({ required: true, nullable: false, choices: ["play", "edit"], initial: "play" }),
-        activeTab: new fields.StringField({ required: true, nullable: false, blank: false, initial: "overview" })
-      })
+      loadout: new fields.SchemaField({ equippedMoveUuids: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: true }), { required: true, nullable: false, initial: ["", "", "", ""] }), reserveMoveUuids: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: true }), { required: true, nullable: false, initial: ["", ""] }), heldItemUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), activeAbilityUuids: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] }) }),
+      progression: new fields.SchemaField({ mode: new fields.StringField({ required: true, nullable: false, choices: ["xp", "milestone"], initial: "milestone" }), experience: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }), milestone: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }), evolutionEligible: new fields.BooleanField({ required: true, nullable: false, initial: false }) }),
+      exploration: new fields.SchemaField({ capabilities: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] }), mountCapable: new fields.BooleanField({ required: true, nullable: false, initial: false }), incubation: resourceField({ value: 0, max: 0 }), development: resourceField({ value: 0, max: 0 }) }),
+      ui: new fields.SchemaField({ mode: new fields.StringField({ required: true, nullable: false, choices: ["play", "edit"], initial: "play" }), activeTab: new fields.StringField({ required: true, nullable: false, blank: false, initial: "overview" }) })
     };
   }
 
   prepareDerivedData() {
-    for (const stat of Object.values(this.stats)) {
-      stat.final = Math.max(0, stat.species + stat.level + stat.path + stat.nature + stat.bonus);
-    }
+    for (const stat of Object.values(this.stats)) stat.final = Math.max(0, stat.species + stat.level + stat.path + stat.nature + stat.bonus);
     this.health.hp.max = Math.max(1, this.stats.hp.final);
     this.health.hp.value = Math.clamp(this.health.hp.value, 0, this.health.hp.max);
     this.defenses.physical.final = this.defenses.physical.base + this.defenses.physical.bonus;
