@@ -23,7 +23,11 @@ async function writePack(pack) {
   const db = new ClassicLevel(destination, { keyEncoding: "utf8", valueEncoding: "json" });
   await db.open();
   try {
-    const operations = documents.map(document => ({ type: "put", key: document._id, value: document }));
+    const operations = documents.map(document => ({
+      type: "put",
+      key: `!items!${document._id}`,
+      value: document
+    }));
     if (operations.length) await db.batch(operations);
   } finally {
     await db.close();
