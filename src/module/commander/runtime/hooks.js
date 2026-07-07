@@ -14,7 +14,7 @@ function bindCommanderChatControls(html) {
       const actor = await fromUuid(button.dataset.actorUuid);
       const amount = Number(button.dataset.amount ?? 0);
       if (!actor) return ui.notifications.warn("The target actor could not be resolved.");
-      await CommanderDamageService.applyDamage(actor, amount);
+      await CommanderDamageService.applyDamage(actor, amount, { damageType: button.dataset.damageType ?? "" });
       ui.notifications.info("Applied " + amount + " damage to " + actor.name + ".");
     });
   });
