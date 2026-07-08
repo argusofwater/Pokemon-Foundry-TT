@@ -1,0 +1,98 @@
+<section class="commander-tab commander-social-tab {{#unless (eq activeTab 'social')}}hidden{{/unless}}" data-tab="social">
+  <header class="commander-section-header">
+    <div>
+      <h2>Social</h2>
+      <p>Track stance, influence, leverage, reputation, and scene notes without turning conversation into a second combat system.</p>
+    </div>
+    <div class="commander-social-header-actions">
+      <button type="button" data-action="postSocialStatus">Post Status</button>
+      {{#if editable}}<button type="button" class="danger" data-action="resetSocialScene">Reset Scene</button>{{/if}}
+    </div>
+  </header>
+
+  <div class="commander-social-grid">
+    <article class="commander-card accent-red">
+      <h3>Scene</h3>
+      <label>
+        Subject
+        {{#if (eq mode "edit")}}
+          <input type="text" name="system.social.subject" value="{{system.social.subject}}" placeholder="Who or what is being influenced?">
+        {{else}}
+          <strong>{{#if system.social.subject}}{{system.social.subject}}{{else}}Current social scene{{/if}}</strong>
+        {{/if}}
+      </label>
+      <label>
+        Stance
+        {{#if (eq mode "edit")}}
+          <select name="system.social.stance">
+            {{#each socialStanceOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+          </select>
+        {{else}}
+          <strong>{{capitalize system.social.stance}}</strong>
+        {{/if}}
+      </label>
+      <p class="commander-social-guidance">
+        Hostile and Unfriendly hinder social checks. Friendly and Devoted favor them. Neutral uses the normal roll.
+      </p>
+    </article>
+
+    <article class="commander-card">
+      <h3>Influence</h3>
+      <div class="commander-social-meter-label">
+        <span>Progress</span>
+        <strong>{{system.social.influence.value}} / {{system.social.influence.max}}</strong>
+      </div>
+      <div class="commander-social-meter"><span style="width: {{socialInfluencePercent}}%;"></span></div>
+      <div class="commander-social-buttons">
+        <button type="button" data-action="adjustSocialResource" data-resource="influence" data-amount="-1">−1</button>
+        <button type="button" data-action="adjustSocialResource" data-resource="influence" data-amount="1">+1</button>
+      </div>
+      {{#if (eq mode "edit")}}
+        <label>Maximum <input type="number" name="system.social.influence.max" value="{{system.social.influence.max}}" min="1"></label>
+      {{/if}}
+    </article>
+
+    <article class="commander-card">
+      <h3>Leverage</h3>
+      <div class="commander-social-resource-value">{{system.social.leverage}}</div>
+      <div class="commander-social-buttons">
+        <button type="button" data-action="adjustSocialResource" data-resource="leverage" data-amount="-1">Spend 1</button>
+        <button type="button" data-action="adjustSocialResource" data-resource="leverage" data-amount="1">Gain 1</button>
+      </div>
+      <p class="commander-social-guidance">Leverage represents concrete reasons the other side should cooperate: evidence, favors, access, obligations, or shared interests.</p>
+    </article>
+
+    <article class="commander-card">
+      <h3>Reputation</h3>
+      <div class="commander-social-resource-value">{{system.social.reputation}}</div>
+      {{#if editable}}
+        <div class="commander-social-buttons">
+          <button type="button" data-action="adjustSocialResource" data-resource="reputation" data-amount="-1">−1</button>
+          <button type="button" data-action="adjustSocialResource" data-resource="reputation" data-amount="1">+1</button>
+        </div>
+      {{/if}}
+      <p class="commander-social-guidance">Reputation is persistent. Resetting a scene does not erase it.</p>
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Social Checks</h3>
+      <div class="commander-social-checks">
+        <button type="button" data-action="rollSocialSkill" data-skill-key="influence">Influence</button>
+        <button type="button" data-action="rollSocialSkill" data-skill-key="deception">Deception</button>
+        <button type="button" data-action="rollSocialSkill" data-skill-key="performance">Performance</button>
+        <button type="button" data-action="rollSocialSkill" data-skill-key="focus">Focus</button>
+        <button type="button" data-action="rollSocialSkill" data-skill-key="investigation">Investigation</button>
+        <button type="button" data-action="rollSocialSkill" data-skill-key="pokemonLore">Pokémon Lore</button>
+      </div>
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Scene Notes</h3>
+      {{#if (eq mode "edit")}}
+        <textarea name="system.social.notes" rows="8" placeholder="Motives, promises, leverage, boundaries, names, and consequences...">{{system.social.notes}}</textarea>
+      {{else}}
+        <div class="commander-social-notes">{{{system.social.notes}}}</div>
+      {{/if}}
+    </article>
+  </div>
+</section>
