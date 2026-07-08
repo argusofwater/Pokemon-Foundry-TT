@@ -1,0 +1,33 @@
+<section class="commander-tab {{#unless (eq activeTab 'skills')}}hidden{{/unless}}" data-tab="skills">
+  <header class="commander-section-header">
+    <div>
+      <h2>Skills</h2>
+      <p>Checks use 1d20 + Attribute + Rank + Misc + situational modifiers. Favorite skills roll favored.</p>
+    </div>
+  </header>
+  <div class="commander-card">
+    <div class="commander-skill-grid">
+      {{#each skillList as |skill|}}
+        <div class="commander-skill-row">
+          <button type="button" data-action="rollSkill" data-skill-key="{{skill.key}}" title="Roll {{skill.label}}">🎲 {{skill.label}}</button>
+          <span>{{capitalize skill.attribute}}</span>
+          {{#if (eq ../mode "edit")}}
+            <select name="system.skills.{{skill.key}}.rank">
+              <option value="untrained" {{#if (eq skill.rank "untrained")}}selected{{/if}}>Untrained +0</option>
+              <option value="novice" {{#if (eq skill.rank "novice")}}selected{{/if}}>Novice +2</option>
+              <option value="adept" {{#if (eq skill.rank "adept")}}selected{{/if}}>Adept +4</option>
+              <option value="expert" {{#if (eq skill.rank "expert")}}selected{{/if}}>Expert +6</option>
+              <option value="master" {{#if (eq skill.rank "master")}}selected{{/if}}>Master +8</option>
+            </select>
+            <input type="number" name="system.skills.{{skill.key}}.misc" value="{{skill.misc}}" aria-label="Miscellaneous modifier">
+            <label><input type="checkbox" name="system.skills.{{skill.key}}.favorite" {{checked skill.favorite}}> Favorite</label>
+          {{else}}
+            <span>{{capitalize skill.rank}}</span>
+            <strong>+{{skill.final}}</strong>
+            <span>{{#if skill.favorite}}Favored{{/if}}</span>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</section>
