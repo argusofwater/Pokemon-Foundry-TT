@@ -2,7 +2,7 @@
   <div class="commander-grid">
     <article class="commander-card accent-red">
       <h2>Creature Profile</h2>
-      <div class="commander-stat-row"><span>Species</span>{{#if (eq mode "edit")}}<input name="system.identity.speciesName" value="{{system.identity.speciesName}}">{{else}}<span class="commander-value">{{system.identity.speciesName}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Species</span><span class="commander-value commander-locked-field" title="Species is set only by the Pokémon generator, species drag/drop, or evolution/form automation.">{{system.identity.speciesName}}</span></div>
       <div class="commander-stat-row"><span>Level</span>{{#if (eq mode "edit")}}<input type="number" name="system.identity.level" value="{{system.identity.level}}" min="1" max="100">{{else}}<span class="commander-value">{{system.identity.level}}</span>{{/if}}</div>
       <div class="commander-stat-row"><span>Nature</span>{{#if (eq mode "edit")}}<input name="system.identity.nature" value="{{system.identity.nature}}">{{else}}<span class="commander-value">{{system.identity.nature}}</span>{{/if}}</div>
       <div class="commander-stat-row"><span>Training Path</span>{{#if (eq mode "edit")}}<select name="system.identity.trainingPath"><option value="striker" {{#if (eq system.identity.trainingPath "striker")}}selected{{/if}}>Striker</option><option value="specialist" {{#if (eq system.identity.trainingPath "specialist")}}selected{{/if}}>Specialist</option><option value="bulwark" {{#if (eq system.identity.trainingPath "bulwark")}}selected{{/if}}>Bulwark</option><option value="swift" {{#if (eq system.identity.trainingPath "swift")}}selected{{/if}}>Swift</option><option value="balanced" {{#if (eq system.identity.trainingPath "balanced")}}selected{{/if}}>Balanced</option><option value="custom" {{#if (eq system.identity.trainingPath "custom")}}selected{{/if}}>Custom</option></select>{{else}}<span class="commander-value">{{system.identity.trainingPath}}</span>{{/if}}</div>
@@ -11,12 +11,13 @@
 
     <article class="commander-card wide">
       <h2>Combat Profile</h2>
+      <p class="commander-card-help">Species values are locked. Level, Path, Nature, and Bonus represent training, growth, and build changes.</p>
       <div class="commander-grid">
         {{#each statList as |stat|}}
           <div class="commander-card">
             <h3>{{stat.label}}</h3>
             {{#if (eq ../mode "edit")}}
-              <label>Species <input type="number" name="system.stats.{{stat.key}}.species" value="{{stat.species}}" min="0"></label>
+              <label>Species <span class="commander-value commander-locked-field" title="Species stats come from the embedded Species item.">{{stat.species}}</span></label>
               <label>Level <input type="number" name="system.stats.{{stat.key}}.level" value="{{stat.level}}" min="0"></label>
               <label>Path <input type="number" name="system.stats.{{stat.key}}.path" value="{{stat.path}}"></label>
               <label>Nature <input type="number" name="system.stats.{{stat.key}}.nature" value="{{stat.nature}}"></label>
