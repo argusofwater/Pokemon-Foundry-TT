@@ -171,6 +171,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
     const item = app.actor.items.get(target.dataset.itemId);
     if (!item) return;
+    if (app.actor.type === "pokemon" && item.type === "species") return ui.notifications.warn("Species is locked. Use evolution/form automation or regenerate the Pokémon instead.");
     const confirmed = await foundry.applications.api.DialogV2.confirm({ window: { title: `Delete ${item.name}?` }, content: `<p>Remove <strong>${item.name}</strong> from ${app.actor.name}?</p>` });
     if (confirmed) return item.delete();
   }
@@ -202,6 +203,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     if (!this.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
     const item = await documentFromDropData(data);
     if (!item) return ui.notifications.warn("That dropped item could not be resolved.");
+    if (item.type === "species" && this.actor.type === "pokemon") return ui.notifications.warn("Species is locked on Pokémon actors. Create Pokémon through the generator or drag a species onto a Trainer sheet.");
     if (item.type === "species" && this.actor.type === "character") {
       try {
         const pokemon = await CommanderSpeciesService.createPokemonFromSpecies(item, { trainer: this.actor, level: 1 });
