@@ -1,0 +1,79 @@
+<section class="commander-tab commander-downtime-tab {{#unless (eq activeTab 'downtime')}}hidden{{/unless}}" data-tab="downtime">
+  <header class="commander-section-header">
+    <div>
+      <h2>Downtime</h2>
+      <p>Spend Downtime Actions on training, bonding, research, crafting, treatment, earning, networking, or facility work.</p>
+    </div>
+    <div class="commander-downtime-header-actions">
+      <button type="button" data-action="postDowntimeStatus">Post Status</button>
+      {{#if editable}}<button type="button" class="danger" data-action="resetDowntimeProject">Reset Project</button>{{/if}}
+    </div>
+  </header>
+
+  <div class="commander-downtime-grid">
+    <article class="commander-card accent-red">
+      <h3>Downtime Actions</h3>
+      <div class="commander-downtime-action-count">{{system.campaign.downtimeActions}}</div>
+      <div class="commander-downtime-buttons">
+        <button type="button" data-action="adjustDowntimeActions" data-amount="-1">Spend 1</button>
+        {{#if editable}}<button type="button" data-action="adjustDowntimeActions" data-amount="1">Add 1</button>{{/if}}
+      </div>
+      <p class="commander-downtime-help">Working a project automatically spends one action.</p>
+    </article>
+
+    <article class="commander-card">
+      <h3>Project Progress</h3>
+      <div class="commander-downtime-progress-label">
+        <span>{{#if downtime.project}}{{downtime.project}}{{else}}No project named{{/if}}</span>
+        <strong>{{downtime.progress}} / {{downtime.goal}}</strong>
+      </div>
+      <div class="commander-downtime-meter {{#if downtimeComplete}}complete{{/if}}"><span style="width: {{downtimePercent}}%;"></span></div>
+      {{#if downtimeComplete}}<div class="commander-downtime-complete">Project Complete</div>{{/if}}
+      {{#if editable}}
+        <div class="commander-downtime-buttons">
+          <button type="button" data-action="adjustDowntimeProgress" data-amount="-1">−1 Progress</button>
+          <button type="button" data-action="adjustDowntimeProgress" data-amount="1">+1 Progress</button>
+        </div>
+      {{/if}}
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Current Project</h3>
+      <div class="commander-downtime-project-fields">
+        <label>
+          Category
+          <select data-downtime-category {{#unless editable}}disabled{{/unless}}>
+            {{#each downtimeCategoryOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+          </select>
+        </label>
+        <label>
+          Project Name
+          <input type="text" data-downtime-project value="{{downtime.project}}" placeholder="What are you working toward?" {{#unless editable}}disabled{{/unless}}>
+        </label>
+        <label>
+          Goal
+          <input type="number" data-downtime-goal value="{{downtime.goal}}" min="1" {{#unless editable}}disabled{{/unless}}>
+        </label>
+      </div>
+      {{#if editable}}<button type="button" data-action="saveDowntimeProject">Save Project</button>{{/if}}
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Work the Project</h3>
+      <div class="commander-downtime-work-row">
+        <div>
+          <strong>{{capitalize downtime.category}}</strong>
+          <p class="commander-downtime-help">A total of 10+ earns 1 progress. A total of 18+ earns 2 progress.</p>
+        </div>
+        <button type="button" data-action="workDowntimeProject" {{#unless system.campaign.downtimeActions}}disabled{{/unless}}>Spend 1 Action and Roll</button>
+      </div>
+      {{#if downtime.lastResult}}<div class="commander-downtime-last-result">{{downtime.lastResult}}</div>{{/if}}
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Project Notes</h3>
+      <textarea data-downtime-notes rows="8" placeholder="Costs, materials, milestones, complications, trainers, Pokémon, facilities..." {{#unless editable}}disabled{{/unless}}>{{downtime.notes}}</textarea>
+      {{#if editable}}<button type="button" data-action="saveDowntimeProject">Save Notes</button>{{/if}}
+    </article>
+  </div>
+</section>
