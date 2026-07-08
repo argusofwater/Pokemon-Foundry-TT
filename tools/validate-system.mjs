@@ -73,7 +73,7 @@ async function validatePack(pack) {
   }
 
   if (!selected) {
-    errors.push(`Pack '${pack.name}' has no source at: ${candidates.join(", ")}`);
+    warnings.push(`Pack '${pack.name}' has no local source yet: ${candidates.join(", ")}. This is allowed before generated LevelDB packs are built.`);
     return;
   }
 
