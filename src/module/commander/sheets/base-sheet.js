@@ -44,6 +44,11 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     };
   }
 
+  async _preparePartContext(partId, context, options) {
+    const partContext = await super._preparePartContext(partId, context, options);
+    return { ...partContext, currentPart: partId };
+  }
+
   static async toggleMode(event, target) {
     const app = resolveApplication(target, this);
     const current = app.actor.system.ui?.mode ?? "play";
@@ -58,7 +63,8 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     const parts = app.constructor.PARTS ?? {};
     if (!parts[tab]) return ui.notifications.info(`${target.textContent?.trim() || tab} is not implemented yet.`);
     app._commanderActiveTab = tab;
-    return app.render({ parts: ["navigation", tab] });
+    await app.actor.update({ "system.ui.activeTab": tab });
+    return app.render();
   }
 
   static async spendAction(event, target) {
@@ -105,7 +111,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     const app = resolveApplication(target, this);
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
     await CommanderConditionService.toggle(app.actor, target.dataset.conditionId);
-    return app.render({ parts: ["effects"] });
+    return app.render();
   }
 
   static async removeEffect(event, target) {
@@ -113,7 +119,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
     const effect = app.actor.effects.get(target.dataset.effectId);
     if (effect) await effect.delete();
-    return app.render({ parts: ["effects"] });
+    return app.render();
   }
 
   async _onDrop(event) {
