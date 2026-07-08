@@ -126,11 +126,20 @@ export class CommanderTrainerData extends foundry.abstract.TypeDataModel {
 
   prepareDerivedData() {
     const rankBonus = { untrained: 0, novice: 2, adept: 4, expert: 6, master: 8 };
-    for (const attribute of Object.values(this.attributes)) attribute.final = attribute.base + attribute.bonus;
+
+    for (const attribute of Object.values(this.attributes)) {
+      attribute.final = Number(attribute.base ?? 0) + Number(attribute.bonus ?? 0);
+    }
+
     for (const skill of Object.values(this.skills)) {
       const attribute = this.attributes[skill.attribute]?.final ?? 0;
-      skill.final = attribute + (rankBonus[skill.rank] ?? 0) + skill.misc;
+      skill.final = attribute + (rankBonus[skill.rank] ?? 0) + Number(skill.misc ?? 0);
     }
+
+    this.defenses.physical.final = Number(this.defenses.physical.base ?? 10) + this.attributes.body.final + Number(this.defenses.physical.bonus ?? 0);
+    this.defenses.special.final = Number(this.defenses.special.base ?? 10) + this.attributes.mind.final + Number(this.defenses.special.bonus ?? 0);
+    this.defenses.reflex.final = Number(this.defenses.reflex.base ?? 10) + this.attributes.agility.final + Number(this.defenses.reflex.bonus ?? 0);
+
     this.health.hp.value = Math.clamp(this.health.hp.value, 0, this.health.hp.max);
     this.inventory.bulkCapacity = Math.max(0, 5 + this.attributes.body.final + this.inventory.bulkCapacityBonus);
     this.social.influence.value = Math.clamp(this.social.influence.value, 0, this.social.influence.max);
