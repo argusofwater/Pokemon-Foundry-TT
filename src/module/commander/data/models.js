@@ -88,9 +88,7 @@ export class CommanderTrainerData extends foundry.abstract.TypeDataModel {
         wounds: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, max: 5, initial: 0 }),
         fatigue: new fields.StringField({ required: true, nullable: false, choices: ["fresh", "tired", "exhausted", "spent"], initial: "fresh" })
       }),
-      attributes: new fields.SchemaField({
-        body: attributeField(), agility: attributeField(), mind: attributeField(), presence: attributeField()
-      }),
+      attributes: new fields.SchemaField({ body: attributeField(), agility: attributeField(), mind: attributeField(), presence: attributeField() }),
       defenses: new fields.SchemaField({ physical: defenseField(), special: defenseField(), reflex: defenseField() }),
       skills: new fields.SchemaField({
         athletics: skillField("body"), acrobatics: skillField("agility"), endurance: skillField("body"), stealth: skillField("agility"), perception: skillField("mind"), survival: skillField("mind"), medicine: skillField("mind"), technology: skillField("mind"), pokemonLore: skillField("mind"), nature: skillField("mind"), investigation: skillField("mind"), influence: skillField("presence"), deception: skillField("presence"), performance: skillField("presence"), focus: skillField("presence")
@@ -110,6 +108,14 @@ export class CommanderTrainerData extends foundry.abstract.TypeDataModel {
         downtimeActions: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
         notes: new fields.HTMLField({ required: true, nullable: false, blank: true, initial: "" })
       }),
+      social: new fields.SchemaField({
+        stance: new fields.StringField({ required: true, nullable: false, choices: ["hostile", "unfriendly", "neutral", "friendly", "devoted"], initial: "neutral" }),
+        influence: resourceField({ value: 0, max: 5 }),
+        leverage: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
+        reputation: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
+        subject: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
+        notes: new fields.HTMLField({ required: true, nullable: false, blank: true, initial: "" })
+      }),
       ui: new fields.SchemaField({
         mode: new fields.StringField({ required: true, nullable: false, choices: ["play", "edit"], initial: "play" }),
         activeTab: new fields.StringField({ required: true, nullable: false, blank: false, initial: "overview" }),
@@ -127,6 +133,7 @@ export class CommanderTrainerData extends foundry.abstract.TypeDataModel {
     }
     this.health.hp.value = Math.clamp(this.health.hp.value, 0, this.health.hp.max);
     this.inventory.bulkCapacity = Math.max(0, 5 + this.attributes.body.final + this.inventory.bulkCapacityBonus);
+    this.social.influence.value = Math.clamp(this.social.influence.value, 0, this.social.influence.max);
   }
 }
 
@@ -136,9 +143,7 @@ export class CommanderPokemonData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       schema: schemaVersionField(),
-      identity: new fields.SchemaField({
-        speciesUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), speciesName: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), level: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, max: 100, initial: 1 }), evolutionStage: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), types: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] }), nature: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), trainingPath: new fields.StringField({ required: true, nullable: false, choices: trainingPathChoices, initial: "balanced" }), lifecycle: new fields.StringField({ required: true, nullable: false, choices: lifecycleChoices, initial: "party" }), trainerUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
-      }),
+      identity: new fields.SchemaField({ speciesUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), speciesName: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), level: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, max: 100, initial: 1 }), evolutionStage: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), types: new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] }), nature: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }), trainingPath: new fields.StringField({ required: true, nullable: false, choices: trainingPathChoices, initial: "balanced" }), lifecycle: new fields.StringField({ required: true, nullable: false, choices: lifecycleChoices, initial: "party" }), trainerUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }) }),
       health: new fields.SchemaField({ hp: resourceField({ value: 10, max: 10 }), temporaryHp: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }), wounds: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, max: 5, initial: 0 }), fatigue: new fields.StringField({ required: true, nullable: false, choices: ["fresh", "tired", "exhausted", "spent"], initial: "fresh" }) }),
       stats: new fields.SchemaField({ hp: pokemonStatField(10), attack: pokemonStatField(), defense: pokemonStatField(), specialAttack: pokemonStatField(), specialDefense: pokemonStatField(), speed: pokemonStatField() }),
       defenses: new fields.SchemaField({ physical: defenseField(), special: defenseField(), reflex: defenseField() }),
