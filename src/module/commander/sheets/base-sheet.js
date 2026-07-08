@@ -8,6 +8,20 @@ function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
 }
 
+async function documentFromDropData(data) {
+  if (data?.uuid) {
+    const document = await fromUuid(data.uuid);
+    if (document) return document;
+  }
+
+  try {
+    return await Item.implementation.fromDropData(data);
+  } catch (error) {
+    console.warn("Commander drop fallback failed", { data, error });
+    return null;
+  }
+}
+
 export class CommanderActorSheetBase extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.sheets.ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["ptu", "commander-sheet"],
@@ -180,8 +194,8 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
 
   async _onDropItem(event, data) {
     if (!this.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
-    const item = await Item.implementation.fromDropData(data);
-    if (!item) return;
+    const item = await documentFromDropData(data);
+    if (!item) return ui.notifications.warn("That dropped item could not be resolved.");
     if (item.type === "species" && this.actor.type === "character") {
       try {
         const pokemon = await CommanderSpeciesService.createPokemonFromSpecies(item, { trainer: this.actor, level: 1 });
@@ -195,7 +209,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
         return ui.notifications.error(error.message ?? "Could not create that Pokémon.");
       }
     }
-    return Item.create(item.toObject(), { parent: this.actor });
+    return this.actor.createEmbeddedDocuments("Item", [item.toObject()]);
   }
 
   async _onDropActor(event, data) {
