@@ -1,0 +1,51 @@
+.commander-biography-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.commander-biography-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.commander-biography-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.commander-biography-tab label {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 0.55rem;
+  color: var(--commander-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.commander-biography-tab input,
+.commander-biography-tab textarea {
+  width: 100%;
+}
+
+.commander-biography-tab textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.commander-biography-tab input:disabled,
+.commander-biography-tab textarea:disabled {
+  color: var(--commander-ink);
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+@media (max-width: 700px) {
+  .commander-biography-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commander-biography-grid .wide {
+    grid-column: auto;
+  }
+}
