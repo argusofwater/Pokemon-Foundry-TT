@@ -9,32 +9,19 @@ function schemaVersionField() {
 
 function automationField() {
   return new fields.SchemaField({
-    state: new fields.StringField({
-      required: true,
-      nullable: false,
-      choices: ["automatic", "prompted", "manual", "unsupported"],
-      initial: "manual"
-    }),
+    state: new fields.StringField({ required: true, nullable: false, choices: ["automatic", "prompted", "manual", "unsupported"], initial: "manual" }),
     handler: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
     notes: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
   });
 }
 
 function tagsField() {
-  return new fields.ArrayField(
-    new fields.StringField({ required: true, nullable: false, blank: false }),
-    { required: true, nullable: false, initial: [] }
-  );
+  return new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] });
 }
 
 function rechargeField() {
   return new fields.SchemaField({
-    category: new fields.StringField({
-      required: true,
-      nullable: false,
-      choices: ["at-will", "cooldown", "encounter", "expedition"],
-      initial: "at-will"
-    }),
+    category: new fields.StringField({ required: true, nullable: false, choices: ["at-will", "cooldown", "encounter", "expedition"], initial: "at-will" }),
     rounds: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
     remaining: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 })
   });
@@ -146,7 +133,9 @@ export class CommanderEquipmentData extends CommanderItemBase {
       assignedActorUuid: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
       consumedOnUse: new fields.BooleanField({ required: true, nullable: false, initial: false }),
       suppressed: new fields.BooleanField({ required: true, nullable: false, initial: false }),
-      compatibility: tagsField()
+      compatibility: tagsField(),
+      effects: new fields.ArrayField(new fields.ObjectField({ required: true, nullable: false, initial: {} }), { required: true, nullable: false, initial: [] }),
+      sourceMetadata: new fields.ObjectField({ required: true, nullable: false, initial: {} })
     }, { inplace: false });
   }
 }
