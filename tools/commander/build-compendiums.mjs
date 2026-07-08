@@ -9,17 +9,50 @@ function sourceMeta(record) {
   return { profile: record.rulesProfile ?? "commander", book: record.source?.dataset ?? "", page: record.source?.sourceId ?? "" };
 }
 
+function titleCase(value) {
+  const text = String(value ?? "").trim();
+  return text ? text.charAt(0).toUpperCase() + text.slice(1).toLowerCase() : "";
+}
+
+function legacyRange(range) {
+  if (typeof range === "string") return range;
+  if (!range) return "";
+  if (range.unit === "self") return "Self";
+  if (range.unit === "scene") return "Scene";
+  const value = Number(range.value ?? 0);
+  const shape = range.shape && range.shape !== "single" ? ` ${titleCase(range.shape)}` : "";
+  const area = Number(range.area ?? 0) ? ` ${range.area}` : "";
+  return `${value || 1} ${range.unit ?? "melee"}${shape}${area}`.trim();
+}
+
+function legacyFrequency(recharge) {
+  const category = recharge?.category ?? "at-will";
+  if (category === "cooldown") return `Cooldown ${Number(recharge.rounds ?? 1) || 1}`;
+  if (category === "encounter") return "Scene";
+  if (category === "expedition") return "Expedition";
+  return "At-Will";
+}
+
 function baseItemDocument(record, type) {
+  const description = record.description ?? record.effect ?? "";
+  const tags = asArray(record.tags);
   return {
-    _id: stableId(type, record.slug), name: record.name, type,
+    _id: stableId(type, record.slug),
+    name: record.name,
+    type,
     img: record.artwork?.portrait ?? record.img ?? "icons/svg/item-bag.svg",
     system: {
       schema: { version: SCHEMA_VERSION, lastMigration: "" },
       slug: record.slug,
-      description: record.description ?? record.effect ?? "",
-      tags: asArray(record.tags),
+      description,
+      effect: description,
+      snippet: description,
+      origin: record.source?.dataset ?? "Commander Compendium",
+      keywords: tags,
+      tags,
       automation: record.automation ?? { state: "manual", handler: "", notes: "" },
-      source: sourceMeta(record)
+      source: sourceMeta(record),
+      commander: { profile: "commander" }
     },
     flags: { ptu: { commanderSource: { schemaVersion: record.schemaVersion ?? SCHEMA_VERSION, sourceId: record.source?.sourceId ?? record.slug } } }
   };
@@ -27,19 +60,30 @@ function baseItemDocument(record, type) {
 
 function buildMove(record) {
   const document = baseItemDocument(record, "move");
+  const category = titleCase(record.category || "status");
+  const type = titleCase(record.type || "normal");
+  const recharge = record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 };
   Object.assign(document.system, {
-    type: record.type,
-    category: record.category,
+    type,
+    commanderType: String(record.type ?? "normal").toLowerCase(),
+    category,
+    commanderCategory: String(record.category ?? "status").toLowerCase(),
     power: record.power,
+    damageBase: record.power,
+    damageBonus: 0,
     accuracy: record.accuracy ?? null,
+    ac: record.accuracy ?? "",
     accuracyModifier: record.accuracyModifier ?? 0,
     accuracyHindered: Boolean(record.accuracyHindered),
     priority: record.priority ?? 0,
-    range: record.range ?? { value: 1, unit: "melee", shape: "single", area: 0 },
-    target: record.target ?? { defense: record.category === "physical" ? "physical" : record.category === "special" ? "special" : "none", count: 1, disposition: "enemy", sourceTarget: "normal" },
-    recharge: record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 },
+    range: legacyRange(record.range),
+    commanderRange: record.range ?? { value: 1, unit: "melee", shape: "single", area: 0 },
+    target: record.target ?? { defense: String(record.category ?? "status").toLowerCase() === "physical" ? "physical" : String(record.category ?? "status").toLowerCase() === "special" ? "special" : "none", count: 1, disposition: "enemy", sourceTarget: "normal" },
+    recharge,
+    frequency: legacyFrequency(recharge),
     effects: asArray(record.effects),
     contest: record.contest ?? { tags: [], category: "", appeal: 0 },
+    contestType: titleCase(record.contest?.category ?? ""),
     tutorModification: { active: false, name: "", description: "" },
     sourceMetadata: record.sourceMetadata ?? {}
   });
@@ -48,12 +92,17 @@ function buildMove(record) {
 
 function buildAbility(record) {
   const document = baseItemDocument(record, "ability");
+  const recharge = record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 };
   Object.assign(document.system, {
     abilityType: record.abilityType ?? "passive",
     trigger: record.trigger ?? "",
     effect: record.effect ?? record.description ?? "",
-    recharge: record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 },
+    description: record.description ?? record.effect ?? "",
+    snippet: record.effect ?? record.description ?? "",
+    recharge,
+    frequency: legacyFrequency(recharge),
     powerTier: record.powerTier ?? "standard",
+    tier: titleCase(record.powerTier ?? "standard"),
     innate: Boolean(record.innate),
     entryLimit: record.entryLimit ?? 1,
     sourceMetadata: record.sourceMetadata ?? {}
@@ -69,10 +118,14 @@ function buildItem(record) {
     quantity: record.quantity ?? 1,
     bulk: record.bulk ?? 1,
     rarity: record.rarity ?? "common",
+    cost: record.cost ?? 0,
+    consumable: Boolean(record.consumedOnUse) ? 1 : 0,
+    consumedOnUse: Boolean(record.consumedOnUse),
     location: "carried",
     slot: record.slot ?? "",
+    subtype: record.category === "pokeball" ? "pokeball" : record.category ?? "",
+    container: false,
     assignedActorUuid: "",
-    consumedOnUse: Boolean(record.consumedOnUse),
     suppressed: false,
     compatibility: asArray(record.compatibility),
     effects: asArray(record.effects),
@@ -84,9 +137,21 @@ function buildItem(record) {
 function buildTalent(record) {
   const document = baseItemDocument(record, record.ownerType === "pokemon" ? "pokeedge" : "feat");
   Object.assign(document.system, {
-    ownerType: record.ownerType ?? "either", talentType: record.talentType ?? "general", role: record.role ?? "", specialty: record.specialty ?? "",
-    requirement: record.requirement ?? "", action: record.action ?? "passive", trigger: record.trigger ?? "",
-    recharge: record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 }, upgradeOf: record.upgradeOf ?? ""
+    ownerType: record.ownerType ?? "either",
+    talentType: record.talentType ?? "general",
+    role: record.role ?? "",
+    specialty: record.specialty ?? "",
+    requirement: record.requirement ?? "",
+    prerequisites: record.requirement ? [record.requirement] : [],
+    notes: record.description ?? "",
+    action: record.action ?? "passive",
+    frequency: titleCase(record.action ?? "passive"),
+    trigger: record.trigger ?? "",
+    recharge: record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 },
+    upgradeOf: record.upgradeOf ?? "",
+    cost: record.cost ?? 0,
+    free: false,
+    class: record.role ?? ""
   });
   return document;
 }
@@ -94,7 +159,7 @@ function buildTalent(record) {
 function normalizeForm(record) {
   return {
     slug: record.slug, name: record.name, family: record.family, temporary: record.temporary ?? true,
-    types: asArray(record.types), canonicalStats: record.canonicalStats ?? {}, stats: record.stats,
+    types: asArray(record.types).map(titleCase), canonicalStats: record.canonicalStats ?? {}, stats: legacyStats(record.stats ?? {}), commanderStats: record.stats,
     abilitySlugs: asArray(record.abilitySlugs), movement: record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 },
     size: record.size ?? "", portrait: record.artwork?.portrait ?? "", token: record.artwork?.token ?? "",
     tokenWidth: record.tokenWidth ?? 1, tokenHeight: record.tokenHeight ?? 1,
@@ -103,36 +168,119 @@ function normalizeForm(record) {
   };
 }
 
+function legacyStats(stats = {}) {
+  return {
+    hp: Number(stats.hp ?? 1),
+    atk: Number(stats.attack ?? stats.atk ?? 1),
+    def: Number(stats.defense ?? stats.def ?? 1),
+    spatk: Number(stats.specialAttack ?? stats.spatk ?? stats.spa ?? 1),
+    spdef: Number(stats.specialDefense ?? stats.spdef ?? stats.spd ?? 1),
+    spd: Number(stats.speed ?? stats.spd ?? 1),
+    attack: Number(stats.attack ?? stats.atk ?? 1),
+    defense: Number(stats.defense ?? stats.def ?? 1),
+    specialAttack: Number(stats.specialAttack ?? stats.spatk ?? stats.spa ?? 1),
+    specialDefense: Number(stats.specialDefense ?? stats.spdef ?? 1),
+    speed: Number(stats.speed ?? stats.spd ?? 1)
+  };
+}
+
+function defaultSkills() {
+  const body = ["acrobatics", "athletics", "combat", "intimidate", "stealth", "survival"];
+  const mind = ["generalEd", "medicineEd", "occultEd", "pokemonEd", "techEd", "guile", "perception"];
+  const spirit = ["charm", "command", "focus", "intuition"];
+  return Object.fromEntries([...body, ...mind, ...spirit].map(key => [key, { value: mind.includes(key) ? 1 : 2, modifier: 0, type: body.includes(key) ? "body" : mind.includes(key) ? "mind" : "spirit" }]));
+}
+
+function legacyMoves(learnset = []) {
+  const moves = { level: [], machine: [], egg: [], tutor: [] };
+  for (const entry of asArray(learnset)) {
+    const method = entry.method === "tm" || entry.method === "tr" ? "machine" : ["egg", "tutor"].includes(entry.method) ? entry.method : "level";
+    moves[method].push({ slug: entry.moveSlug, uuid: "", level: method === "level" ? (entry.level ?? 1) : undefined });
+  }
+  moves.level.sort((a, b) => Number(a.level ?? 1) - Number(b.level ?? 1));
+  return moves;
+}
+
+function legacyAbilities(slugs = []) {
+  const unique = asArray(slugs).map(slug => ({ slug, uuid: "" }));
+  return { basic: unique.slice(0, 2), advanced: unique.slice(2, 3), high: unique.slice(3) };
+}
+
+function legacyCapabilities(movement = {}, capabilitySlugs = []) {
+  return {
+    overland: Number(movement.overland ?? 5),
+    sky: Number(movement.fly ?? 0),
+    swim: Number(movement.swim ?? 0),
+    levitate: asArray(capabilitySlugs).includes("levitate") ? Number(movement.fly ?? 4) || 4 : 0,
+    burrow: Number(movement.burrow ?? 0),
+    highJump: 1,
+    longJump: 1,
+    power: 1,
+    naturewalk: [],
+    other: asArray(capabilitySlugs).map(slug => ({ slug, uuid: "" }))
+  };
+}
+
 function buildSpecies(record, forms) {
   const document = baseItemDocument(record, "species");
+  const movement = record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 };
+  const description = record.description ?? "";
   document.img = record.artwork?.portrait ?? "icons/svg/mystery-man.svg";
   document.system = {
     schema: { version: SCHEMA_VERSION, lastMigration: "" },
     slug: record.slug,
-    description: record.description ?? "",
+    description,
+    effect: description,
+    snippet: description,
+    dexentry: description,
+    number: record.nationalDex ?? -1,
     nationalDex: record.nationalDex ?? null,
+    form: record.formSlug ?? "",
     formSlug: record.formSlug ?? "",
     formKind: record.formKind ?? "base",
     baseSpeciesSlug: record.baseSpeciesSlug ?? "",
-    types: asArray(record.types),
+    types: asArray(record.types).map(titleCase),
     canonicalStats: record.canonicalStats ?? {},
-    stats: record.stats,
-    movement: record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 },
-    size: record.size ?? "medium",
-    weightClass: record.weightClass ?? 1,
+    commanderStats: record.stats,
+    stats: legacyStats(record.stats ?? {}),
+    movement,
+    size: {
+      height: record.heightMeters ?? 0,
+      weight: record.weightKg ?? 0,
+      sizeClass: record.size ?? "medium",
+      weightClass: record.weightClass ?? 1
+    },
     heightMeters: record.heightMeters ?? 0,
     weightKg: record.weightKg ?? 0,
+    weightClass: record.weightClass ?? 1,
     captureDifficulty: record.captureDifficulty ?? 0,
     rarity: record.rarity ?? "common",
+    breeding: { genderRatio: 0, eggGroups: asArray(record.eggGroups), hatchRate: 0 },
     eggGroups: asArray(record.eggGroups),
+    habitats: asArray(record.habitatTags),
+    diet: [],
     habitatTags: asArray(record.habitatTags),
     temperamentTags: asArray(record.temperamentTags),
+    capabilities: legacyCapabilities(movement, record.capabilitySlugs),
     capabilitySlugs: asArray(record.capabilitySlugs),
+    abilities: legacyAbilities(record.abilitySlugs),
     abilitySlugs: asArray(record.abilitySlugs),
     talentSlugs: asArray(record.talentSlugs),
     learnset: asArray(record.learnset),
-    evolutions: asArray(record.evolutions),
+    moves: legacyMoves(record.learnset),
+    evolutions: asArray(record.evolutions).map(evolution => ({
+      slug: evolution.targetSpeciesSlug,
+      targetSpeciesSlug: evolution.targetSpeciesSlug,
+      uuid: "",
+      method: evolution.method ?? "special",
+      level: evolution.level ?? 1,
+      itemSlug: evolution.itemSlug ?? "",
+      condition: evolution.condition ?? "",
+      other: { restrictions: evolution.condition ? [evolution.condition] : [], evolutionItem: evolution.itemSlug ? { slug: evolution.itemSlug, uuid: "" } : undefined }
+    })),
     forms: forms.map(normalizeForm),
+    skills: defaultSkills(),
+    keywords: asArray(record.tags),
     artwork: record.artwork ?? { portrait: "", token: "" },
     source: record.source ?? { dataset: "", sourceId: record.slug, generation: null }
   };
