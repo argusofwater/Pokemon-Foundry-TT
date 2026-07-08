@@ -1,8 +1,36 @@
 const STAT_KEYS = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"];
 
-function actorStat(value) {
+function clampLevel(level) {
+  return Math.max(1, Math.min(100, Number(level) || 1));
+}
+
+function allocateLevelStats(speciesStats, level, randomness = 0) {
+  const points = Math.max(0, clampLevel(level) + 10);
+  const randomShare = Math.clamp(Number(randomness) > 1 ? Number(randomness) / 100 : Number(randomness) || 0, 0, 1);
+  const randomPoints = Math.round(points * randomShare);
+  const weightedPoints = points - randomPoints;
+  const result = Object.fromEntries(STAT_KEYS.map(key => [key, 0]));
+
+  const weightedBag = [];
+  for (const key of STAT_KEYS) {
+    const weight = Math.max(1, Number(speciesStats?.[key] ?? 1));
+    for (let index = 0; index < weight; index += 1) weightedBag.push(key);
+  }
+
+  for (let index = 0; index < weightedPoints; index += 1) {
+    const key = weightedBag[Math.floor(Math.random() * weightedBag.length)] ?? STAT_KEYS[0];
+    result[key] += 1;
+  }
+  for (let index = 0; index < randomPoints; index += 1) {
+    result[STAT_KEYS[Math.floor(Math.random() * STAT_KEYS.length)]] += 1;
+  }
+  return result;
+}
+
+function actorStat(value, levelValue = 0) {
   const species = Math.max(1, Number(value ?? 1));
-  return { species, level: 0, path: 0, nature: 0, bonus: 0, stage: 0, final: species };
+  const level = Math.max(0, Number(levelValue ?? 0));
+  return { species, level, path: 0, nature: 0, bonus: 0, stage: 0, final: species + level };
 }
 
 async function documentsBySlug(packId, slugs) {
@@ -29,30 +57,61 @@ function starterMoveSlugs(species, level = 1) {
   return unique.slice(-6);
 }
 
+function tokenSize(size) {
+  if (size === "tiny") return 0.5;
+  if (size === "large") return 2;
+  if (size === "massive") return 3;
+  return 1;
+}
+
 export class CommanderSpeciesService {
-  static async createPokemonFromSpecies(species, { trainer = null, level = 1, name = "" } = {}) {
+  static async buildPokemonData(species, {
+    trainer = null,
+    level = 1,
+    name = "",
+    nature = "",
+    trainingPath = "balanced",
+    statRandomness = 0,
+    shiny = false,
+    folder = null
+  } = {}) {
     if (!species || species.type !== "species") throw new Error("A Commander Species item is required.");
 
-    const stats = Object.fromEntries(STAT_KEYS.map(key => [key, actorStat(species.system.stats?.[key])]));
-    const actor = await Actor.create({
+    const resolvedLevel = clampLevel(level);
+    const levelStats = allocateLevelStats(species.system.stats ?? {}, resolvedLevel, statRandomness);
+    const stats = Object.fromEntries(STAT_KEYS.map(key => [key, actorStat(species.system.stats?.[key], levelStats[key])]));
+    const portrait = species.system.artwork?.portrait || species.img;
+    const size = tokenSize(species.system.size);
+
+    const actorData = {
       name: name || species.name,
       type: "pokemon",
-      img: species.system.artwork?.portrait || species.img,
+      img: portrait,
+      folder: typeof folder === "string" ? folder : folder?.id ?? null,
+      prototypeToken: {
+        actorLink: true,
+        width: size,
+        height: size,
+        displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
+        displayName: CONST.TOKEN_DISPLAY_MODES.OWNER,
+        bar1: { attribute: "health.hp" },
+        texture: { src: species.system.artwork?.token || portrait }
+      },
       system: {
         schema: { version: 1, lastMigration: "species-import" },
         identity: {
           speciesUuid: species.uuid,
           speciesName: species.name,
-          level: Math.max(1, Math.min(100, Number(level) || 1)),
+          level: resolvedLevel,
           evolutionStage: species.system.formKind ?? "base",
           types: [...(species.system.types ?? [])],
-          nature: "",
-          trainingPath: "balanced",
+          nature: nature || "",
+          trainingPath,
           lifecycle: trainer ? "party" : "reserve",
           trainerUuid: trainer?.uuid ?? ""
         },
         health: {
-          hp: { value: stats.hp.species, max: stats.hp.species },
+          hp: { value: stats.hp.final, max: stats.hp.final },
           temporaryHp: 0,
           wounds: 0,
           fatigue: "fresh"
@@ -77,6 +136,7 @@ export class CommanderSpeciesService {
       },
       flags: {
         ptu: {
+          commanderShiny: Boolean(shiny),
           commanderSpeciesSnapshot: {
             slug: species.system.slug,
             nationalDex: species.system.nationalDex,
@@ -85,12 +145,18 @@ export class CommanderSpeciesService {
           }
         }
       }
-    });
-
-    if (!actor) return null;
+    };
 
     const abilityDocuments = await documentsBySlug("ptu.abilities", species.system.abilitySlugs ?? []);
-    const moveDocuments = await documentsBySlug("ptu.moves", starterMoveSlugs(species, actor.system.identity.level));
+    const moveDocuments = await documentsBySlug("ptu.moves", starterMoveSlugs(species, resolvedLevel));
+    return { actorData, abilityDocuments, moveDocuments };
+  }
+
+  static async createPokemonFromSpecies(species, options = {}) {
+    const { actorData, abilityDocuments, moveDocuments } = await this.buildPokemonData(species, options);
+    const actor = await Actor.create(actorData);
+    if (!actor) return null;
+
     const embedded = await actor.createEmbeddedDocuments("Item", [...abilityDocuments, ...moveDocuments].map(document => document.toObject()));
     const abilities = embedded.filter(item => item.type === "ability");
     const moves = embedded.filter(item => item.type === "move");
@@ -104,7 +170,7 @@ export class CommanderSpeciesService {
       "system.loadout.activeAbilityUuids": abilities.map(item => item.uuid)
     });
 
-    if (trainer) await this.addPokemonToTrainer(actor, trainer);
+    if (options.trainer) await this.addPokemonToTrainer(actor, options.trainer);
     return actor;
   }
 
