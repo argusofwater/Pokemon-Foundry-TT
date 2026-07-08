@@ -4,11 +4,18 @@ import { CommanderRollService } from "../runtime/roll-service.js";
 import { COMMANDER_BACKGROUNDS, optionList, roleOptions, specialtyOptions } from "../config/trainer-options.js";
 
 function resolveApplication(target, fallback) {
-  return target?.closest?.(".application")?.application ?? fallback;
+  return target?.closest?.".application"?.application ?? fallback;
 }
 
 const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
 const MAX_TEAM_SIZE = 6;
+const RANK_BONUSES = Object.freeze({ untrained: 0, novice: 2, adept: 4, expert: 6, master: 8 });
+const ATTRIBUTE_LABELS = Object.freeze({ body: "Body", agility: "Agility", mind: "Mind", presence: "Presence" });
+
+function signed(value) {
+  const number = Number(value) || 0;
+  return number >= 0 ? `+${number}` : String(number);
+}
 
 export class CommanderTrainerSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
@@ -44,11 +51,29 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const activeUuid = this.actor.system.team?.activePokemonUuid;
     const activeCompanion = activeUuid ? await fromUuid(activeUuid) : null;
     const team = [];
-    const skillList = Object.entries(this.actor.system.skills ?? {}).map(([key, skill]) => ({
-      key,
-      label: key.replace(/([A-Z])/g, " $1").replace(/^./, char => char.toUpperCase()),
-      ...skill
-    }));
+    const attributes = this.actor.system.attributes ?? {};
+    const attributeOptions = Object.entries(ATTRIBUTE_LABELS).map(([value, label]) => ({ value, label }));
+    const skillList = Object.entries(this.actor.system.skills ?? {}).map(([key, skill]) => {
+      const attributeValue = Number(attributes[skill.attribute]?.final ?? 0);
+      const rankBonus = RANK_BONUSES[String(skill.rank ?? "untrained").toLowerCase()] ?? 0;
+      const misc = Number(skill.misc ?? 0);
+      const total = attributeValue + rankBonus + misc;
+      return {
+        key,
+        label: key.replace(/([A-Z])/g, " $1").replace(/^./, char => char.toUpperCase()),
+        ...skill,
+        attributeLabel: ATTRIBUTE_LABELS[skill.attribute] ?? skill.attribute,
+        attributeValue,
+        attributeSigned: signed(attributeValue),
+        rankBonus,
+        rankSigned: signed(rankBonus),
+        misc,
+        miscSigned: signed(misc),
+        total,
+        totalSigned: signed(total),
+        attributeOptions: attributeOptions.map(option => ({ ...option, selected: option.value === skill.attribute }))
+      };
+    });
 
     for (const uuid of this.actor.system.team?.pokemonUuids ?? []) {
       const pokemon = await fromUuid(uuid);
