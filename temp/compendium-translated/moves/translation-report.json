@@ -1,23 +1,8 @@
 {
-  "generatedAt": "2026-07-07T15:56:20.721Z",
+  "generatedAt": "2026-07-08T14:01:02.524Z",
   "cutoff": "gen9-sv-dlc-pre-za",
   "moveRecords": 898,
   "excludedRecords": 55,
-  "byCategory": {
-    "special": 256,
-    "physical": 372,
-    "status": 270
-  },
-  "byRecharge": {
-    "expedition": 35,
-    "at-will": 614,
-    "cooldown": 175,
-    "encounter": 74
-  },
-  "byAutomation": {
-    "manual": 635,
-    "structured": 263
-  },
   "byType": {
     "electric": 48,
     "grass": 58,
@@ -38,18 +23,28 @@
     "ground": 30,
     "dragon": 30
   },
-  "structuredEffects": 300,
-  "reviewRequired": 898,
-  "retainedPastMoves": 188,
-  "retainedZMoves": 35,
-  "exclusions": {
-    "max-or-gmax": 52,
-    "cap-content": 3
+  "byCategory": {
+    "special": 256,
+    "physical": 372,
+    "status": 270
   },
+  "byRecharge": {
+    "expedition": 35,
+    "at-will": 614,
+    "cooldown": 175,
+    "encounter": 74
+  },
+  "byAutomation": {
+    "manual": 635,
+    "prompted": 263
+  },
+  "structuredEffects": 300,
+  "fullyPromptedEffects": 263,
+  "reviewRequired": 898,
   "notes": [
-    "Gen 9 Power, accuracy, category, type, and canonical source metadata are preserved.",
-    "Max, G-Max, and CAP-only moves are excluded.",
-    "Past and Z-Moves are retained as tagged archival content.",
-    "Ranges, defenses, recharge, and complex effects remain reviewable Commander translations."
+    "Canonical descriptions are retained from the frozen Showdown snapshot.",
+    "Max and G-Max moves are excluded by project rule.",
+    "Structured effects use the supported prompted automation state.",
+    "Variable-power, fixed-damage, OHKO, and complex callback moves remain review-tagged."
   ]
 }
