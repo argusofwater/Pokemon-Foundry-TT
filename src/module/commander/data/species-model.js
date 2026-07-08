@@ -18,6 +18,17 @@ function statBlockField() {
   });
 }
 
+function canonicalStatBlockField() {
+  return new fields.SchemaField({
+    hp: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, initial: 1 }),
+    attack: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, initial: 1 }),
+    defense: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, initial: 1 }),
+    specialAttack: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, initial: 1 }),
+    specialDefense: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, initial: 1 }),
+    speed: new fields.NumberField({ required: true, nullable: false, integer: true, min: 1, initial: 1 })
+  });
+}
+
 function movementField() {
   return new fields.SchemaField({
     overland: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 5 }),
@@ -50,6 +61,7 @@ function formProfileField() {
     }),
     temporary: new fields.BooleanField({ required: true, nullable: false, initial: true }),
     types: tagsField(),
+    canonicalStats: canonicalStatBlockField(),
     stats: statBlockField(),
     abilitySlugs: tagsField(),
     movement: movementField(),
@@ -85,6 +97,7 @@ export class CommanderSpeciesData extends foundry.abstract.TypeDataModel {
       }),
       baseSpeciesSlug: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
       types: tagsField(),
+      canonicalStats: canonicalStatBlockField(),
       stats: statBlockField(),
       movement: movementField(),
       size: new fields.StringField({ required: true, nullable: false, blank: true, initial: "medium" }),
