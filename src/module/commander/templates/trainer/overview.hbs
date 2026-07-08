@@ -2,9 +2,36 @@
   <div class="commander-grid">
     <article class="commander-card accent-red">
       <h2>Trainer Profile</h2>
-      <div class="commander-stat-row"><span>Background</span>{{#if (eq mode "edit")}}<input name="system.identity.background" value="{{system.identity.background}}">{{else}}<span class="commander-value">{{system.identity.background}}</span>{{/if}}</div>
-      <div class="commander-stat-row"><span>Role</span>{{#if (eq mode "edit")}}<input name="system.identity.role" value="{{system.identity.role}}">{{else}}<span class="commander-value">{{system.identity.role}}</span>{{/if}}</div>
-      <div class="commander-stat-row"><span>Specialty</span>{{#if (eq mode "edit")}}<input name="system.identity.specialty" value="{{system.identity.specialty}}">{{else}}<span class="commander-value">{{system.identity.specialty}}</span>{{/if}}</div>
+      <div class="commander-stat-row">
+        <span>Background</span>
+        {{#if (eq mode "edit")}}
+          <select name="system.identity.background">
+            {{#each backgroundOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+          </select>
+        {{else}}
+          <span class="commander-value">{{system.identity.background}}</span>
+        {{/if}}
+      </div>
+      <div class="commander-stat-row">
+        <span>Role</span>
+        {{#if (eq mode "edit")}}
+          <select name="system.identity.role">
+            {{#each roleOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+          </select>
+        {{else}}
+          <span class="commander-value">{{system.identity.role}}</span>
+        {{/if}}
+      </div>
+      <div class="commander-stat-row">
+        <span>Specialty</span>
+        {{#if (eq mode "edit")}}
+          <select name="system.identity.specialty">
+            {{#each specialtyOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+          </select>
+        {{else}}
+          <span class="commander-value">{{system.identity.specialty}}</span>
+        {{/if}}
+      </div>
       <div class="commander-stat-row"><span>Level</span>{{#if (eq mode "edit")}}<input type="number" name="system.identity.level" value="{{system.identity.level}}" min="1" max="20">{{else}}<span class="commander-value">{{system.identity.level}}</span>{{/if}}</div>
     </article>
 
