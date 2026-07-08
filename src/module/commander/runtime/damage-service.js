@@ -1,5 +1,6 @@
 import { CommanderFriendshipService } from "./friendship-service.js";
 import { CommanderConditionService } from "./condition-service.js";
+import { CommanderRulesEngine } from "./rules-engine.js";
 
 export class CommanderDamageService {
   static getTargetActors() {
@@ -15,25 +16,24 @@ export class CommanderDamageService {
     return Math.max(0, value);
   }
 
-  static estimateDamage({ attacker, target, move, rollTotal = null } = {}) {
+  static estimateDamage({ attacker, target, move, rollTotal = null, critical = false } = {}) {
     const system = move?.system ?? {};
     const category = String(system.category ?? "status").toLowerCase();
-    const attack = category === "physical"
-      ? Number(attacker?.system.stats?.attack?.final ?? 0)
-      : Number(attacker?.system.stats?.specialAttack?.final ?? 0);
-    const defenseKey = system.target?.defense ?? (category === "physical" ? "physical" : "special");
+    const defenseKey = system.target?.defense ?? (category === "physical" ? "physical" : category === "special" ? "special" : "none");
     const defense = this.defenseValue(target, defenseKey);
-    const power = Number(system.power ?? 0);
-    const dice = Math.max(0, Math.min(8, Math.ceil(power / 20)));
-    const flat = Math.max(0, attack - defense);
-    return { dice, flat, defenseKey, defense, hit: rollTotal == null || defenseKey === "none" || Number(rollTotal) >= defense };
+    const profile = CommanderRulesEngine.damageProfile({ attacker, target, move, critical });
+    const hit = rollTotal == null || defenseKey === "none" || Number(rollTotal) >= defense;
+    return { ...profile, dice: profile.finalDice, defenseKey, defense, hit };
   }
 
-  static async rollDamage({ attacker, target, move, rollTotal = null } = {}) {
-    const preview = this.estimateDamage({ attacker, target, move, rollTotal });
-    if (!preview.hit) return { ...preview, total: 0 };
+  static async rollDamage({ attacker, target, move, rollTotal = null, critical = false } = {}) {
+    const preview = this.estimateDamage({ attacker, target, move, rollTotal, critical });
+    if (!preview.hit || preview.typing.immune) return { ...preview, total: 0 };
     if (preview.dice <= 0) return { ...preview, total: preview.flat };
-    const roll = await new Roll(`${preview.dice}d6 + @flat`, { flat: preview.flat }).evaluate();
+    const formula = critical
+      ? `${Math.max(0, preview.dice - 1)}d6 + 6 + @flat`
+      : `${preview.dice}d6 + @flat`;
+    const roll = await new Roll(formula, { flat: preview.flat }).evaluate();
     return { ...preview, total: roll.total, roll };
   }
 
@@ -53,23 +53,15 @@ export class CommanderDamageService {
       if (useFriendship) {
         nextHp = 1;
         await CommanderFriendshipService.useResolve(actor);
-        await ChatMessage.create({
-          speaker: ChatMessage.getSpeaker({ actor }),
-          content: `<section class="commander-chat-card commander-friendship-card"><strong>${actor.name}</strong><p>It held on because it doesn&#39;t want you to worry.</p></section>`
-        });
+        await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<section class="commander-chat-card commander-friendship-card"><strong>${actor.name}</strong><p>It held on because it doesn&#39;t want you to worry.</p></section>` });
       }
     }
 
-    const result = await actor.update({
-      "system.health.temporaryHp": temporary - absorbed,
-      "system.health.hp.value": nextHp
-    });
-
+    const result = await actor.update({ "system.health.temporaryHp": temporary - absorbed, "system.health.hp.value": nextHp });
     if (remaining > 0 && sourceType !== "condition") {
       const { CommanderConditionMechanics } = await import("./condition-mechanics.js");
       await CommanderConditionMechanics.onDamageTaken(actor, { damageType, amount: remaining, conditionId });
     }
-
     return result;
   }
 
