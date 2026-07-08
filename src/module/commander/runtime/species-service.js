@@ -86,6 +86,24 @@ function tokenSize(size) {
   return 1;
 }
 
+function embeddedItemData(documents) {
+  return documents.filter(Boolean).map(document => {
+    const data = document.toObject();
+    delete data._id;
+    return data;
+  });
+}
+
+function loadoutFromActor(actor) {
+  const abilities = actor.itemTypes?.ability ?? [];
+  const moves = (actor.itemTypes?.move ?? []).filter(item => !item.system?.isStruggle);
+  const equipped = moves.slice(0, 4).map(item => item.uuid);
+  const reserve = moves.slice(4, 6).map(item => item.uuid);
+  while (equipped.length < 4) equipped.push("");
+  while (reserve.length < 2) reserve.push("");
+  return { abilities, equipped, reserve };
+}
+
 export class CommanderSpeciesService {
   static async buildPokemonData(species, {
     trainer = null,
@@ -105,12 +123,17 @@ export class CommanderSpeciesService {
     const stats = Object.fromEntries(STAT_KEYS.map(key => [key, actorStat(baseStats[key], levelStats[key])]));
     const portrait = species.system.artwork?.portrait || species.img;
     const size = tokenSize(sizeClass(species.system));
+    const abilityDocuments = await documentsBySlug("ptu.abilities", species.system.abilitySlugs ?? []);
+    const moveDocuments = await documentsBySlug("ptu.moves", starterMoveSlugs(species, resolvedLevel));
+    const speciesItem = species.toObject();
+    delete speciesItem._id;
 
     const actorData = {
       name: name || species.name,
       type: "pokemon",
       img: portrait,
       folder: typeof folder === "string" ? folder : folder?.id ?? null,
+      items: [speciesItem, ...embeddedItemData(abilityDocuments), ...embeddedItemData(moveDocuments)],
       prototypeToken: {
         actorLink: true,
         width: size,
@@ -170,23 +193,15 @@ export class CommanderSpeciesService {
       }
     };
 
-    const abilityDocuments = await documentsBySlug("ptu.abilities", species.system.abilitySlugs ?? []);
-    const moveDocuments = await documentsBySlug("ptu.moves", starterMoveSlugs(species, resolvedLevel));
-    return { actorData, abilityDocuments, moveDocuments };
+    return { actorData, abilityDocuments, moveDocuments, speciesDocument: species };
   }
 
   static async createPokemonFromSpecies(species, options = {}) {
-    const { actorData, abilityDocuments, moveDocuments } = await this.buildPokemonData(species, options);
+    const { actorData } = await this.buildPokemonData(species, options);
     const actor = await Actor.create(actorData);
     if (!actor) return null;
 
-    const embedded = await actor.createEmbeddedDocuments("Item", [...abilityDocuments, ...moveDocuments].map(document => document.toObject()));
-    const abilities = embedded.filter(item => item.type === "ability");
-    const moves = embedded.filter(item => item.type === "move");
-    const equipped = moves.slice(0, 4).map(item => item.uuid);
-    const reserve = moves.slice(4, 6).map(item => item.uuid);
-    while (equipped.length < 4) equipped.push("");
-    while (reserve.length < 2) reserve.push("");
+    const { abilities, equipped, reserve } = loadoutFromActor(actor);
     await actor.update({
       "system.loadout.equippedMoveUuids": equipped,
       "system.loadout.reserveMoveUuids": reserve,
