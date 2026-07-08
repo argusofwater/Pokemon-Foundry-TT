@@ -81,8 +81,7 @@ function inferTags(key, item, category) {
 }
 
 function automationState(item) {
-  if (item.megaStone || item.forcedForme) return "structured";
-  if (item.boosts || item.heal || item.onEat || item.onUse || item.onTakeItem) return "manual";
+  if (item.megaStone || item.forcedForme) return "prompted";
   return "manual";
 }
 
@@ -120,7 +119,7 @@ function convertItem(key, item) {
     tags,
     automation: {
       state: automationState(item),
-      handler: item.megaStone ? "commander.mega.activate" : "",
+      handler: item.megaStone ? "commander.mega.activate" : item.forcedForme ? "commander.form.activate" : "",
       notes: "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     source: {
@@ -186,9 +185,9 @@ async function main() {
     formChangeItems: records.filter(record => record.tags.includes("form-change")).length,
     reviewRequired: records.filter(record => record.tags.includes("review-automation")).length,
     notes: [
-      "Mega Stones are retained and wired to the Commander Mega activation handler name.",
+      "Mega Stones and form items use the valid prompted automation state.",
       "Type boosters use the locked Commander +2 flat damage rule.",
-      "Complex item hooks remain preserved in source metadata and flagged for review.",
+      "Structured effects and source metadata are retained in the runtime item document.",
       "CAP-only items are excluded; canonical nonstandard items are retained and tagged."
     ]
   });
