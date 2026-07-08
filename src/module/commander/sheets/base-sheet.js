@@ -8,6 +8,12 @@ function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
 }
 
+function getDropData(event) {
+  const TextEditorV13 = foundry.applications?.ux?.TextEditor?.implementation;
+  if (TextEditorV13?.getDragEventData) return TextEditorV13.getDragEventData(event);
+  return TextEditor.getDragEventData(event);
+}
+
 async function documentFromDropData(data) {
   if (data?.uuid) {
     const document = await fromUuid(data.uuid);
@@ -185,7 +191,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
   }
 
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
+    const data = getDropData(event);
     if (!data?.type) return super._onDrop(event);
     if (data.type === "Item") return this._onDropItem(event, data);
     if (data.type === "Actor") return this._onDropActor(event, data);
