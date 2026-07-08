@@ -4,7 +4,29 @@ function clampLevel(level) {
   return Math.max(1, Math.min(100, Number(level) || 1));
 }
 
-function allocateLevelStats(speciesStats, level, randomness = 0) {
+function speciesStats(system = {}) {
+  const stats = system.commanderStats ?? system.stats ?? {};
+  return {
+    hp: Number(stats.hp ?? 1),
+    attack: Number(stats.attack ?? stats.atk ?? 1),
+    defense: Number(stats.defense ?? stats.def ?? 1),
+    specialAttack: Number(stats.specialAttack ?? stats.spatk ?? stats.spa ?? 1),
+    specialDefense: Number(stats.specialDefense ?? stats.spdef ?? 1),
+    speed: Number(stats.speed ?? stats.spd ?? 1)
+  };
+}
+
+function sizeClass(system = {}) {
+  const size = system.size;
+  if (typeof size === "string") return size;
+  return size?.sizeClass ?? "medium";
+}
+
+function lowerTypes(types = []) {
+  return [...types].map(type => String(type).toLowerCase()).filter(type => type && type !== "untyped");
+}
+
+function allocateLevelStats(baseStats, level, randomness = 0) {
   const points = Math.max(0, clampLevel(level) + 10);
   const randomShare = Math.clamp(Number(randomness) > 1 ? Number(randomness) / 100 : Number(randomness) || 0, 0, 1);
   const randomPoints = Math.round(points * randomShare);
@@ -13,7 +35,7 @@ function allocateLevelStats(speciesStats, level, randomness = 0) {
 
   const weightedBag = [];
   for (const key of STAT_KEYS) {
-    const weight = Math.max(1, Number(speciesStats?.[key] ?? 1));
+    const weight = Math.max(1, Number(baseStats?.[key] ?? 1));
     for (let index = 0; index < weight; index += 1) weightedBag.push(key);
   }
 
@@ -78,10 +100,11 @@ export class CommanderSpeciesService {
     if (!species || species.type !== "species") throw new Error("A Commander Species item is required.");
 
     const resolvedLevel = clampLevel(level);
-    const levelStats = allocateLevelStats(species.system.stats ?? {}, resolvedLevel, statRandomness);
-    const stats = Object.fromEntries(STAT_KEYS.map(key => [key, actorStat(species.system.stats?.[key], levelStats[key])]));
+    const baseStats = speciesStats(species.system);
+    const levelStats = allocateLevelStats(baseStats, resolvedLevel, statRandomness);
+    const stats = Object.fromEntries(STAT_KEYS.map(key => [key, actorStat(baseStats[key], levelStats[key])]));
     const portrait = species.system.artwork?.portrait || species.img;
-    const size = tokenSize(species.system.size);
+    const size = tokenSize(sizeClass(species.system));
 
     const actorData = {
       name: name || species.name,
@@ -104,7 +127,7 @@ export class CommanderSpeciesService {
           speciesName: species.name,
           level: resolvedLevel,
           evolutionStage: species.system.formKind ?? "base",
-          types: [...(species.system.types ?? [])],
+          types: lowerTypes(species.system.types ?? []),
           nature: nature || "",
           trainingPath,
           lifecycle: trainer ? "party" : "reserve",
@@ -139,7 +162,7 @@ export class CommanderSpeciesService {
           commanderShiny: Boolean(shiny),
           commanderSpeciesSnapshot: {
             slug: species.system.slug,
-            nationalDex: species.system.nationalDex,
+            nationalDex: species.system.nationalDex ?? species.system.number,
             canonicalStats: foundry.utils.deepClone(species.system.canonicalStats ?? {}),
             source: foundry.utils.deepClone(species.system.source ?? {})
           }
