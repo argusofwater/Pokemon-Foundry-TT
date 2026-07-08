@@ -11,10 +11,27 @@ const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-ta
 const MAX_TEAM_SIZE = 6;
 const RANK_BONUSES = Object.freeze({ untrained: 0, novice: 2, adept: 4, expert: 6, master: 8 });
 const ATTRIBUTE_LABELS = Object.freeze({ body: "Body", agility: "Agility", mind: "Mind", presence: "Presence" });
+const TALENT_TYPES = new Set(["talent", "feat", "edge"]);
 
 function signed(value) {
   const number = Number(value) || 0;
   return number >= 0 ? `+${number}` : String(number);
+}
+
+function talentSummary(item, pinnedUuids) {
+  const system = item.system ?? {};
+  const action = system.actionType ?? system.action?.type ?? system.activation?.type ?? "Passive";
+  const frequency = system.recharge?.category ?? system.frequency ?? system.usage ?? "At-Will";
+  const prerequisites = system.prerequisites ?? system.requirements ?? system.prerequisite ?? "";
+  const description = system.description ?? system.effect ?? system.summary ?? "";
+  return {
+    item,
+    action,
+    frequency,
+    prerequisites: Array.isArray(prerequisites) ? prerequisites.join(", ") : prerequisites,
+    description,
+    isPinned: pinnedUuids.includes(item.uuid)
+  };
 }
 
 export class CommanderTrainerSheet extends CommanderActorSheetBase {
@@ -27,7 +44,9 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       setActivePokemon: CommanderTrainerSheet.setActivePokemon,
       removePokemon: CommanderTrainerSheet.removePokemon,
       openPokemon: CommanderTrainerSheet.openPokemon,
-      rollSkill: CommanderTrainerSheet.rollSkill
+      rollSkill: CommanderTrainerSheet.rollSkill,
+      togglePinnedTalent: CommanderTrainerSheet.togglePinnedTalent,
+      postTalent: CommanderTrainerSheet.postTalent
     }
   };
 
@@ -37,7 +56,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     overview: { template: "systems/ptu/src/module/commander/templates/trainer/overview.hbs" },
     team: { template: "systems/ptu/src/module/commander/templates/trainer/team.hbs" },
     skills: { template: "systems/ptu/src/module/commander/templates/trainer/skills.hbs" },
-    talents: { template: genericTab },
+    talents: { template: "systems/ptu/src/module/commander/templates/trainer/talents.hbs" },
     inventory: { template: genericTab },
     exploration: { template: genericTab },
     social: { template: genericTab },
@@ -94,6 +113,10 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     }
 
     const identity = this.actor.system.identity ?? {};
+    const pinnedUuids = this.actor.system.ui?.pinnedTalentUuids ?? [];
+    const talents = this.actor.items.filter(item => TALENT_TYPES.has(item.type)).map(item => talentSummary(item, pinnedUuids));
+    talents.sort((a, b) => Number(b.isPinned) - Number(a.isPinned) || a.item.name.localeCompare(b.item.name));
+
     return {
       ...context,
       sheetType: "trainer",
@@ -104,6 +127,8 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       maxTeamSize: MAX_TEAM_SIZE,
       teamFull: team.length >= MAX_TEAM_SIZE,
       skillList,
+      talents,
+      pinnedTalentCount: talents.filter(talent => talent.isPinned).length,
       backgroundOptions: optionList(COMMANDER_BACKGROUNDS, identity.background),
       roleOptions: roleOptions(identity.role),
       specialtyOptions: specialtyOptions(identity.role, identity.specialty)
@@ -113,6 +138,27 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
   static async rollSkill(event, target) {
     const app = resolveApplication(target, this);
     return CommanderRollService.rollSkill({ actor: app.actor, skillKey: target.dataset.skillKey });
+  }
+
+  static async togglePinnedTalent(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this Trainer.");
+    const item = app.actor.items.get(target.dataset.itemId);
+    if (!item) return ui.notifications.warn("That Talent could not be resolved.");
+    const current = [...(app.actor.system.ui?.pinnedTalentUuids ?? [])];
+    const next = current.includes(item.uuid) ? current.filter(uuid => uuid !== item.uuid) : [...current, item.uuid];
+    await app.actor.update({ "system.ui.pinnedTalentUuids": next });
+    return app.render();
+  }
+
+  static async postTalent(event, target) {
+    const app = resolveApplication(target, this);
+    const item = app.actor.items.get(target.dataset.itemId);
+    if (!item) return ui.notifications.warn("That Talent could not be resolved.");
+    const system = item.system ?? {};
+    const description = system.description ?? system.effect ?? system.summary ?? "No rules text available.";
+    const content = `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(item.name)}</h3><p>${description}</p></section>`;
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
   }
 
   async _onDropActor(event, data) {
@@ -126,6 +172,15 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     await dropped.update({ "system.identity.trainerUuid": this.actor.uuid, "system.identity.lifecycle": current.length ? "party" : "active" });
     if (!this.actor.system.team?.activePokemonUuid) await this.actor.update({ "system.team.activePokemonUuid": dropped.uuid });
     return this.render();
+  }
+
+  async _onDropItem(event, data) {
+    if (!this.isEditable) return ui.notifications.warn("You do not have permission to edit this Trainer.");
+    const item = await Item.implementation.fromDropData(data);
+    if (!item) return;
+    const activeTab = this._commanderActiveTab ?? this.actor.system.ui?.activeTab;
+    if (activeTab === "talents" && !TALENT_TYPES.has(item.type)) return ui.notifications.warn("Only Talent, Feat, or Edge items can be dropped onto the Talents tab.");
+    return Item.create(item.toObject(), { parent: this.actor });
   }
 
   static async setActivePokemon(event, target) {
