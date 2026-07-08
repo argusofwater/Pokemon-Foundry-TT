@@ -1,6 +1,7 @@
 import { CommanderActorSheetBase } from "./base-sheet.js";
 import { CommanderFriendshipService } from "../runtime/friendship-service.js";
 import { CommanderRollService } from "../runtime/roll-service.js";
+import { COMMANDER_BACKGROUNDS, optionList, roleOptions, specialtyOptions } from "../config/trainer-options.js";
 
 function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
@@ -55,13 +56,17 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       team.push({ actor: pokemon, isActive: pokemon.uuid === activeUuid, friendship, hpPercent: pokemon.system.health?.hp?.max ? Math.round((Number(pokemon.system.health.hp.value ?? 0) / Number(pokemon.system.health.hp.max)) * 100) : 0 });
     }
 
+    const identity = this.actor.system.identity ?? {};
     return {
       ...context,
       sheetType: "trainer",
       tabs: ["overview", "team", "skills", "talents", "inventory", "exploration", "social", "downtime", "effects", "biography"],
       activeCompanion,
       team,
-      skillList
+      skillList,
+      backgroundOptions: optionList(COMMANDER_BACKGROUNDS, identity.background),
+      roleOptions: roleOptions(identity.role),
+      specialtyOptions: specialtyOptions(identity.role, identity.specialty)
     };
   }
 
