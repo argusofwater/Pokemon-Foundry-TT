@@ -2,7 +2,8 @@ import { CommanderDamageService } from "./damage-service.js";
 import { CommanderActionTracker } from "./action-tracker.js";
 
 export class CommanderSheetAutomation {
-  static async resolveTarget(app, targetKey = "self") {
+  static async resolveTarget(app, targetKey = "self", explicitUuid = "") {
+    if (explicitUuid) return fromUuid(explicitUuid);
     if (targetKey === "self") return app.actor;
     if (targetKey === "activePokemon" && app.actor.type === "character") {
       const uuid = app.actor.system.team?.activePokemonUuid;
@@ -22,7 +23,7 @@ export class CommanderSheetAutomation {
   }
 
   static async adjustHp(app, target, mode) {
-    const actor = await this.resolveTarget(app, target.dataset.targetActor ?? "self");
+    const actor = await this.resolveTarget(app, target.dataset.targetActor ?? "self", target.dataset.actorUuid ?? "");
     if (!actor) return ui.notifications.warn("The linked actor could not be resolved.");
     const amount = this.readAmount(app, target);
     if (amount <= 0) return ui.notifications.warn("Enter an amount greater than zero.");
@@ -32,7 +33,7 @@ export class CommanderSheetAutomation {
   }
 
   static async setHp(app, target, mode) {
-    const actor = await this.resolveTarget(app, target.dataset.targetActor ?? "self");
+    const actor = await this.resolveTarget(app, target.dataset.targetActor ?? "self", target.dataset.actorUuid ?? "");
     if (!actor) return ui.notifications.warn("The linked actor could not be resolved.");
     const hp = actor.system.health?.hp;
     if (!hp) return ui.notifications.warn(`${actor.name} has no Commander HP resource.`);
@@ -42,7 +43,7 @@ export class CommanderSheetAutomation {
   }
 
   static async changeAction(app, target, mode) {
-    const actor = await this.resolveTarget(app, target.dataset.targetActor ?? "self");
+    const actor = await this.resolveTarget(app, target.dataset.targetActor ?? "self", target.dataset.actorUuid ?? "");
     if (!actor) return ui.notifications.warn("The linked actor could not be resolved.");
     const type = target.dataset.actionType;
     if (mode === "spend") await CommanderActionTracker.spend(actor, type);
