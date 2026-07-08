@@ -3,6 +3,7 @@
 @import url("./commander-moves.css");
 @import url("./commander-effects.css");
 @import url("./commander-automation.css");
+@import url("./commander-skills.css");
 
 :root {
   --commander-friendship-pink: #ff6fae;
