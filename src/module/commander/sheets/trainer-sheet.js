@@ -8,6 +8,7 @@ function resolveApplication(target, fallback) {
 }
 
 const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
+const MAX_TEAM_SIZE = 6;
 
 export class CommanderTrainerSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
@@ -53,7 +54,18 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       const pokemon = await fromUuid(uuid);
       if (!pokemon) continue;
       const friendship = CommanderFriendshipService.getState(pokemon);
-      team.push({ actor: pokemon, isActive: pokemon.uuid === activeUuid, friendship, hpPercent: pokemon.system.health?.hp?.max ? Math.round((Number(pokemon.system.health.hp.value ?? 0) / Number(pokemon.system.health.hp.max)) * 100) : 0 });
+      const hp = pokemon.system.health?.hp ?? {};
+      const types = pokemon.system.identity?.types ?? [];
+      team.push({
+        actor: pokemon,
+        isActive: pokemon.uuid === activeUuid,
+        friendship,
+        types,
+        hpPercent: Number(hp.max ?? 0) > 0 ? Math.round((Number(hp.value ?? 0) / Number(hp.max)) * 100) : 0,
+        isFainted: Number(hp.value ?? 0) <= 0 || pokemon.system.identity?.lifecycle === "fainted",
+        conditionCount: pokemon.effects?.contents?.length ?? 0,
+        actionState: pokemon.system.actions ?? {}
+      });
     }
 
     const identity = this.actor.system.identity ?? {};
@@ -63,6 +75,9 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       tabs: ["overview", "team", "skills", "talents", "inventory", "exploration", "social", "downtime", "effects", "biography"],
       activeCompanion,
       team,
+      teamCount: team.length,
+      maxTeamSize: MAX_TEAM_SIZE,
+      teamFull: team.length >= MAX_TEAM_SIZE,
       skillList,
       backgroundOptions: optionList(COMMANDER_BACKGROUNDS, identity.background),
       roleOptions: roleOptions(identity.role),
@@ -81,6 +96,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     if (!dropped || dropped.type !== "pokemon") return ui.notifications.warn("Only Pokémon actors can be added to a Trainer team.");
     const current = this.actor.system.team?.pokemonUuids ?? [];
     if (current.includes(dropped.uuid)) return ui.notifications.info(`${dropped.name} is already on this team.`);
+    if (current.length >= MAX_TEAM_SIZE) return ui.notifications.warn(`A Trainer team can hold no more than ${MAX_TEAM_SIZE} Pokémon.`);
     await this.actor.update({ "system.team.pokemonUuids": [...current, dropped.uuid] });
     await dropped.update({ "system.identity.trainerUuid": this.actor.uuid, "system.identity.lifecycle": current.length ? "party" : "active" });
     if (!this.actor.system.team?.activePokemonUuid) await this.actor.update({ "system.team.activePokemonUuid": dropped.uuid });
@@ -93,6 +109,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const uuid = target.dataset.uuid;
     const next = uuid ? await fromUuid(uuid) : null;
     if (!next || next.type !== "pokemon") return ui.notifications.warn("That Pokémon could not be resolved.");
+    if (Number(next.system.health?.hp?.value ?? 0) <= 0) return ui.notifications.warn(`${next.name} is fainted and cannot become active.`);
     const previousUuid = app.actor.system.team?.activePokemonUuid;
     const previous = previousUuid && previousUuid !== uuid ? await fromUuid(previousUuid) : null;
     const updates = [app.actor.update({ "system.team.activePokemonUuid": uuid }), next.update({ "system.identity.trainerUuid": app.actor.uuid, "system.identity.lifecycle": "active" })];
@@ -115,7 +132,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     if (pokemon?.type === "pokemon" && pokemon.system.identity?.trainerUuid === app.actor.uuid) await pokemon.update({ "system.identity.trainerUuid": "", "system.identity.lifecycle": "reserve" });
     if (wasActive && replacementUuid) {
       const replacement = await fromUuid(replacementUuid);
-      if (replacement?.type === "pokemon") await replacement.update({ "system.identity.lifecycle": "active" });
+      if (replacement?.type === "pokemon") await replacement.update({ "system.identity.lifecycle": Number(replacement.system.health?.hp?.value ?? 0) > 0 ? "active" : "fainted" });
     }
     return app.render();
   }
