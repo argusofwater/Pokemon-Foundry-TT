@@ -10,15 +10,7 @@
     {{/if}}
 
     {{#if (eq sheetType "trainer")}}
-      {{#if (eq mode "edit")}}
-        <div class="commander-inline-fields">
-          <label>Level <input type="number" name="system.identity.level" value="{{system.identity.level}}" min="1" max="20"></label>
-          <label>Role <input type="text" name="system.identity.role" value="{{system.identity.role}}"></label>
-          <label>Specialty <input type="text" name="system.identity.specialty" value="{{system.identity.specialty}}"></label>
-        </div>
-      {{else}}
-        <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.role}} • {{system.identity.specialty}}</p>
-      {{/if}}
+      <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.role}} • {{system.identity.specialty}}</p>
     {{else}}
       <div class="commander-friendship-header {{#if friendship.canUseResolve}}resolve-ready{{/if}}" title="Friendship {{friendship.value}} / 255 • {{friendship.tier}}">
         <div class="commander-friendship-hearts" role="meter" aria-label="Friendship" aria-valuemin="0" aria-valuemax="255" aria-valuenow="{{friendship.value}}">
@@ -34,24 +26,7 @@
           <span>{{friendship.value}} / 255</span>
         </div>
       </div>
-      {{#if (eq mode "edit")}}
-        <div class="commander-inline-fields">
-          <label>Level <input type="number" name="system.identity.level" value="{{system.identity.level}}" min="1" max="100"></label>
-          <label>Species <input type="text" name="system.identity.speciesName" value="{{system.identity.speciesName}}"></label>
-          <label>Training Path
-            <select name="system.identity.trainingPath">
-              <option value="striker" {{#if (eq system.identity.trainingPath "striker")}}selected{{/if}}>Striker</option>
-              <option value="specialist" {{#if (eq system.identity.trainingPath "specialist")}}selected{{/if}}>Specialist</option>
-              <option value="bulwark" {{#if (eq system.identity.trainingPath "bulwark")}}selected{{/if}}>Bulwark</option>
-              <option value="swift" {{#if (eq system.identity.trainingPath "swift")}}selected{{/if}}>Swift</option>
-              <option value="balanced" {{#if (eq system.identity.trainingPath "balanced")}}selected{{/if}}>Balanced</option>
-              <option value="custom" {{#if (eq system.identity.trainingPath "custom")}}selected{{/if}}>Custom</option>
-            </select>
-          </label>
-        </div>
-      {{else}}
-        <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.speciesName}} • {{system.identity.trainingPath}}</p>
-      {{/if}}
+      <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.speciesName}} • {{system.identity.trainingPath}}</p>
       <div>
         {{#each system.identity.types as |type|}}<span class="commander-type-chip">{{type}}</span>{{/each}}
       </div>
