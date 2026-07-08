@@ -12,6 +12,7 @@ const MAX_TEAM_SIZE = 6;
 const RANK_BONUSES = Object.freeze({ untrained: 0, novice: 2, adept: 4, expert: 6, master: 8 });
 const ATTRIBUTE_LABELS = Object.freeze({ body: "Body", agility: "Agility", mind: "Mind", presence: "Presence" });
 const TALENT_TYPES = new Set(["talent", "feat", "edge"]);
+const INVENTORY_TYPES = new Set(["item", "equipment", "consumable"]);
 
 function signed(value) {
   const number = Number(value) || 0;
@@ -34,6 +35,25 @@ function talentSummary(item, pinnedUuids) {
   };
 }
 
+function inventorySummary(item) {
+  const system = item.system ?? {};
+  const quantity = Math.max(0, Number(system.quantity ?? 1) || 0);
+  const bulk = Math.max(0, Number(system.bulk ?? 0) || 0);
+  const category = system.category ?? item.type ?? "item";
+  return {
+    item,
+    quantity,
+    bulk,
+    totalBulk: quantity * bulk,
+    category,
+    rarity: system.rarity ?? "common",
+    slot: system.slot ?? "",
+    consumedOnUse: Boolean(system.consumedOnUse),
+    description: system.description ?? system.effect ?? system.summary ?? "",
+    automationState: system.automation?.state ?? "manual"
+  };
+}
+
 export class CommanderTrainerSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
     ...super.DEFAULT_OPTIONS,
@@ -46,7 +66,10 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       openPokemon: CommanderTrainerSheet.openPokemon,
       rollSkill: CommanderTrainerSheet.rollSkill,
       togglePinnedTalent: CommanderTrainerSheet.togglePinnedTalent,
-      postTalent: CommanderTrainerSheet.postTalent
+      postTalent: CommanderTrainerSheet.postTalent,
+      useInventoryItem: CommanderTrainerSheet.useInventoryItem,
+      adjustItemQuantity: CommanderTrainerSheet.adjustItemQuantity,
+      postInventoryItem: CommanderTrainerSheet.postInventoryItem
     }
   };
 
@@ -57,7 +80,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     team: { template: "systems/ptu/src/module/commander/templates/trainer/team.hbs" },
     skills: { template: "systems/ptu/src/module/commander/templates/trainer/skills.hbs" },
     talents: { template: "systems/ptu/src/module/commander/templates/trainer/talents.hbs" },
-    inventory: { template: genericTab },
+    inventory: { template: "systems/ptu/src/module/commander/templates/trainer/inventory.hbs" },
     exploration: { template: genericTab },
     social: { template: genericTab },
     downtime: { template: genericTab },
@@ -117,6 +140,11 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const talents = this.actor.items.filter(item => TALENT_TYPES.has(item.type)).map(item => talentSummary(item, pinnedUuids));
     talents.sort((a, b) => Number(b.isPinned) - Number(a.isPinned) || a.item.name.localeCompare(b.item.name));
 
+    const inventoryItems = this.actor.items.filter(item => INVENTORY_TYPES.has(item.type)).map(inventorySummary);
+    inventoryItems.sort((a, b) => a.category.localeCompare(b.category) || a.item.name.localeCompare(b.item.name));
+    const carriedBulk = inventoryItems.reduce((total, entry) => total + entry.totalBulk, 0);
+    const bulkCapacity = Number(this.actor.system.inventory?.bulkCapacity ?? 0);
+
     return {
       ...context,
       sheetType: "trainer",
@@ -129,6 +157,11 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       skillList,
       talents,
       pinnedTalentCount: talents.filter(talent => talent.isPinned).length,
+      inventoryItems,
+      inventoryCount: inventoryItems.length,
+      carriedBulk,
+      bulkCapacity,
+      overBulkCapacity: carriedBulk > bulkCapacity,
       backgroundOptions: optionList(COMMANDER_BACKGROUNDS, identity.background),
       roleOptions: roleOptions(identity.role),
       specialtyOptions: specialtyOptions(identity.role, identity.specialty)
@@ -155,10 +188,41 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const app = resolveApplication(target, this);
     const item = app.actor.items.get(target.dataset.itemId);
     if (!item) return ui.notifications.warn("That Talent could not be resolved.");
-    const system = item.system ?? {};
-    const description = system.description ?? system.effect ?? system.summary ?? "No rules text available.";
+    const description = item.system?.description ?? item.system?.effect ?? item.system?.summary ?? "No rules text available.";
     const content = `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(item.name)}</h3><p>${description}</p></section>`;
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
+  }
+
+  static async useInventoryItem(event, target) {
+    const app = resolveApplication(target, this);
+    const item = app.actor.items.get(target.dataset.itemId);
+    if (!item) return ui.notifications.warn("That item could not be resolved.");
+    const system = item.system ?? {};
+    const quantity = Math.max(0, Number(system.quantity ?? 1) || 0);
+    if (quantity <= 0) return ui.notifications.warn(`${item.name} has no uses remaining.`);
+    const description = system.description ?? system.effect ?? system.summary ?? "No rules text available.";
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(item.name)}</h3><p>${description}</p></section>` });
+    if (system.consumedOnUse) await item.update({ "system.quantity": Math.max(0, quantity - 1) });
+    return app.render();
+  }
+
+  static async adjustItemQuantity(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this Trainer.");
+    const item = app.actor.items.get(target.dataset.itemId);
+    if (!item) return ui.notifications.warn("That item could not be resolved.");
+    const current = Math.max(0, Number(item.system?.quantity ?? 1) || 0);
+    const next = Math.max(0, current + Number(target.dataset.amount ?? 0));
+    await item.update({ "system.quantity": next });
+    return app.render();
+  }
+
+  static async postInventoryItem(event, target) {
+    const app = resolveApplication(target, this);
+    const item = app.actor.items.get(target.dataset.itemId);
+    if (!item) return ui.notifications.warn("That item could not be resolved.");
+    const description = item.system?.description ?? item.system?.effect ?? item.system?.summary ?? "No rules text available.";
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(item.name)}</h3><p>${description}</p></section>` });
   }
 
   async _onDropActor(event, data) {
@@ -180,6 +244,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     if (!item) return;
     const activeTab = this._commanderActiveTab ?? this.actor.system.ui?.activeTab;
     if (activeTab === "talents" && !TALENT_TYPES.has(item.type)) return ui.notifications.warn("Only Talent, Feat, or Edge items can be dropped onto the Talents tab.");
+    if (activeTab === "inventory" && !INVENTORY_TYPES.has(item.type)) return ui.notifications.warn("Only inventory items can be dropped onto the Inventory tab.");
     return Item.create(item.toObject(), { parent: this.actor });
   }
 
