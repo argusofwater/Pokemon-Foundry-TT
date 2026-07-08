@@ -9,8 +9,13 @@ on:
       - "src/module/commander/**"
       - "src/scripts/hooks/init.js"
       - "tools/audit-commander-runtime.mjs"
+      - "tools/commander/**"
+      - ".github/workflows/audit-commander-runtime.yml"
       - "package.json"
       - "system.json"
+
+permissions:
+  contents: write
 
 jobs:
   audit:
@@ -29,3 +34,39 @@ jobs:
 
       - name: Run Commander runtime audit
         run: npm run audit:commander-runtime
+
+  package:
+    needs: audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install LevelDB writer
+        run: npm install --no-save classic-level@2
+
+      - name: Build Commander compendiums
+        run: |
+          npm run compendium:build
+          node tools/commander/write-leveldb-packs.mjs
+
+      - name: Build Foundry package
+        run: |
+          mkdir -p build/release
+          zip -r build/release/ptu.zip . -x '.git/*' '.github/*' 'build/*' 'node_modules/*' 'temp/*' '*.zip'
+          unzip -l build/release/ptu.zip | grep 'system.json'
+          unzip -l build/release/ptu.zip | grep 'packs/species/'
+
+      - name: Publish Commander v8 prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: commander-test-v8
+          name: Commander Build Test v8
+          prerelease: true
+          make_latest: false
+          files: build/release/ptu.zip
