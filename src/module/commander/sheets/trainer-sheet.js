@@ -7,7 +7,6 @@ function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
 }
 
-const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
 const MAX_TEAM_SIZE = 6;
 const RANK_BONUSES = Object.freeze({ untrained: 0, novice: 2, adept: 4, expert: 6, master: 8 });
 const ATTRIBUTE_LABELS = Object.freeze({ body: "Body", agility: "Agility", mind: "Mind", presence: "Presence" });
@@ -24,16 +23,7 @@ const DOWNTIME_CATEGORIES = Object.freeze([
   ["training", "Train"], ["bonding", "Bond"], ["research", "Research"], ["crafting", "Craft"],
   ["treatment", "Treat"], ["earning", "Earn"], ["networking", "Network"], ["facility", "Facility Work"]
 ]);
-const DOWNTIME_SKILLS = Object.freeze({
-  training: "focus",
-  bonding: "influence",
-  research: "investigation",
-  crafting: "technology",
-  treatment: "medicine",
-  earning: "influence",
-  networking: "influence",
-  facility: "technology"
-});
+const DOWNTIME_SKILLS = Object.freeze({ training: "focus", bonding: "influence", research: "investigation", crafting: "technology", treatment: "medicine", earning: "influence", networking: "influence", facility: "technology" });
 
 function signed(value) {
   const number = Number(value) || 0;
@@ -42,11 +32,15 @@ function signed(value) {
 
 function talentSummary(item, pinnedUuids) {
   const system = item.system ?? {};
-  const action = system.actionType ?? system.action?.type ?? system.activation?.type ?? "Passive";
-  const frequency = system.recharge?.category ?? system.frequency ?? system.usage ?? "At-Will";
   const prerequisites = system.prerequisites ?? system.requirements ?? system.prerequisite ?? "";
-  const description = system.description ?? system.effect ?? system.summary ?? "";
-  return { item, action, frequency, prerequisites: Array.isArray(prerequisites) ? prerequisites.join(", ") : prerequisites, description, isPinned: pinnedUuids.includes(item.uuid) };
+  return {
+    item,
+    action: system.actionType ?? system.action?.type ?? system.activation?.type ?? "Passive",
+    frequency: system.recharge?.category ?? system.frequency ?? system.usage ?? "At-Will",
+    prerequisites: Array.isArray(prerequisites) ? prerequisites.join(", ") : prerequisites,
+    description: system.description ?? system.effect ?? system.summary ?? "",
+    isPinned: pinnedUuids.includes(item.uuid)
+  };
 }
 
 function inventorySummary(item) {
@@ -66,6 +60,26 @@ function inventorySummary(item) {
 
 function downtimeDefaults() {
   return { category: "training", project: "", progress: 0, goal: 5, notes: "", lastResult: "" };
+}
+
+function biographyDefaults() {
+  return {
+    pronouns: "",
+    age: "",
+    hometown: "",
+    occupation: "",
+    appearance: "",
+    personality: "",
+    ideals: "",
+    bonds: "",
+    flaws: "",
+    goals: "",
+    history: "",
+    trainerCreed: "",
+    allies: "",
+    rivals: "",
+    notes: ""
+  };
 }
 
 export class CommanderTrainerSheet extends CommanderActorSheetBase {
@@ -96,7 +110,9 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       workDowntimeProject: CommanderTrainerSheet.workDowntimeProject,
       adjustDowntimeProgress: CommanderTrainerSheet.adjustDowntimeProgress,
       postDowntimeStatus: CommanderTrainerSheet.postDowntimeStatus,
-      resetDowntimeProject: CommanderTrainerSheet.resetDowntimeProject
+      resetDowntimeProject: CommanderTrainerSheet.resetDowntimeProject,
+      saveBiography: CommanderTrainerSheet.saveBiography,
+      postBiography: CommanderTrainerSheet.postBiography
     }
   };
 
@@ -112,7 +128,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     social: { template: "systems/ptu/src/module/commander/templates/trainer/social.hbs" },
     downtime: { template: "systems/ptu/src/module/commander/templates/trainer/downtime.hbs" },
     effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" },
-    biography: { template: genericTab }
+    biography: { template: "systems/ptu/src/module/commander/templates/trainer/biography.hbs" }
   };
 
   async _prepareContext(options) {
@@ -149,12 +165,11 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       if (!pokemon) continue;
       const friendship = CommanderFriendshipService.getState(pokemon);
       const hp = pokemon.system.health?.hp ?? {};
-      const types = pokemon.system.identity?.types ?? [];
       team.push({
         actor: pokemon,
         isActive: pokemon.uuid === activeUuid,
         friendship,
-        types,
+        types: pokemon.system.identity?.types ?? [],
         hpPercent: Number(hp.max ?? 0) > 0 ? Math.round((Number(hp.value ?? 0) / Number(hp.max)) * 100) : 0,
         isFainted: Number(hp.value ?? 0) <= 0 || pokemon.system.identity?.lifecycle === "fainted",
         conditionCount: pokemon.effects?.contents?.length ?? 0,
@@ -179,6 +194,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const downtime = foundry.utils.mergeObject(downtimeDefaults(), this.actor.getFlag("ptu", "commanderDowntime") ?? {}, { inplace: false });
     const downtimeGoal = Math.max(1, Number(downtime.goal ?? 5));
     const downtimeProgress = Math.clamp(Number(downtime.progress ?? 0), 0, downtimeGoal);
+    const biography = foundry.utils.mergeObject(biographyDefaults(), this.actor.getFlag("ptu", "commanderBiography") ?? {}, { inplace: false });
 
     return {
       ...context,
@@ -206,6 +222,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       downtimePercent: Math.round((downtimeProgress / downtimeGoal) * 100),
       downtimeComplete: downtimeProgress >= downtimeGoal,
       downtimeCategoryOptions: DOWNTIME_CATEGORIES.map(([value, label]) => ({ value, label, selected: value === downtime.category })),
+      biography,
       backgroundOptions: optionList(COMMANDER_BACKGROUNDS, identity.background),
       roleOptions: roleOptions(identity.role),
       specialtyOptions: specialtyOptions(identity.role, identity.specialty)
@@ -298,12 +315,10 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const amount = Number(target.dataset.amount ?? 0);
     const social = app.actor.system.social;
     if (resource === "influence") {
-      const next = Math.clamp(Number(social.influence?.value ?? 0) + amount, 0, Number(social.influence?.max ?? 5));
-      await app.actor.update({ "system.social.influence.value": next });
+      await app.actor.update({ "system.social.influence.value": Math.clamp(Number(social.influence?.value ?? 0) + amount, 0, Number(social.influence?.max ?? 5)) });
     } else if (["leverage", "reputation"].includes(resource)) {
       const current = Number(social[resource] ?? 0);
-      const next = resource === "leverage" ? Math.max(0, current + amount) : current + amount;
-      await app.actor.update({ [`system.social.${resource}`]: next });
+      await app.actor.update({ [`system.social.${resource}`]: resource === "leverage" ? Math.max(0, current + amount) : current + amount });
     }
     return app.render();
   }
@@ -312,12 +327,19 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const app = resolveApplication(target, this);
     const skillKey = target.dataset.skillKey;
     const stance = app.actor.system.social?.stance ?? "neutral";
-    const favored = stance === "friendly" || stance === "devoted";
-    const hindered = stance === "hostile" || stance === "unfriendly";
     const skill = app.actor.system.skills?.[skillKey];
     if (!skill) return ui.notifications.warn("That social skill could not be resolved.");
-    const attribute = app.actor.system.attributes?.[skill.attribute]?.final ?? 0;
-    return CommanderRollService.rollCheck({ actor: app.actor, label: `${skillKey.replace(/([A-Z])/g, " $1").replace(/^./, char => char.toUpperCase())} Social Check`, rank: skill.rank, attribute, misc: skill.misc, favored: Boolean(skill.favorite || favored), hindered, target: target.dataset.target ? Number(target.dataset.target) : null, notes: `Current stance: ${stance}` });
+    return CommanderRollService.rollCheck({
+      actor: app.actor,
+      label: `${skillKey.replace(/([A-Z])/g, " $1").replace(/^./, char => char.toUpperCase())} Social Check`,
+      rank: skill.rank,
+      attribute: app.actor.system.attributes?.[skill.attribute]?.final ?? 0,
+      misc: skill.misc,
+      favored: Boolean(skill.favorite || stance === "friendly" || stance === "devoted"),
+      hindered: stance === "hostile" || stance === "unfriendly",
+      target: target.dataset.target ? Number(target.dataset.target) : null,
+      notes: `Current stance: ${stance}`
+    });
   }
 
   static async postSocialStatus(event, target) {
@@ -325,8 +347,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const social = app.actor.system.social;
     const stance = SOCIAL_STANCES.find(([value]) => value === social.stance)?.[1] ?? "Neutral";
     const subject = foundry.utils.escapeHTML(social.subject || "Current social scene");
-    const content = `<section class="commander-chat-card"><h3>${subject}</h3><p><strong>Stance:</strong> ${stance}</p><p><strong>Influence:</strong> ${social.influence.value} / ${social.influence.max}</p><p><strong>Leverage:</strong> ${social.leverage} | <strong>Reputation:</strong> ${signed(social.reputation)}</p></section>`;
-    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content: `<section class="commander-chat-card"><h3>${subject}</h3><p><strong>Stance:</strong> ${stance}</p><p><strong>Influence:</strong> ${social.influence.value} / ${social.influence.max}</p><p><strong>Leverage:</strong> ${social.leverage} | <strong>Reputation:</strong> ${signed(social.reputation)}</p></section>` });
   }
 
   static async resetSocialScene(event, target) {
@@ -349,14 +370,13 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
   static async saveDowntimeProject(event, target) {
     const app = resolveApplication(target, this);
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this Trainer.");
-    const root = app.element;
     const current = foundry.utils.mergeObject(downtimeDefaults(), app.actor.getFlag("ptu", "commanderDowntime") ?? {}, { inplace: false });
     const next = {
       ...current,
-      category: root.querySelector("[data-downtime-category]")?.value ?? current.category,
-      project: root.querySelector("[data-downtime-project]")?.value ?? current.project,
-      goal: Math.max(1, Number(root.querySelector("[data-downtime-goal]")?.value ?? current.goal)),
-      notes: root.querySelector("[data-downtime-notes]")?.value ?? current.notes
+      category: app.element.querySelector("[data-downtime-category]")?.value ?? current.category,
+      project: app.element.querySelector("[data-downtime-project]")?.value ?? current.project,
+      goal: Math.max(1, Number(app.element.querySelector("[data-downtime-goal]")?.value ?? current.goal)),
+      notes: app.element.querySelector("[data-downtime-notes]")?.value ?? current.notes
     };
     next.progress = Math.clamp(Number(next.progress ?? 0), 0, next.goal);
     await app.actor.setFlag("ptu", "commanderDowntime", next);
@@ -372,18 +392,17 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const skillKey = DOWNTIME_SKILLS[downtime.category] ?? "focus";
     const skill = app.actor.system.skills?.[skillKey];
     if (!skill) return ui.notifications.warn("The downtime skill could not be resolved.");
-    const attribute = app.actor.system.attributes?.[skill.attribute]?.final ?? 0;
-    const roll = await new Roll(`1d20 + @attribute + @rank + @misc`, { attribute, rank: RANK_BONUSES[skill.rank] ?? 0, misc: skill.misc ?? 0 }).evaluate();
+    const roll = await new Roll("1d20 + @attribute + @rank + @misc", { attribute: app.actor.system.attributes?.[skill.attribute]?.final ?? 0, rank: RANK_BONUSES[skill.rank] ?? 0, misc: skill.misc ?? 0 }).evaluate();
     const progress = roll.total >= 18 ? 2 : roll.total >= 10 ? 1 : 0;
-    const nextProgress = Math.clamp(Number(downtime.progress ?? 0) + progress, 0, Math.max(1, Number(downtime.goal ?? 5)));
-    const categoryLabel = DOWNTIME_CATEGORIES.find(([value]) => value === downtime.category)?.[1] ?? "Downtime";
+    const goal = Math.max(1, Number(downtime.goal ?? 5));
+    const nextProgress = Math.clamp(Number(downtime.progress ?? 0) + progress, 0, goal);
     const result = progress === 2 ? "Strong success: +2 progress" : progress === 1 ? "Success: +1 progress" : "No progress; the action is still spent";
     await Promise.all([
       app.actor.update({ "system.campaign.downtimeActions": actions - 1 }),
       app.actor.setFlag("ptu", "commanderDowntime", { ...downtime, progress: nextProgress, lastResult: result })
     ]);
-    const content = `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(categoryLabel)}: ${foundry.utils.escapeHTML(downtime.project || "Downtime Project")}</h3><p><strong>${foundry.utils.escapeHTML(skillKey)}</strong> total: ${roll.total}</p><p>${foundry.utils.escapeHTML(result)}</p><p>Progress: ${nextProgress} / ${Math.max(1, Number(downtime.goal ?? 5))}</p></section>`;
-    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content, rolls: [roll] });
+    const categoryLabel = DOWNTIME_CATEGORIES.find(([value]) => value === downtime.category)?.[1] ?? "Downtime";
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(categoryLabel)}: ${foundry.utils.escapeHTML(downtime.project || "Downtime Project")}</h3><p><strong>${foundry.utils.escapeHTML(skillKey)}</strong> total: ${roll.total}</p><p>${foundry.utils.escapeHTML(result)}</p><p>Progress: ${nextProgress} / ${goal}</p></section>`, rolls: [roll] });
     return app.render();
   }
 
@@ -400,8 +419,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const app = resolveApplication(target, this);
     const downtime = foundry.utils.mergeObject(downtimeDefaults(), app.actor.getFlag("ptu", "commanderDowntime") ?? {}, { inplace: false });
     const category = DOWNTIME_CATEGORIES.find(([value]) => value === downtime.category)?.[1] ?? "Downtime";
-    const content = `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(downtime.project || "Downtime Project")}</h3><p><strong>Category:</strong> ${foundry.utils.escapeHTML(category)}</p><p><strong>Progress:</strong> ${Number(downtime.progress ?? 0)} / ${Math.max(1, Number(downtime.goal ?? 5))}</p><p><strong>Actions Remaining:</strong> ${Number(app.actor.system.campaign?.downtimeActions ?? 0)}</p></section>`;
-    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(downtime.project || "Downtime Project")}</h3><p><strong>Category:</strong> ${foundry.utils.escapeHTML(category)}</p><p><strong>Progress:</strong> ${Number(downtime.progress ?? 0)} / ${Math.max(1, Number(downtime.goal ?? 5))}</p><p><strong>Actions Remaining:</strong> ${Number(app.actor.system.campaign?.downtimeActions ?? 0)}</p></section>` });
   }
 
   static async resetDowntimeProject(event, target) {
@@ -411,6 +429,24 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     if (!confirmed) return;
     await app.actor.setFlag("ptu", "commanderDowntime", downtimeDefaults());
     return app.render();
+  }
+
+  static async saveBiography(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this Trainer.");
+    const next = {};
+    for (const key of Object.keys(biographyDefaults())) next[key] = app.element.querySelector(`[data-biography-field="${key}"]`)?.value ?? "";
+    await app.actor.setFlag("ptu", "commanderBiography", next);
+    ui.notifications.info("Biography saved.");
+    return app.render();
+  }
+
+  static async postBiography(event, target) {
+    const app = resolveApplication(target, this);
+    const biography = foundry.utils.mergeObject(biographyDefaults(), app.actor.getFlag("ptu", "commanderBiography") ?? {}, { inplace: false });
+    const identity = [biography.pronouns, biography.age && `Age ${biography.age}`, biography.hometown].filter(Boolean).map(foundry.utils.escapeHTML).join(" • ");
+    const content = `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(app.actor.name)}</h3>${identity ? `<p>${identity}</p>` : ""}${biography.trainerCreed ? `<blockquote>${foundry.utils.escapeHTML(biography.trainerCreed)}</blockquote>` : ""}${biography.goals ? `<p><strong>Goals:</strong> ${foundry.utils.escapeHTML(biography.goals)}</p>` : ""}${biography.bonds ? `<p><strong>Bonds:</strong> ${foundry.utils.escapeHTML(biography.bonds)}</p>` : ""}</section>`;
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
   }
 
   async _onDropActor(event, data) {
@@ -439,13 +475,12 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
   static async setActivePokemon(event, target) {
     const app = resolveApplication(target, this);
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this trainer.");
-    const uuid = target.dataset.uuid;
-    const next = uuid ? await fromUuid(uuid) : null;
+    const next = target.dataset.uuid ? await fromUuid(target.dataset.uuid) : null;
     if (!next || next.type !== "pokemon") return ui.notifications.warn("That Pokémon could not be resolved.");
     if (Number(next.system.health?.hp?.value ?? 0) <= 0) return ui.notifications.warn(`${next.name} is fainted and cannot become active.`);
     const previousUuid = app.actor.system.team?.activePokemonUuid;
-    const previous = previousUuid && previousUuid !== uuid ? await fromUuid(previousUuid) : null;
-    const updates = [app.actor.update({ "system.team.activePokemonUuid": uuid }), next.update({ "system.identity.trainerUuid": app.actor.uuid, "system.identity.lifecycle": "active" })];
+    const previous = previousUuid && previousUuid !== next.uuid ? await fromUuid(previousUuid) : null;
+    const updates = [app.actor.update({ "system.team.activePokemonUuid": next.uuid }), next.update({ "system.identity.trainerUuid": app.actor.uuid, "system.identity.lifecycle": "active" })];
     if (previous?.type === "pokemon") updates.push(previous.update({ "system.identity.lifecycle": "party" }));
     await Promise.all(updates);
     ui.notifications.info(`${next.name} is now ${app.actor.name}'s active Pokémon.`);
@@ -471,8 +506,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
   }
 
   static async openPokemon(event, target) {
-    const uuid = target.dataset.uuid;
-    const pokemon = uuid ? await fromUuid(uuid) : null;
+    const pokemon = target.dataset.uuid ? await fromUuid(target.dataset.uuid) : null;
     return pokemon?.sheet?.render(true);
   }
 }
