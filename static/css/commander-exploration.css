@@ -1,0 +1,122 @@
+.commander-exploration-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.commander-exploration-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.commander-exploration-help,
+.commander-expedition-notes,
+.commander-exploration-tab .muted {
+  color: var(--commander-muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.commander-expedition-resource {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--commander-line);
+}
+
+.commander-expedition-resource:last-child {
+  border-bottom: 0;
+}
+
+.commander-expedition-resource > div {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.commander-field-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.5rem;
+}
+
+.commander-field-checks button {
+  min-height: 2.5rem;
+  font-weight: 800;
+}
+
+.commander-active-expedition-pokemon {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.commander-active-expedition-pokemon img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  background: #fff;
+  border: 1px solid var(--commander-line);
+  border-radius: 50%;
+}
+
+.commander-active-expedition-pokemon strong,
+.commander-active-expedition-pokemon span {
+  display: block;
+}
+
+.commander-capability-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.commander-capability-list > span,
+.commander-mount-badge {
+  display: inline-flex;
+  padding: 0.18rem 0.5rem;
+  color: #1f5279;
+  background: #e9f3fa;
+  border: 1px solid #b7d0e1;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.commander-mount-badge {
+  margin-top: 0.45rem;
+  color: #795900;
+  background: #fff7d7;
+  border-color: #d7b64b;
+}
+
+.commander-mount-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--commander-line);
+}
+
+.commander-mount-row:last-child {
+  border-bottom: 0;
+}
+
+.commander-exploration-tab textarea,
+.commander-exploration-tab select {
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .commander-exploration-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commander-exploration-grid .wide {
+    grid-column: auto;
+  }
+}
