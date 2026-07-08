@@ -5,6 +5,8 @@ function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
 }
 
+const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
+
 export class CommanderTrainerSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
     ...super.DEFAULT_OPTIONS,
@@ -23,7 +25,14 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     navigation: { template: "systems/ptu/src/module/commander/templates/shared/navigation.hbs" },
     overview: { template: "systems/ptu/src/module/commander/templates/trainer/overview.hbs" },
     team: { template: "systems/ptu/src/module/commander/templates/trainer/team.hbs" },
-    effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" }
+    skills: { template: genericTab },
+    talents: { template: genericTab },
+    inventory: { template: genericTab },
+    exploration: { template: genericTab },
+    social: { template: genericTab },
+    downtime: { template: genericTab },
+    effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" },
+    biography: { template: genericTab }
   };
 
   async _prepareContext(options) {
