@@ -21,6 +21,8 @@ function buildFriendshipHearts(value, count = 10) {
   });
 }
 
+const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
+
 export class CommanderPokemonSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
     ...super.DEFAULT_OPTIONS,
@@ -42,8 +44,14 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     navigation: { template: "systems/ptu/src/module/commander/templates/shared/navigation.hbs" },
     overview: { template: "systems/ptu/src/module/commander/templates/pokemon/overview.hbs" },
     moves: { template: "systems/ptu/src/module/commander/templates/pokemon/moves.hbs" },
+    abilities: { template: genericTab },
+    talents: { template: genericTab },
+    growth: { template: genericTab },
+    equipment: { template: genericTab },
     bond: { template: "systems/ptu/src/module/commander/templates/pokemon/bond.hbs" },
-    effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" }
+    exploration: { template: genericTab },
+    effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" },
+    biography: { template: genericTab }
   };
 
   async _prepareContext(options) {
@@ -147,7 +155,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
       "system.loadout.equippedMoveUuids": equipped,
       "system.loadout.reserveMoveUuids": reserve
     });
-    return this.render({ parts: ["moves"] });
+    return this.render();
   }
 
   async #assignMoveToSlot(uuid, zone, index) {
@@ -164,7 +172,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
       "system.loadout.equippedMoveUuids": equipped,
       "system.loadout.reserveMoveUuids": reserve
     });
-    return this.render({ parts: ["moves"] });
+    return this.render();
   }
 
   static async rollMove(event, target) {
@@ -189,7 +197,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     const slots = [...(foundry.utils.getProperty(app.actor, path) ?? [])];
     slots[index] = "";
     await app.actor.update({ [path]: slots });
-    return app.render({ parts: ["moves"] });
+    return app.render();
   }
 
   static async setFriendship(event, target) {
