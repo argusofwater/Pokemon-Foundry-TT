@@ -6,6 +6,7 @@
 @import url("./commander-skills.css");
 @import url("./commander-talents.css");
 @import url("./commander-inventory.css");
+@import url("./commander-exploration.css");
 
 :root {
   --commander-friendship-pink: #ff6fae;
