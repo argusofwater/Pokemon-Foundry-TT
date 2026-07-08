@@ -14,13 +14,11 @@ const ATTRIBUTE_LABELS = Object.freeze({ body: "Body", agility: "Agility", mind:
 const TALENT_TYPES = new Set(["talent", "feat", "edge"]);
 const INVENTORY_TYPES = new Set(["item", "equipment", "consumable"]);
 const EXPEDITION_ROLES = Object.freeze([
-  ["", "Unassigned"],
-  ["guide", "Guide"],
-  ["scout", "Scout"],
-  ["quartermaster", "Quartermaster"],
-  ["medic", "Medic"],
-  ["researcher", "Researcher"],
-  ["handler", "Handler"]
+  ["", "Unassigned"], ["guide", "Guide"], ["scout", "Scout"], ["quartermaster", "Quartermaster"],
+  ["medic", "Medic"], ["researcher", "Researcher"], ["handler", "Handler"]
+]);
+const SOCIAL_STANCES = Object.freeze([
+  ["hostile", "Hostile"], ["unfriendly", "Unfriendly"], ["neutral", "Neutral"], ["friendly", "Friendly"], ["devoted", "Devoted"]
 ]);
 
 function signed(value) {
@@ -42,10 +40,7 @@ function inventorySummary(item) {
   const quantity = Math.max(0, Number(system.quantity ?? 1) || 0);
   const bulk = Math.max(0, Number(system.bulk ?? 0) || 0);
   return {
-    item,
-    quantity,
-    bulk,
-    totalBulk: quantity * bulk,
+    item, quantity, bulk, totalBulk: quantity * bulk,
     category: system.category ?? item.type ?? "item",
     rarity: system.rarity ?? "common",
     slot: system.slot ?? "",
@@ -73,7 +68,11 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       postInventoryItem: CommanderTrainerSheet.postInventoryItem,
       adjustExpeditionResource: CommanderTrainerSheet.adjustExpeditionResource,
       rollExpeditionSkill: CommanderTrainerSheet.rollExpeditionSkill,
-      postExpeditionStatus: CommanderTrainerSheet.postExpeditionStatus
+      postExpeditionStatus: CommanderTrainerSheet.postExpeditionStatus,
+      adjustSocialResource: CommanderTrainerSheet.adjustSocialResource,
+      rollSocialSkill: CommanderTrainerSheet.rollSocialSkill,
+      postSocialStatus: CommanderTrainerSheet.postSocialStatus,
+      resetSocialScene: CommanderTrainerSheet.resetSocialScene
     }
   };
 
@@ -86,7 +85,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     talents: { template: "systems/ptu/src/module/commander/templates/trainer/talents.hbs" },
     inventory: { template: "systems/ptu/src/module/commander/templates/trainer/inventory.hbs" },
     exploration: { template: "systems/ptu/src/module/commander/templates/trainer/exploration.hbs" },
-    social: { template: genericTab },
+    social: { template: "systems/ptu/src/module/commander/templates/trainer/social.hbs" },
     downtime: { template: genericTab },
     effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" },
     biography: { template: genericTab }
@@ -152,6 +151,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const bulkCapacity = Number(this.actor.system.inventory?.bulkCapacity ?? 0);
     const explorationCapabilities = [...new Set(team.flatMap(member => member.capabilities))].sort((a, b) => String(a).localeCompare(String(b)));
     const expeditionRole = this.actor.system.campaign?.expeditionRole ?? "";
+    const social = this.actor.system.social ?? {};
 
     return {
       ...context,
@@ -173,6 +173,8 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       explorationCapabilities,
       mountTeam: team.filter(member => member.mountCapable),
       expeditionRoleOptions: EXPEDITION_ROLES.map(([value, label]) => ({ value, label, selected: value === expeditionRole })),
+      socialStanceOptions: SOCIAL_STANCES.map(([value, label]) => ({ value, label, selected: value === social.stance })),
+      socialInfluencePercent: Number(social.influence?.max ?? 0) > 0 ? Math.round((Number(social.influence?.value ?? 0) / Number(social.influence.max)) * 100) : 0,
       backgroundOptions: optionList(COMMANDER_BACKGROUNDS, identity.background),
       roleOptions: roleOptions(identity.role),
       specialtyOptions: specialtyOptions(identity.role, identity.specialty)
@@ -240,16 +242,13 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const resource = target.dataset.resource;
     if (!["supplyUnits", "medicalSupplies"].includes(resource)) return;
     const current = Number(app.actor.system.inventory?.[resource] ?? 0);
-    const next = Math.max(0, current + Number(target.dataset.amount ?? 0));
-    await app.actor.update({ [`system.inventory.${resource}`]: next });
+    await app.actor.update({ [`system.inventory.${resource}`]: Math.max(0, current + Number(target.dataset.amount ?? 0)) });
     return app.render();
   }
 
   static async rollExpeditionSkill(event, target) {
     const app = resolveApplication(target, this);
-    const skillKey = target.dataset.skillKey;
-    const targetNumber = target.dataset.target ? Number(target.dataset.target) : null;
-    return CommanderRollService.rollSkill({ actor: app.actor, skillKey, target: targetNumber });
+    return CommanderRollService.rollSkill({ actor: app.actor, skillKey: target.dataset.skillKey, target: target.dataset.target ? Number(target.dataset.target) : null });
   }
 
   static async postExpeditionStatus(event, target) {
@@ -259,6 +258,69 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const capabilities = active?.system.exploration?.capabilities ?? [];
     const content = `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(app.actor.name)} Expedition Status</h3><p><strong>Role:</strong> ${foundry.utils.escapeHTML(role)}</p><p><strong>Supplies:</strong> ${Number(app.actor.system.inventory?.supplyUnits ?? 0)} | <strong>Medical:</strong> ${Number(app.actor.system.inventory?.medicalSupplies ?? 0)}</p><p><strong>Active Pokémon:</strong> ${foundry.utils.escapeHTML(active?.name ?? "None")}</p><p><strong>Capabilities:</strong> ${foundry.utils.escapeHTML(capabilities.join(", ") || "None")}</p></section>`;
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
+  }
+
+  static async adjustSocialResource(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this Trainer.");
+    const resource = target.dataset.resource;
+    const amount = Number(target.dataset.amount ?? 0);
+    const social = app.actor.system.social;
+    if (resource === "influence") {
+      const next = Math.clamp(Number(social.influence?.value ?? 0) + amount, 0, Number(social.influence?.max ?? 5));
+      await app.actor.update({ "system.social.influence.value": next });
+    } else if (["leverage", "reputation"].includes(resource)) {
+      const current = Number(social[resource] ?? 0);
+      const next = resource === "leverage" ? Math.max(0, current + amount) : current + amount;
+      await app.actor.update({ [`system.social.${resource}`]: next });
+    }
+    return app.render();
+  }
+
+  static async rollSocialSkill(event, target) {
+    const app = resolveApplication(target, this);
+    const skillKey = target.dataset.skillKey;
+    const stance = app.actor.system.social?.stance ?? "neutral";
+    const favored = stance === "friendly" || stance === "devoted";
+    const hindered = stance === "hostile" || stance === "unfriendly";
+    const skill = app.actor.system.skills?.[skillKey];
+    if (!skill) return ui.notifications.warn("That social skill could not be resolved.");
+    const attribute = app.actor.system.attributes?.[skill.attribute]?.final ?? 0;
+    return CommanderRollService.rollCheck({
+      actor: app.actor,
+      label: `${skillKey.replace(/([A-Z])/g, " $1").replace(/^./, char => char.toUpperCase())} Social Check`,
+      rank: skill.rank,
+      attribute,
+      misc: skill.misc,
+      favored: Boolean(skill.favorite || favored),
+      hindered,
+      target: target.dataset.target ? Number(target.dataset.target) : null,
+      notes: `Current stance: ${stance}`
+    });
+  }
+
+  static async postSocialStatus(event, target) {
+    const app = resolveApplication(target, this);
+    const social = app.actor.system.social;
+    const stance = SOCIAL_STANCES.find(([value]) => value === social.stance)?.[1] ?? "Neutral";
+    const subject = foundry.utils.escapeHTML(social.subject || "Current social scene");
+    const content = `<section class="commander-chat-card"><h3>${subject}</h3><p><strong>Stance:</strong> ${stance}</p><p><strong>Influence:</strong> ${social.influence.value} / ${social.influence.max}</p><p><strong>Leverage:</strong> ${social.leverage} | <strong>Reputation:</strong> ${signed(social.reputation)}</p></section>`;
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
+  }
+
+  static async resetSocialScene(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this Trainer.");
+    const confirmed = await foundry.applications.api.DialogV2.confirm({ window: { title: "Reset Social Scene?" }, content: "<p>Reset stance, influence, leverage, subject, and notes? Reputation will be preserved.</p>" });
+    if (!confirmed) return;
+    await app.actor.update({
+      "system.social.stance": "neutral",
+      "system.social.influence.value": 0,
+      "system.social.leverage": 0,
+      "system.social.subject": "",
+      "system.social.notes": ""
+    });
+    return app.render();
   }
 
   async _onDropActor(event, data) {
