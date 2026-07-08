@@ -53,12 +53,7 @@ function formProfileField() {
   return new fields.SchemaField({
     slug: new fields.StringField({ required: true, nullable: false, blank: false }),
     name: new fields.StringField({ required: true, nullable: false, blank: false }),
-    family: new fields.StringField({
-      required: true,
-      nullable: false,
-      choices: ["mega", "primal", "battle", "stance", "weather", "item", "ability", "story"],
-      initial: "battle"
-    }),
+    family: new fields.StringField({ required: true, nullable: false, choices: ["mega", "primal", "battle", "stance", "weather", "item", "ability", "story"], initial: "battle" }),
     temporary: new fields.BooleanField({ required: true, nullable: false, initial: true }),
     types: tagsField(),
     canonicalStats: canonicalStatBlockField(),
@@ -87,20 +82,18 @@ export class CommanderSpeciesData extends foundry.abstract.TypeDataModel {
         lastMigration: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
       }),
       slug: new fields.StringField({ required: true, nullable: false, blank: false }),
+      description: new fields.HTMLField({ required: true, nullable: false, blank: true, initial: "" }),
       nationalDex: new fields.NumberField({ required: false, nullable: true, integer: true, min: 1, initial: null }),
       formSlug: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
-      formKind: new fields.StringField({
-        required: true,
-        nullable: false,
-        choices: ["base", "regional", "permanent", "temporary", "cosmetic"],
-        initial: "base"
-      }),
+      formKind: new fields.StringField({ required: true, nullable: false, choices: ["base", "regional", "permanent", "temporary", "cosmetic"], initial: "base" }),
       baseSpeciesSlug: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
       types: tagsField(),
       canonicalStats: canonicalStatBlockField(),
       stats: statBlockField(),
       movement: movementField(),
       size: new fields.StringField({ required: true, nullable: false, blank: true, initial: "medium" }),
+      heightMeters: new fields.NumberField({ required: true, nullable: false, min: 0, initial: 0 }),
+      weightKg: new fields.NumberField({ required: true, nullable: false, min: 0, initial: 0 }),
       weightClass: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 1 }),
       captureDifficulty: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
       rarity: new fields.StringField({ required: true, nullable: false, choices: ["common", "uncommon", "rare", "exceptional", "legendary", "restricted"], initial: "common" }),
