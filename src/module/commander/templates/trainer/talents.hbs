@@ -1,0 +1,54 @@
+<section class="commander-tab commander-talents-tab {{#unless (eq activeTab 'talents')}}hidden{{/unless}}" data-tab="talents">
+  <header class="commander-section-header">
+    <div>
+      <h2>Talents</h2>
+      <p>Drag Talent, Feat, or Edge items onto this tab. Pinned talents stay at the top for quick play.</p>
+    </div>
+    <div class="commander-talent-count">{{talents.length}} total • {{pinnedTalentCount}} pinned</div>
+  </header>
+
+  {{#if talents.length}}
+    <div class="commander-talent-grid">
+      {{#each talents as |talent|}}
+        <article class="commander-talent-card {{#if talent.isPinned}}pinned{{/if}}">
+          <header class="commander-talent-header">
+            <div>
+              <h3>{{talent.item.name}}</h3>
+              <div class="commander-talent-tags">
+                <span>{{capitalize talent.item.type}}</span>
+                <span>{{talent.action}}</span>
+                <span>{{talent.frequency}}</span>
+              </div>
+            </div>
+            {{#if ../editable}}
+              <button type="button" class="commander-pin-button" data-action="togglePinnedTalent" data-item-id="{{talent.item.id}}" title="{{#if talent.isPinned}}Unpin{{else}}Pin{{/if}} {{talent.item.name}}">
+                {{#if talent.isPinned}}★{{else}}☆{{/if}}
+              </button>
+            {{/if}}
+          </header>
+
+          {{#if talent.prerequisites}}
+            <p class="commander-talent-prerequisites"><strong>Prerequisites:</strong> {{talent.prerequisites}}</p>
+          {{/if}}
+
+          {{#if talent.description}}
+            <div class="commander-talent-description">{{{talent.description}}}</div>
+          {{else}}
+            <p class="commander-talent-description muted">No rules text is available for this talent yet.</p>
+          {{/if}}
+
+          <footer class="commander-talent-actions">
+            <button type="button" data-action="postTalent" data-item-id="{{talent.item.id}}">Post to Chat</button>
+            <button type="button" data-action="openDocument" data-item-id="{{talent.item.id}}">Open</button>
+            {{#if ../editable}}<button type="button" class="danger" data-action="deleteEmbedded" data-item-id="{{talent.item.id}}">Remove</button>{{/if}}
+          </footer>
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="commander-empty-state">
+      <strong>No talents assigned.</strong>
+      <p>Drag a Talent, Feat, or Edge from a compendium onto this tab.</p>
+    </div>
+  {{/if}}
+</section>
