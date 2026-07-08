@@ -11,6 +11,7 @@
 @import url("./commander-downtime.css");
 @import url("./commander-biography.css");
 @import url("./commander-layout.css");
+@import url("./commander-attributes.css");
 
 :root {
   --commander-friendship-pink: #ff6fae;
