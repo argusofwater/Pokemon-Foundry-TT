@@ -23,6 +23,7 @@ jobs:
 
       - name: Build Commander compendiums
         run: |
+          node tools/commander/normalize-translated-sources.mjs
           npm run compendium:build
           node tools/commander/write-leveldb-packs.mjs
 
