@@ -2,6 +2,7 @@ import { CommanderActionTracker } from "../runtime/action-tracker.js";
 import { CommanderRollService } from "../runtime/roll-service.js";
 import { CommanderConditionService } from "../runtime/condition-service.js";
 import { CommanderSheetAutomation } from "../runtime/sheet-automation.js";
+import { CommanderSpeciesService } from "../runtime/species-service.js";
 
 function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
@@ -181,6 +182,19 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
     if (!this.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
     const item = await Item.implementation.fromDropData(data);
     if (!item) return;
+    if (item.type === "species" && this.actor.type === "character") {
+      try {
+        const pokemon = await CommanderSpeciesService.createPokemonFromSpecies(item, { trainer: this.actor, level: 1 });
+        if (pokemon) {
+          ui.notifications.info(`${pokemon.name} was created from ${item.name} and added to ${this.actor.name}'s team.`);
+          pokemon.sheet?.render(true);
+          return this.render();
+        }
+      } catch (error) {
+        console.error("Commander species drop failed", error);
+        return ui.notifications.error(error.message ?? "Could not create that Pokémon.");
+      }
+    }
     return Item.create(item.toObject(), { parent: this.actor });
   }
 
