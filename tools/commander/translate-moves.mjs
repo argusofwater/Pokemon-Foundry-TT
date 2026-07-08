@@ -42,9 +42,7 @@ function evaluate(node) {
       if (ts.isPropertyAssignment(property)) {
         const key = propertyName(property.name);
         if (key != null) result[key] = evaluate(property.initializer);
-      } else if (ts.isShorthandPropertyAssignment(property)) {
-        result[property.name.text] = property.name.text;
-      }
+      } else if (ts.isShorthandPropertyAssignment(property)) result[property.name.text] = property.name.text;
     }
     return result;
   }
@@ -86,20 +84,13 @@ function isCap(move) {
 
 function targetProfile(target) {
   const map = {
-    self: { disposition: "self", count: 1, kind: "self" },
-    allySide: { disposition: "ally", count: 0, kind: "field" },
-    allyTeam: { disposition: "ally", count: 0, kind: "field" },
-    all: { disposition: "any", count: 0, kind: "field" },
-    allAdjacent: { disposition: "any", count: 0, kind: "area" },
-    allAdjacentFoes: { disposition: "enemy", count: 0, kind: "area" },
-    allAdjacentAllies: { disposition: "ally", count: 0, kind: "area" },
-    adjacentAlly: { disposition: "ally", count: 1, kind: "ally" },
-    adjacentAllyOrSelf: { disposition: "ally", count: 1, kind: "ally" },
-    adjacentFoe: { disposition: "enemy", count: 1, kind: "enemy" },
-    any: { disposition: "any", count: 1, kind: "enemy" },
-    foeSide: { disposition: "enemy", count: 0, kind: "field" },
-    normal: { disposition: "enemy", count: 1, kind: "enemy" },
-    randomNormal: { disposition: "enemy", count: 1, kind: "enemy" },
+    self: { disposition: "self", count: 1, kind: "self" }, allySide: { disposition: "ally", count: 0, kind: "field" },
+    allyTeam: { disposition: "ally", count: 0, kind: "field" }, all: { disposition: "any", count: 0, kind: "field" },
+    allAdjacent: { disposition: "any", count: 0, kind: "area" }, allAdjacentFoes: { disposition: "enemy", count: 0, kind: "area" },
+    allAdjacentAllies: { disposition: "ally", count: 0, kind: "area" }, adjacentAlly: { disposition: "ally", count: 1, kind: "ally" },
+    adjacentAllyOrSelf: { disposition: "ally", count: 1, kind: "ally" }, adjacentFoe: { disposition: "enemy", count: 1, kind: "enemy" },
+    any: { disposition: "any", count: 1, kind: "enemy" }, foeSide: { disposition: "enemy", count: 0, kind: "field" },
+    normal: { disposition: "enemy", count: 1, kind: "enemy" }, randomNormal: { disposition: "enemy", count: 1, kind: "enemy" },
     scripted: { disposition: "any", count: 1, kind: "special" }
   };
   return map[target] ?? { disposition: "enemy", count: 1, kind: "enemy" };
@@ -134,18 +125,9 @@ function collectConditions(move) {
   const candidates = [];
   if (move.status) candidates.push({ status: move.status, chance: 100, recipient: "target" });
   if (move.secondary?.status) candidates.push({ status: move.secondary.status, chance: move.secondary.chance ?? 100, recipient: "target" });
-  for (const secondary of move.secondaries ?? []) {
-    if (secondary?.status) candidates.push({ status: secondary.status, chance: secondary.chance ?? 100, recipient: "target" });
-  }
+  for (const secondary of move.secondaries ?? []) if (secondary?.status) candidates.push({ status: secondary.status, chance: secondary.chance ?? 100, recipient: "target" });
   if (move.self?.status) candidates.push({ status: move.self.status, chance: 100, recipient: "self" });
-  for (const candidate of candidates) {
-    effects.push({
-      kind: "condition",
-      conditionSlug: normalizeConditionSlug(candidate.status),
-      chance: Number(candidate.chance),
-      recipient: candidate.recipient
-    });
-  }
+  for (const candidate of candidates) effects.push({ kind: "condition", conditionSlug: normalizeConditionSlug(candidate.status), chance: Number(candidate.chance), recipient: candidate.recipient });
   return effects;
 }
 
@@ -153,9 +135,7 @@ function collectBoosts(move) {
   const effects = [];
   const add = (boosts, recipient, chance = 100) => {
     if (!boosts || typeof boosts !== "object") return;
-    for (const [stat, stages] of Object.entries(boosts)) {
-      effects.push({ kind: "stage", stat, stages: Number(stages), chance: Number(chance), recipient });
-    }
+    for (const [stat, stages] of Object.entries(boosts)) effects.push({ kind: "stage", stat, stages: Number(stages), chance: Number(chance), recipient });
   };
   add(move.boosts, "target");
   add(move.secondary?.boosts, "target", move.secondary?.chance ?? 100);
@@ -181,12 +161,7 @@ function collectStructuredEffects(move) {
 }
 
 function needsEffectReview(move, effects) {
-  return Boolean(
-    move.onHit || move.onTry || move.onTryHit || move.onAfterHit || move.onModifyMove || move.condition ||
-    move.basePowerCallback || move.damageCallback || move.onEffectiveness || move.onPrepareHit ||
-    move.selfSwitch || move.forceSwitch || move.multihit || move.noMetronome ||
-    (move.secondary && !effects.length)
-  );
+  return Boolean(move.onHit || move.onTry || move.onTryHit || move.onAfterHit || move.onModifyMove || move.condition || move.basePowerCallback || move.damageCallback || move.onEffectiveness || move.onPrepareHit || move.selfSwitch || move.forceSwitch || move.multihit || move.noMetronome || (move.secondary && !effects.length));
 }
 
 function convertMove(key, move) {
@@ -195,10 +170,7 @@ function convertMove(key, move) {
   const variable = tags.includes("variable-power");
   const ohko = tags.includes("ohko");
   const power = convertMovePower(move.basePower ?? 0, { sourceField: "power", fixed, variable, ohko });
-  const accuracy = convertAccuracy(move.accuracy === true ? null : move.accuracy, {
-    alwaysHits: move.accuracy === true,
-    special: Boolean(move.accuracyCallback)
-  });
+  const accuracy = convertAccuracy(move.accuracy === true ? null : move.accuracy, { alwaysHits: move.accuracy === true, special: Boolean(move.accuracyCallback) });
   const target = targetProfile(move.target);
   const category = String(move.category ?? "Status").toLowerCase();
   const text = cleanText(move.desc || move.shortDesc || move.name);
@@ -206,24 +178,10 @@ function convertMove(key, move) {
   const range = inferRange({ tags, target: target.kind === "self" ? "self" : target.kind === "field" ? "field" : "enemy", text });
   const effects = collectStructuredEffects(move);
   const healingPercent = fractionPercent(move.heal);
-  const recharge = inferRecharge({
-    power: power.power,
-    tags,
-    text,
-    healingPercent,
-    protect: Boolean(move.stallingMove),
-    drawback: Boolean(move.recoil || move.hasCrashDamage || move.selfdestruct || move.mindBlownRecoil || move.flags?.charge)
-  });
+  const recharge = inferRecharge({ power: power.power, tags, text, healingPercent, protect: Boolean(move.stallingMove), drawback: Boolean(move.recoil || move.hasCrashDamage || move.selfdestruct || move.mindBlownRecoil || move.flags?.charge) });
+  const review = needsEffectReview(move, effects);
 
-  const reviewFlags = [
-    ...power.tags,
-    ...accuracy.tags,
-    ...recharge.tags,
-    defense.review ? "review-defense" : null,
-    range.review ? "review-range" : null,
-    needsEffectReview(move, effects) ? "review-effects" : null,
-    "review-automation"
-  ];
+  const reviewFlags = [...power.tags, ...accuracy.tags, ...recharge.tags, defense.review ? "review-defense" : null, range.review ? "review-range" : null, review ? "review-effects" : null, "review-automation"];
 
   return {
     schemaVersion: 1,
@@ -237,36 +195,18 @@ function convertMove(key, move) {
     accuracyModifier: accuracy.modifier,
     accuracyHindered: accuracy.hindered,
     range: range.range,
-    target: {
-      defense: defense.defense,
-      count: target.count,
-      disposition: target.disposition,
-      sourceTarget: move.target ?? "normal"
-    },
-    recharge: {
-      category: recharge.category,
-      rounds: recharge.rounds,
-      remaining: 0
-    },
+    target: { defense: defense.defense, count: target.count, disposition: target.disposition, sourceTarget: move.target ?? "normal" },
+    recharge: { category: recharge.category, rounds: recharge.rounds, remaining: 0 },
     priority: Number(move.priority ?? 0),
     effects,
-    contest: {
-      category: move.contestType ? sluggify(move.contestType) : "",
-      tags: [],
-      appeal: 0
-    },
+    contest: { category: move.contestType ? sluggify(move.contestType) : "", tags: [], appeal: 0 },
     tags: addReviewTags(tags, ...reviewFlags),
     automation: {
-      state: effects.length && !needsEffectReview(move, effects) ? "structured" : "manual",
-      handler: "",
+      state: effects.length && !review ? "prompted" : "manual",
+      handler: effects.length ? "commander.move.resolveEffects" : "",
       notes: "Translated from frozen Pokémon Showdown move data; Commander timing, range, and effects remain reviewable."
     },
-    source: {
-      dataset: "pokemon-showdown-gen9-snapshot",
-      sourceId: key,
-      generation: null,
-      cutoff: "gen9-sv-dlc-pre-za"
-    },
+    source: { dataset: "pokemon-showdown-gen9-snapshot", sourceId: key, generation: null, cutoff: "gen9-sv-dlc-pre-za" },
     sourceMetadata: {
       number: move.num ?? null,
       pp: move.pp ?? null,
@@ -275,7 +215,8 @@ function convertMove(key, move) {
       critRatio: move.critRatio ?? 1,
       sourceFlags: Object.keys(move.flags ?? {}),
       sourceAccuracy: move.accuracy ?? null,
-      sourcePower: move.basePower ?? 0
+      sourcePower: move.basePower ?? 0,
+      sourceTarget: move.target ?? "normal"
     }
   };
 }
@@ -288,29 +229,22 @@ async function main() {
 
   for (const [key, move] of Object.entries(table)) {
     if (!move) continue;
-    if (isMaxMove(key, move)) {
-      excluded.push({ key, name: move.name ?? key, reason: "max-or-gmax" });
-      continue;
-    }
-    if (isCap(move)) {
-      excluded.push({ key, name: move.name ?? key, reason: "cap-content" });
-      continue;
-    }
+    if (isMaxMove(key, move)) { excluded.push({ key, name: move.name ?? key, reason: "max-or-gmax" }); continue; }
+    if (isCap(move)) { excluded.push({ key, name: move.name ?? key, reason: "cap-content" }); continue; }
     records.push(convertMove(key, move));
   }
 
   records.sort((a, b) => a.slug.localeCompare(b.slug));
   excluded.sort((a, b) => a.name.localeCompare(b.name));
-
+  const byType = {};
   const byCategory = {};
   const byRecharge = {};
   const byAutomation = {};
-  const byType = {};
   for (const record of records) {
+    byType[record.type] = (byType[record.type] ?? 0) + 1;
     byCategory[record.category] = (byCategory[record.category] ?? 0) + 1;
     byRecharge[record.recharge.category] = (byRecharge[record.recharge.category] ?? 0) + 1;
     byAutomation[record.automation.state] = (byAutomation[record.automation.state] ?? 0) + 1;
-    byType[record.type] = (byType[record.type] ?? 0) + 1;
   }
 
   await fs.rm(OUTPUT_ROOT, { recursive: true, force: true });
@@ -318,27 +252,13 @@ async function main() {
   await writeJsonFile(path.join(OUTPUT_ROOT, "moves.json"), records);
   await writeJsonFile(path.join(OUTPUT_ROOT, "excluded-moves.json"), excluded);
   await writeJsonFile(path.join(OUTPUT_ROOT, "translation-report.json"), {
-    generatedAt: new Date().toISOString(),
-    cutoff: "gen9-sv-dlc-pre-za",
-    moveRecords: records.length,
-    excludedRecords: excluded.length,
-    byCategory,
-    byRecharge,
-    byAutomation,
-    byType,
+    generatedAt: new Date().toISOString(), cutoff: "gen9-sv-dlc-pre-za", moveRecords: records.length, excludedRecords: excluded.length,
+    byType, byCategory, byRecharge, byAutomation,
     structuredEffects: records.filter(record => record.effects.length).length,
-    reviewRequired: records.filter(record => record.tags.some(tag => tag.startsWith("review-"))).length,
-    retainedPastMoves: records.filter(record => record.tags.includes("nonstandard-past")).length,
-    retainedZMoves: records.filter(record => record.tags.includes("z-move")).length,
-    exclusions: Object.fromEntries([...new Set(excluded.map(record => record.reason))].map(reason => [reason, excluded.filter(record => record.reason === reason).length])),
-    notes: [
-      "Gen 9 Power, accuracy, category, type, and canonical source metadata are preserved.",
-      "Max, G-Max, and CAP-only moves are excluded.",
-      "Past and Z-Moves are retained as tagged archival content.",
-      "Ranges, defenses, recharge, and complex effects remain reviewable Commander translations."
-    ]
+    fullyPromptedEffects: records.filter(record => record.automation.state === "prompted").length,
+    reviewRequired: records.filter(record => record.tags.includes("review-automation")).length,
+    notes: ["Canonical descriptions are retained from the frozen Showdown snapshot.", "Max and G-Max moves are excluded by project rule.", "Structured effects use the supported prompted automation state.", "Variable-power, fixed-damage, OHKO, and complex callback moves remain review-tagged."]
   });
-
   console.log(`Translated ${records.length} moves; excluded ${excluded.length}.`);
 }
 
