@@ -6,35 +6,22 @@ import { loadAndValidateSources } from "./validate-source.mjs";
 import { asArray, ensureDirectory, stableId, writeJsonFile } from "./utils.mjs";
 
 function sourceMeta(record) {
-  return {
-    profile: record.rulesProfile ?? "commander",
-    book: record.source?.dataset ?? "",
-    page: record.source?.sourceId ?? ""
-  };
+  return { profile: record.rulesProfile ?? "commander", book: record.source?.dataset ?? "", page: record.source?.sourceId ?? "" };
 }
 
 function baseItemDocument(record, type) {
   return {
-    _id: stableId(type, record.slug),
-    name: record.name,
-    type,
+    _id: stableId(type, record.slug), name: record.name, type,
     img: record.artwork?.portrait ?? record.img ?? "icons/svg/item-bag.svg",
     system: {
       schema: { version: SCHEMA_VERSION, lastMigration: "" },
       slug: record.slug,
-      description: record.description ?? "",
+      description: record.description ?? record.effect ?? "",
       tags: asArray(record.tags),
       automation: record.automation ?? { state: "manual", handler: "", notes: "" },
       source: sourceMeta(record)
     },
-    flags: {
-      ptu: {
-        commanderSource: {
-          schemaVersion: record.schemaVersion ?? SCHEMA_VERSION,
-          sourceId: record.source?.sourceId ?? record.slug
-        }
-      }
-    }
+    flags: { ptu: { commanderSource: { schemaVersion: record.schemaVersion ?? SCHEMA_VERSION, sourceId: record.source?.sourceId ?? record.slug } } }
   };
 }
 
@@ -45,12 +32,16 @@ function buildMove(record) {
     category: record.category,
     power: record.power,
     accuracy: record.accuracy ?? null,
+    accuracyModifier: record.accuracyModifier ?? 0,
+    accuracyHindered: Boolean(record.accuracyHindered),
+    priority: record.priority ?? 0,
     range: record.range ?? { value: 1, unit: "melee", shape: "single", area: 0 },
-    target: record.target ?? { defense: record.category === "physical" ? "physical" : record.category === "special" ? "special" : "none", count: 1, disposition: "enemy" },
+    target: record.target ?? { defense: record.category === "physical" ? "physical" : record.category === "special" ? "special" : "none", count: 1, disposition: "enemy", sourceTarget: "normal" },
     recharge: record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 },
     effects: asArray(record.effects),
     contest: record.contest ?? { tags: [], category: "", appeal: 0 },
-    tutorModification: { active: false, name: "", description: "" }
+    tutorModification: { active: false, name: "", description: "" },
+    sourceMetadata: record.sourceMetadata ?? {}
   });
   return document;
 }
@@ -64,7 +55,8 @@ function buildAbility(record) {
     recharge: record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 },
     powerTier: record.powerTier ?? "standard",
     innate: Boolean(record.innate),
-    entryLimit: record.entryLimit ?? 1
+    entryLimit: record.entryLimit ?? 1,
+    sourceMetadata: record.sourceMetadata ?? {}
   });
   return document;
 }
@@ -92,39 +84,22 @@ function buildItem(record) {
 function buildTalent(record) {
   const document = baseItemDocument(record, record.ownerType === "pokemon" ? "pokeedge" : "feat");
   Object.assign(document.system, {
-    ownerType: record.ownerType ?? "either",
-    talentType: record.talentType ?? "general",
-    role: record.role ?? "",
-    specialty: record.specialty ?? "",
-    requirement: record.requirement ?? "",
-    action: record.action ?? "passive",
-    trigger: record.trigger ?? "",
-    recharge: record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 },
-    upgradeOf: record.upgradeOf ?? ""
+    ownerType: record.ownerType ?? "either", talentType: record.talentType ?? "general", role: record.role ?? "", specialty: record.specialty ?? "",
+    requirement: record.requirement ?? "", action: record.action ?? "passive", trigger: record.trigger ?? "",
+    recharge: record.recharge ?? { category: "at-will", rounds: 0, remaining: 0 }, upgradeOf: record.upgradeOf ?? ""
   });
   return document;
 }
 
 function normalizeForm(record) {
   return {
-    slug: record.slug,
-    name: record.name,
-    family: record.family,
-    temporary: record.temporary ?? true,
-    types: asArray(record.types),
-    canonicalStats: record.canonicalStats ?? {},
-    stats: record.stats,
-    abilitySlugs: asArray(record.abilitySlugs),
-    movement: record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 },
-    size: record.size ?? "",
-    portrait: record.artwork?.portrait ?? "",
-    token: record.artwork?.token ?? "",
-    tokenWidth: record.tokenWidth ?? 1,
-    tokenHeight: record.tokenHeight ?? 1,
+    slug: record.slug, name: record.name, family: record.family, temporary: record.temporary ?? true,
+    types: asArray(record.types), canonicalStats: record.canonicalStats ?? {}, stats: record.stats,
+    abilitySlugs: asArray(record.abilitySlugs), movement: record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 },
+    size: record.size ?? "", portrait: record.artwork?.portrait ?? "", token: record.artwork?.token ?? "",
+    tokenWidth: record.tokenWidth ?? 1, tokenHeight: record.tokenHeight ?? 1,
     requirements: record.requirements ?? { itemSlug: "", trainerTalentSlug: "", trainerItemSlug: "", baseSpeciesSlugs: [record.baseSpeciesSlug], campaignFlag: "" },
-    replacesMoveSlugs: asArray(record.replacesMoveSlugs),
-    addsMoveSlugs: asArray(record.addsMoveSlugs),
-    tags: asArray(record.tags)
+    replacesMoveSlugs: asArray(record.replacesMoveSlugs), addsMoveSlugs: asArray(record.addsMoveSlugs), tags: asArray(record.tags)
   };
 }
 
@@ -134,6 +109,7 @@ function buildSpecies(record, forms) {
   document.system = {
     schema: { version: SCHEMA_VERSION, lastMigration: "" },
     slug: record.slug,
+    description: record.description ?? "",
     nationalDex: record.nationalDex ?? null,
     formSlug: record.formSlug ?? "",
     formKind: record.formKind ?? "base",
@@ -144,6 +120,8 @@ function buildSpecies(record, forms) {
     movement: record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 },
     size: record.size ?? "medium",
     weightClass: record.weightClass ?? 1,
+    heightMeters: record.heightMeters ?? 0,
+    weightKg: record.weightKg ?? 0,
     captureDifficulty: record.captureDifficulty ?? 0,
     rarity: record.rarity ?? "common",
     eggGroups: asArray(record.eggGroups),
@@ -176,22 +154,36 @@ function runtimePack(entry, document) {
   return entry.config.pack;
 }
 
+function auditDocuments(packs) {
+  const empty = {};
+  for (const [pack, documents] of Object.entries(packs)) {
+    empty[pack] = {
+      missingDescription: documents.filter(document => !String(document.system?.description ?? document.system?.effect ?? "").trim()).map(document => document.system?.slug),
+      missingArtwork: documents.filter(document => !document.img || document.img === "icons/svg/item-bag.svg" || document.img === "icons/svg/mystery-man.svg").map(document => document.system?.slug),
+      missingAutomationHandler: documents.filter(document => document.system?.automation?.state === "automatic" && !document.system?.automation?.handler).map(document => document.system?.slug)
+    };
+    if (pack === "species") {
+      empty[pack].missingLearnset = documents.filter(document => !(document.system?.learnset?.length)).map(document => document.system?.slug);
+      empty[pack].missingAbilities = documents.filter(document => !(document.system?.abilitySlugs?.length)).map(document => document.system?.slug);
+      empty[pack].missingCapabilities = documents.filter(document => !(document.system?.capabilitySlugs?.length)).map(document => document.system?.slug);
+      empty[pack].placeholderMovement = documents.filter(document => JSON.stringify(document.system?.movement) === JSON.stringify({ overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 })).map(document => document.system?.slug);
+    }
+  }
+  return empty;
+}
+
 function makeReport(validation, packs) {
   const recordsByType = {};
   for (const entry of validation.records) recordsByType[entry.type] = (recordsByType[entry.type] ?? 0) + 1;
-  const documentsByPack = Object.fromEntries(Object.entries(packs).map(([pack, documents]) => [pack, documents.length]));
-  const missingArtwork = validation.records.filter(entry => ["species", "forms", "items"].includes(entry.type) && !entry.record.artwork?.portrait && !entry.record.img).map(entry => `${entry.type}:${entry.record.slug}`);
-  const unsupportedAutomation = validation.records.filter(entry => entry.record.automation?.state === "unsupported").map(entry => `${entry.type}:${entry.record.slug}`);
-
   return {
     generatedAt: new Date().toISOString(),
     schemaVersion: SCHEMA_VERSION,
     sourceRecords: recordsByType,
-    documentsByPack,
+    documentsByPack: Object.fromEntries(Object.entries(packs).map(([pack, documents]) => [pack, documents.length])),
     excluded: validation.excluded.map(entry => ({ type: entry.type, slug: entry.slug, reason: entry.reason })),
     warnings: validation.warnings,
-    missingArtwork,
-    unsupportedAutomation
+    contentAudit: auditDocuments(packs),
+    unsupportedAutomation: validation.records.filter(entry => entry.record.automation?.state === "unsupported").map(entry => `${entry.type}:${entry.record.slug}`)
   };
 }
 
@@ -224,10 +216,8 @@ export async function buildCompendiums() {
   }
 
   for (const documents of Object.values(packs)) documents.sort((a, b) => a.system.slug.localeCompare(b.system.slug));
-
   for (const [pack, documents] of Object.entries(packs)) {
-    const packPath = path.join(fileURLToPath(BUILD_ROOT), `${pack}.json`);
-    await writeJsonFile(packPath, documents);
+    await writeJsonFile(path.join(fileURLToPath(BUILD_ROOT), `${pack}.json`), documents);
     const jsonl = documents.map(document => JSON.stringify(document)).join("\n");
     await fs.writeFile(path.join(fileURLToPath(BUILD_ROOT), `${pack}.jsonl`), `${jsonl}${jsonl ? "\n" : ""}`, "utf8");
   }
