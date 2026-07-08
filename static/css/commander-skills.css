@@ -1,0 +1,106 @@
+.commander-skill-legend {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.5fr) repeat(4, minmax(90px, 0.7fr));
+  gap: 0.45rem;
+  margin: 0 0 0.4rem;
+  padding: 0 0.65rem;
+  color: var(--commander-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.commander-skill-legend span:first-child {
+  grid-column: 2;
+}
+
+.commander-skill-grid {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.commander-skill-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.5fr) repeat(4, minmax(90px, 0.7fr));
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.55rem;
+  border: 1px solid var(--commander-line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.commander-skill-row.favorite {
+  border-color: var(--commander-gold);
+  box-shadow: inset 3px 0 0 var(--commander-gold);
+}
+
+.commander-skill-roll {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  text-align: left;
+  font-weight: 900;
+}
+
+.commander-skill-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commander-skill-favorite {
+  color: #9a6c00;
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.commander-skill-breakdown {
+  color: var(--commander-muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.commander-skill-total {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 3rem;
+  min-height: 2rem;
+  color: #fff;
+  background: #2f6f9f;
+  border-radius: 999px;
+  font-size: 1rem;
+}
+
+.commander-favorite-toggle {
+  grid-column: 2 / -1;
+  justify-self: end;
+  color: var(--commander-muted);
+  font-size: 0.78rem;
+}
+
+.commander-skill-row select,
+.commander-skill-row input[type="number"] {
+  width: 100%;
+}
+
+@media (max-width: 760px) {
+  .commander-skill-legend {
+    display: none;
+  }
+
+  .commander-skill-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .commander-skill-roll {
+    grid-column: 1 / -1;
+  }
+
+  .commander-favorite-toggle {
+    grid-column: 1 / -1;
+  }
+}
