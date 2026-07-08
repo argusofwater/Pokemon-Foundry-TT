@@ -13,6 +13,15 @@ const RANK_BONUSES = Object.freeze({ untrained: 0, novice: 2, adept: 4, expert: 
 const ATTRIBUTE_LABELS = Object.freeze({ body: "Body", agility: "Agility", mind: "Mind", presence: "Presence" });
 const TALENT_TYPES = new Set(["talent", "feat", "edge"]);
 const INVENTORY_TYPES = new Set(["item", "equipment", "consumable"]);
+const EXPEDITION_ROLES = Object.freeze([
+  ["", "Unassigned"],
+  ["guide", "Guide"],
+  ["scout", "Scout"],
+  ["quartermaster", "Quartermaster"],
+  ["medic", "Medic"],
+  ["researcher", "Researcher"],
+  ["handler", "Handler"]
+]);
 
 function signed(value) {
   const number = Number(value) || 0;
@@ -25,27 +34,19 @@ function talentSummary(item, pinnedUuids) {
   const frequency = system.recharge?.category ?? system.frequency ?? system.usage ?? "At-Will";
   const prerequisites = system.prerequisites ?? system.requirements ?? system.prerequisite ?? "";
   const description = system.description ?? system.effect ?? system.summary ?? "";
-  return {
-    item,
-    action,
-    frequency,
-    prerequisites: Array.isArray(prerequisites) ? prerequisites.join(", ") : prerequisites,
-    description,
-    isPinned: pinnedUuids.includes(item.uuid)
-  };
+  return { item, action, frequency, prerequisites: Array.isArray(prerequisites) ? prerequisites.join(", ") : prerequisites, description, isPinned: pinnedUuids.includes(item.uuid) };
 }
 
 function inventorySummary(item) {
   const system = item.system ?? {};
   const quantity = Math.max(0, Number(system.quantity ?? 1) || 0);
   const bulk = Math.max(0, Number(system.bulk ?? 0) || 0);
-  const category = system.category ?? item.type ?? "item";
   return {
     item,
     quantity,
     bulk,
     totalBulk: quantity * bulk,
-    category,
+    category: system.category ?? item.type ?? "item",
     rarity: system.rarity ?? "common",
     slot: system.slot ?? "",
     consumedOnUse: Boolean(system.consumedOnUse),
@@ -69,7 +70,10 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       postTalent: CommanderTrainerSheet.postTalent,
       useInventoryItem: CommanderTrainerSheet.useInventoryItem,
       adjustItemQuantity: CommanderTrainerSheet.adjustItemQuantity,
-      postInventoryItem: CommanderTrainerSheet.postInventoryItem
+      postInventoryItem: CommanderTrainerSheet.postInventoryItem,
+      adjustExpeditionResource: CommanderTrainerSheet.adjustExpeditionResource,
+      rollExpeditionSkill: CommanderTrainerSheet.rollExpeditionSkill,
+      postExpeditionStatus: CommanderTrainerSheet.postExpeditionStatus
     }
   };
 
@@ -81,7 +85,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     skills: { template: "systems/ptu/src/module/commander/templates/trainer/skills.hbs" },
     talents: { template: "systems/ptu/src/module/commander/templates/trainer/talents.hbs" },
     inventory: { template: "systems/ptu/src/module/commander/templates/trainer/inventory.hbs" },
-    exploration: { template: genericTab },
+    exploration: { template: "systems/ptu/src/module/commander/templates/trainer/exploration.hbs" },
     social: { template: genericTab },
     downtime: { template: genericTab },
     effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" },
@@ -131,7 +135,9 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
         hpPercent: Number(hp.max ?? 0) > 0 ? Math.round((Number(hp.value ?? 0) / Number(hp.max)) * 100) : 0,
         isFainted: Number(hp.value ?? 0) <= 0 || pokemon.system.identity?.lifecycle === "fainted",
         conditionCount: pokemon.effects?.contents?.length ?? 0,
-        actionState: pokemon.system.actions ?? {}
+        actionState: pokemon.system.actions ?? {},
+        capabilities: pokemon.system.exploration?.capabilities ?? [],
+        mountCapable: Boolean(pokemon.system.exploration?.mountCapable)
       });
     }
 
@@ -144,6 +150,8 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     inventoryItems.sort((a, b) => a.category.localeCompare(b.category) || a.item.name.localeCompare(b.item.name));
     const carriedBulk = inventoryItems.reduce((total, entry) => total + entry.totalBulk, 0);
     const bulkCapacity = Number(this.actor.system.inventory?.bulkCapacity ?? 0);
+    const explorationCapabilities = [...new Set(team.flatMap(member => member.capabilities))].sort((a, b) => String(a).localeCompare(String(b)));
+    const expeditionRole = this.actor.system.campaign?.expeditionRole ?? "";
 
     return {
       ...context,
@@ -162,6 +170,9 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       carriedBulk,
       bulkCapacity,
       overBulkCapacity: carriedBulk > bulkCapacity,
+      explorationCapabilities,
+      mountTeam: team.filter(member => member.mountCapable),
+      expeditionRoleOptions: EXPEDITION_ROLES.map(([value, label]) => ({ value, label, selected: value === expeditionRole })),
       backgroundOptions: optionList(COMMANDER_BACKGROUNDS, identity.background),
       roleOptions: roleOptions(identity.role),
       specialtyOptions: specialtyOptions(identity.role, identity.specialty)
@@ -189,8 +200,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const item = app.actor.items.get(target.dataset.itemId);
     if (!item) return ui.notifications.warn("That Talent could not be resolved.");
     const description = item.system?.description ?? item.system?.effect ?? item.system?.summary ?? "No rules text available.";
-    const content = `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(item.name)}</h3><p>${description}</p></section>`;
-    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(item.name)}</h3><p>${description}</p></section>` });
   }
 
   static async useInventoryItem(event, target) {
@@ -212,8 +222,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const item = app.actor.items.get(target.dataset.itemId);
     if (!item) return ui.notifications.warn("That item could not be resolved.");
     const current = Math.max(0, Number(item.system?.quantity ?? 1) || 0);
-    const next = Math.max(0, current + Number(target.dataset.amount ?? 0));
-    await item.update({ "system.quantity": next });
+    await item.update({ "system.quantity": Math.max(0, current + Number(target.dataset.amount ?? 0)) });
     return app.render();
   }
 
@@ -223,6 +232,33 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     if (!item) return ui.notifications.warn("That item could not be resolved.");
     const description = item.system?.description ?? item.system?.effect ?? item.system?.summary ?? "No rules text available.";
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(item.name)}</h3><p>${description}</p></section>` });
+  }
+
+  static async adjustExpeditionResource(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this Trainer.");
+    const resource = target.dataset.resource;
+    if (!["supplyUnits", "medicalSupplies"].includes(resource)) return;
+    const current = Number(app.actor.system.inventory?.[resource] ?? 0);
+    const next = Math.max(0, current + Number(target.dataset.amount ?? 0));
+    await app.actor.update({ [`system.inventory.${resource}`]: next });
+    return app.render();
+  }
+
+  static async rollExpeditionSkill(event, target) {
+    const app = resolveApplication(target, this);
+    const skillKey = target.dataset.skillKey;
+    const targetNumber = target.dataset.target ? Number(target.dataset.target) : null;
+    return CommanderRollService.rollSkill({ actor: app.actor, skillKey, target: targetNumber });
+  }
+
+  static async postExpeditionStatus(event, target) {
+    const app = resolveApplication(target, this);
+    const role = EXPEDITION_ROLES.find(([value]) => value === app.actor.system.campaign?.expeditionRole)?.[1] ?? "Unassigned";
+    const active = app.actor.system.team?.activePokemonUuid ? await fromUuid(app.actor.system.team.activePokemonUuid) : null;
+    const capabilities = active?.system.exploration?.capabilities ?? [];
+    const content = `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(app.actor.name)} Expedition Status</h3><p><strong>Role:</strong> ${foundry.utils.escapeHTML(role)}</p><p><strong>Supplies:</strong> ${Number(app.actor.system.inventory?.supplyUnits ?? 0)} | <strong>Medical:</strong> ${Number(app.actor.system.inventory?.medicalSupplies ?? 0)}</p><p><strong>Active Pokémon:</strong> ${foundry.utils.escapeHTML(active?.name ?? "None")}</p><p><strong>Capabilities:</strong> ${foundry.utils.escapeHTML(capabilities.join(", ") || "None")}</p></section>`;
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content });
   }
 
   async _onDropActor(event, data) {
