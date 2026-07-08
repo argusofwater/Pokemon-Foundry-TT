@@ -1,0 +1,7 @@
+.commander-trainer-sheet.application {
+  min-height: min(880px, calc(100vh - 32px));
+}
+
+.commander-trainer-sheet .window-content {
+  min-height: 0;
+}
