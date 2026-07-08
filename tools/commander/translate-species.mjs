@@ -169,7 +169,8 @@ async function main() {
       continue;
     }
 
-    const stats = convertSpeciesStats(normalizeStats(entry.baseStats), { scale: "main-series" }).stats;
+    const canonicalStats = normalizeStats(entry.baseStats);
+    const stats = convertSpeciesStats(canonicalStats, { scale: "main-series" }).stats;
     const metadata = speciesMetadata.get(Number(entry.num));
     const capture = convertCaptureValue(metadata?.capture_rate ?? null, {
       restricted: metadata?.is_legendary === "1" || metadata?.is_mythical === "1"
@@ -183,6 +184,7 @@ async function main() {
       slug: sluggify(entry.name),
       nationalDex: Number(entry.num),
       types,
+      canonicalStats,
       stats,
       abilitySlugs: abilities,
       heightMeters: Number(entry.heightm ?? 0),
@@ -256,8 +258,9 @@ async function main() {
     primalProfiles: primalForms.length,
     excludedGigantamax: excluded.length,
     notes: [
+      "Canonical main-series base stats are preserved alongside Commander-scale species stats.",
       "Movement and tabletop capabilities remain placeholders until legacy PTR data is merged.",
-      "Learnsets remain empty until Generation 9 learnset translation is performed.",
+      "Learnsets are merged during compendium normalization.",
       "Mega profiles include records present in the frozen raw source, including newer Mega forms."
     ]
   });
