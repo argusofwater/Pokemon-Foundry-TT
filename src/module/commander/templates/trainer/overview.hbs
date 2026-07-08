@@ -11,7 +11,7 @@
     <article class="commander-card">
       <h2>Attributes</h2>
       {{#each system.attributes as |attribute key|}}
-        <div class="commander-stat-row"><span>{{capitalize key}}</span>{{#if (eq ../mode "edit")}}<span><input type="number" name="system.attributes.{{key}}.base" value="{{attribute.base}}"><input type="number" name="system.attributes.{{key}}.bonus" value="{{attribute.bonus}}"></span>{{else}}<span class="commander-value">{{attribute.final}}</span>{{/if}}</div>
+        <div class="commander-stat-row"><span>{{capitalize key}}</span>{{#if (eq ../mode "edit")}}<span><input type="number" name="system.attributes.{{key}}.base" value="{{attribute.base}}"><input type="number" name="system.attributes.{{key}}.bonus" value="{{attribute.bonus}}"></span>{{else}}<button type="button" class="commander-value-button" data-action="rollCheck" data-label="{{capitalize key}} Check" data-modifier="{{attribute.final}}">+{{attribute.final}}</button>{{/if}}</div>
       {{/each}}
     </article>
 
@@ -22,16 +22,55 @@
       {{/each}}
     </article>
 
-    <article class="commander-card wide accent-red">
-      <h2>Command Center</h2>
-      <div class="commander-action-pips">
-        <span class="commander-pip {{#if system.actions.mainUsed}}used{{else}}ready{{/if}}">Trainer Main</span>
-        <span class="commander-pip {{#if system.actions.moveUsed}}used{{else}}ready{{/if}}">Trainer Move</span>
-        <span class="commander-pip {{#if system.actions.reactionUsed}}used{{else}}ready{{/if}}">Reaction</span>
-        <span class="commander-pip ready">Pair Main {{system.actions.sharedMainRemaining}} / 2</span>
-        <span class="commander-pip ready">Pair Move {{system.actions.sharedMoveRemaining}} / 2</span>
+    <article class="commander-card wide accent-red commander-automation-panel">
+      <h2>Player-Light Command Center</h2>
+      <div class="commander-automation-grid">
+        <div>
+          <h3>Trainer Actions</h3>
+          <div class="commander-action-buttons">
+            <button type="button" data-action="automateSpendAction" data-action-type="main">Use Main</button>
+            <button type="button" data-action="automateSpendAction" data-action-type="move">Use Move</button>
+            <button type="button" data-action="automateSpendAction" data-action-type="reaction">Use Reaction</button>
+            <button type="button" data-action="automateResetActions">Reset Pair Turn</button>
+          </div>
+          <div class="commander-action-pips">
+            <span class="commander-pip {{#if system.actions.mainUsed}}used{{else}}ready{{/if}}">Trainer Main</span>
+            <span class="commander-pip {{#if system.actions.moveUsed}}used{{else}}ready{{/if}}">Trainer Move</span>
+            <span class="commander-pip {{#if system.actions.reactionUsed}}used{{else}}ready{{/if}}">Reaction</span>
+            <span class="commander-pip ready">Pair Main {{system.actions.sharedMainRemaining}} / 2</span>
+            <span class="commander-pip ready">Pair Move {{system.actions.sharedMoveRemaining}} / 2</span>
+          </div>
+        </div>
+
+        <div>
+          <h3>Trainer HP</h3>
+          <div class="commander-hp-summary"><strong>{{system.health.hp.value}} / {{system.health.hp.max}}</strong><span>{{hpPercent}}%</span></div>
+          <input type="number" min="0" value="1" data-commander-adjustment aria-label="HP adjustment amount">
+          <div class="commander-action-buttons">
+            <button type="button" data-action="quickDamage">Damage</button>
+            <button type="button" data-action="quickHeal">Heal</button>
+            <button type="button" data-action="fullHeal">Full HP</button>
+            {{#if isGM}}<button type="button" data-action="setZeroHp">Set 0 HP</button>{{/if}}
+          </div>
+        </div>
+
+        {{#if activeCompanion}}
+          <div>
+            <h3>Active Pokémon</h3>
+            <div class="commander-resource-row"><span><strong>{{activeCompanion.name}}</strong><br>{{activeCompanion.system.identity.speciesName}}</span><span class="commander-value">{{activeCompanion.system.health.hp.value}} / {{activeCompanion.system.health.hp.max}} HP</span></div>
+            <input type="number" min="0" value="1" data-active-pokemon-adjustment aria-label="Active Pokémon HP adjustment amount">
+            <div class="commander-action-buttons">
+              <button type="button" data-action="quickDamage" data-target-actor="activePokemon" data-amount-selector="[data-active-pokemon-adjustment]">Damage</button>
+              <button type="button" data-action="quickHeal" data-target-actor="activePokemon" data-amount-selector="[data-active-pokemon-adjustment]">Heal</button>
+              <button type="button" data-action="fullHeal" data-target-actor="activePokemon">Full HP</button>
+              <button type="button" data-action="automateSpendAction" data-target-actor="activePokemon" data-action-type="main">Use Main</button>
+              <button type="button" data-action="automateSpendAction" data-target-actor="activePokemon" data-action-type="move">Use Move</button>
+            </div>
+          </div>
+        {{else}}
+          <div class="commander-empty-state">Drop a Pokémon actor onto the Team tab, then set it active.</div>
+        {{/if}}
       </div>
-      {{#if activeCompanion}}<div class="commander-resource-row"><span><strong>{{activeCompanion.name}}</strong><br>{{activeCompanion.system.identity.speciesName}}</span><span class="commander-value">{{activeCompanion.system.health.hp.value}} / {{activeCompanion.system.health.hp.max}} HP</span></div>{{else}}<div class="commander-empty-state">Drop a creature actor onto the Team tab, then set it active.</div>{{/if}}
     </article>
 
     <article class="commander-card">
@@ -39,7 +78,7 @@
       <div class="commander-resource-row"><span>Supply Units</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.supplyUnits" value="{{system.inventory.supplyUnits}}" min="0">{{else}}<span class="commander-value">{{system.inventory.supplyUnits}}</span>{{/if}}</div>
       <div class="commander-resource-row"><span>Medical Supplies</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.medicalSupplies" value="{{system.inventory.medicalSupplies}}" min="0">{{else}}<span class="commander-value">{{system.inventory.medicalSupplies}}</span>{{/if}}</div>
       <div class="commander-resource-row"><span>Downtime Actions</span>{{#if (eq mode "edit")}}<input type="number" name="system.campaign.downtimeActions" value="{{system.campaign.downtimeActions}}" min="0">{{else}}<span class="commander-value">{{system.campaign.downtimeActions}}</span>{{/if}}</div>
-      <div class="commander-resource-row"><span>Bulk Bonus</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.bulkCapacityBonus" value="{{system.inventory.bulkCapacityBonus}}">{{else}}<span class="commander-value">{{system.inventory.bulkCapacity}}</span>{{/if}}</div>
+      <div class="commander-resource-row"><span>Bulk Capacity</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.bulkCapacityBonus" value="{{system.inventory.bulkCapacityBonus}}">{{else}}<span class="commander-value">{{system.inventory.bulkCapacity}}</span>{{/if}}</div>
     </article>
   </div>
 </section>
