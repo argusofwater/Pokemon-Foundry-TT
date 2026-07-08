@@ -4,7 +4,7 @@ import { CommanderRollService } from "../runtime/roll-service.js";
 import { COMMANDER_BACKGROUNDS, optionList, roleOptions, specialtyOptions } from "../config/trainer-options.js";
 
 function resolveApplication(target, fallback) {
-  return target?.closest?.".application"?.application ?? fallback;
+  return target?.closest?.(".application")?.application ?? fallback;
 }
 
 const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
