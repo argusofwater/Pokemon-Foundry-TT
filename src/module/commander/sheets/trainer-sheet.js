@@ -1,14 +1,12 @@
 import { CommanderActorSheetBase } from "./base-sheet.js";
 import { CommanderFriendshipService } from "../runtime/friendship-service.js";
 import { CommanderRollService } from "../runtime/roll-service.js";
-import { COMMANDER_BACKGROUNDS, optionList, roleOptions, specialtyOptions } from "../config/trainer-options.js";
 
 function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
 }
 
 const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
-const rankBonus = Object.freeze({ untrained: 0, novice: 2, adept: 4, expert: 6, master: 8 });
 
 export class CommanderTrainerSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
@@ -44,20 +42,11 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     const activeUuid = this.actor.system.team?.activePokemonUuid;
     const activeCompanion = activeUuid ? await fromUuid(activeUuid) : null;
     const team = [];
-    const attributes = this.actor.system.attributes ?? {};
-    const skillList = Object.entries(this.actor.system.skills ?? {}).map(([key, skill]) => {
-      const attributeValue = Number(attributes[skill.attribute]?.final ?? 0);
-      const proficiency = rankBonus[skill.rank] ?? 0;
-      const misc = Number(skill.misc ?? 0);
-      return {
-        key,
-        label: key.replace(/([A-Z])/g, " $1").replace(/^./, char => char.toUpperCase()),
-        ...skill,
-        attributeValue,
-        rankBonus: proficiency,
-        calculatedTotal: attributeValue + proficiency + misc
-      };
-    });
+    const skillList = Object.entries(this.actor.system.skills ?? {}).map(([key, skill]) => ({
+      key,
+      label: key.replace(/([A-Z])/g, " $1").replace(/^./, char => char.toUpperCase()),
+      ...skill
+    }));
 
     for (const uuid of this.actor.system.team?.pokemonUuids ?? []) {
       const pokemon = await fromUuid(uuid);
@@ -66,17 +55,13 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
       team.push({ actor: pokemon, isActive: pokemon.uuid === activeUuid, friendship, hpPercent: pokemon.system.health?.hp?.max ? Math.round((Number(pokemon.system.health.hp.value ?? 0) / Number(pokemon.system.health.hp.max)) * 100) : 0 });
     }
 
-    const identity = this.actor.system.identity ?? {};
     return {
       ...context,
       sheetType: "trainer",
       tabs: ["overview", "team", "skills", "talents", "inventory", "exploration", "social", "downtime", "effects", "biography"],
       activeCompanion,
       team,
-      skillList,
-      backgroundOptions: optionList(COMMANDER_BACKGROUNDS, identity.background),
-      roleOptions: roleOptions(identity.role),
-      specialtyOptions: specialtyOptions(identity.role, identity.specialty)
+      skillList
     };
   }
 
