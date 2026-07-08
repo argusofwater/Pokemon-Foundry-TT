@@ -6,6 +6,7 @@ const ROOT = process.cwd();
 const BUILD_ROOT = path.join(ROOT, "build", "commander-compendiums");
 const PACK_ROOT = path.join(ROOT, "packs");
 const PACKS = ["species", "moves", "abilities", "items", "feats", "poke-edges"];
+const REQUIRED_PACKS = new Set(["species", "moves", "abilities", "items"]);
 
 async function readJsonLines(file) {
   const text = await fs.readFile(file, "utf8");
@@ -15,7 +16,19 @@ async function readJsonLines(file) {
 async function writePack(pack) {
   const source = path.join(BUILD_ROOT, `${pack}.jsonl`);
   const destination = path.join(PACK_ROOT, pack);
+
+  try {
+    await fs.access(source);
+  } catch {
+    if (REQUIRED_PACKS.has(pack)) throw new Error(`Required Commander pack source is missing: ${source}`);
+    console.log(`Skipping optional pack ${pack}; no generated source exists yet.`);
+    return 0;
+  }
+
   const documents = await readJsonLines(source);
+  if (REQUIRED_PACKS.has(pack) && documents.length === 0) {
+    throw new Error(`Required Commander pack ${pack} generated zero documents.`);
+  }
 
   await fs.rm(destination, { recursive: true, force: true });
   await fs.mkdir(destination, { recursive: true });
