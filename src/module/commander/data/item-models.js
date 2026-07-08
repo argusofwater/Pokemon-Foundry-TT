@@ -19,6 +19,10 @@ function tagsField() {
   return new fields.ArrayField(new fields.StringField({ required: true, nullable: false, blank: false }), { required: true, nullable: false, initial: [] });
 }
 
+function objectArrayField() {
+  return new fields.ArrayField(new fields.ObjectField({ required: true, nullable: false, initial: {} }), { required: true, nullable: false, initial: [] });
+}
+
 function rechargeField() {
   return new fields.SchemaField({
     category: new fields.StringField({ required: true, nullable: false, choices: ["at-will", "cooldown", "encounter", "expedition"], initial: "at-will" }),
@@ -53,6 +57,9 @@ export class CommanderMoveData extends CommanderItemBase {
       category: new fields.StringField({ required: true, nullable: false, choices: ["physical", "special", "status"], initial: "status" }),
       power: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
       accuracy: new fields.NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
+      accuracyModifier: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
+      accuracyHindered: new fields.BooleanField({ required: true, nullable: false, initial: false }),
+      priority: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
       range: new fields.SchemaField({
         value: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 1 }),
         unit: new fields.StringField({ required: true, nullable: false, choices: ["self", "melee", "squares", "scene"], initial: "melee" }),
@@ -62,15 +69,11 @@ export class CommanderMoveData extends CommanderItemBase {
       target: new fields.SchemaField({
         defense: new fields.StringField({ required: true, nullable: false, choices: ["physical", "special", "reflex", "none"], initial: "none" }),
         count: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 1 }),
-        disposition: new fields.StringField({ required: true, nullable: false, choices: ["any", "ally", "enemy", "self"], initial: "enemy" })
+        disposition: new fields.StringField({ required: true, nullable: false, choices: ["any", "ally", "enemy", "self"], initial: "enemy" }),
+        sourceTarget: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
       }),
       recharge: rechargeField(),
-      effects: new fields.ArrayField(new fields.SchemaField({
-        kind: new fields.StringField({ required: true, nullable: false, choices: ["condition", "zone", "movement", "healing", "recoil", "drain", "custom"], initial: "custom" }),
-        slug: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
-        value: new fields.NumberField({ required: true, nullable: false, initial: 0 }),
-        text: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
-      }), { required: true, nullable: false, initial: [] }),
+      effects: objectArrayField(),
       contest: new fields.SchemaField({
         tags: tagsField(),
         category: new fields.StringField({ required: true, nullable: false, choices: ["", "beauty", "cool", "clever", "cute", "tough", "freestyle"], initial: "" }),
@@ -80,7 +83,8 @@ export class CommanderMoveData extends CommanderItemBase {
         active: new fields.BooleanField({ required: true, nullable: false, initial: false }),
         name: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
         description: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
-      })
+      }),
+      sourceMetadata: new fields.ObjectField({ required: true, nullable: false, initial: {} })
     }, { inplace: false });
   }
 }
@@ -96,7 +100,8 @@ export class CommanderAbilityData extends CommanderItemBase {
       recharge: rechargeField(),
       powerTier: new fields.StringField({ required: true, nullable: false, choices: ["minor", "standard", "major", "signature"], initial: "standard" }),
       innate: new fields.BooleanField({ required: true, nullable: false, initial: false }),
-      entryLimit: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 1 })
+      entryLimit: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 1 }),
+      sourceMetadata: new fields.ObjectField({ required: true, nullable: false, initial: {} })
     }, { inplace: false });
   }
 }
@@ -134,7 +139,7 @@ export class CommanderEquipmentData extends CommanderItemBase {
       consumedOnUse: new fields.BooleanField({ required: true, nullable: false, initial: false }),
       suppressed: new fields.BooleanField({ required: true, nullable: false, initial: false }),
       compatibility: tagsField(),
-      effects: new fields.ArrayField(new fields.ObjectField({ required: true, nullable: false, initial: {} }), { required: true, nullable: false, initial: [] }),
+      effects: objectArrayField(),
       sourceMetadata: new fields.ObjectField({ required: true, nullable: false, initial: {} })
     }, { inplace: false });
   }
