@@ -10,6 +10,7 @@
 @import url("./commander-social.css");
 @import url("./commander-downtime.css");
 @import url("./commander-biography.css");
+@import url("./commander-layout.css");
 
 :root {
   --commander-friendship-pink: #ff6fae;
