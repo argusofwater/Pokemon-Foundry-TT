@@ -86,6 +86,7 @@ const header = await read("src/module/commander/templates/shared/header.hbs");
 assert(header.includes("commander-friendship-hearts"), "Pokemon header does not display Friendship hearts.");
 assert(header.includes('aria-valuemax="255"'), "Friendship heart meter lacks a 0-255 accessibility scale.");
 assert(header.includes("heart.percent"), "Friendship hearts do not support partial fill percentages.");
+assert(header.includes('name="system.health.hp.value"'), "Commander header does not expose editable current HP.");
 
 const friendshipCss = await read("static/css/commander-friendship.css");
 assert(friendshipCss.includes("--commander-friendship-pink"), "Friendship heart palette is missing.");
@@ -140,8 +141,9 @@ assert(moveCard.includes("data-damage-type"), "Move damage controls do not inclu
 
 const baseSheet = await read("src/module/commander/sheets/base-sheet.js");
 assert(baseSheet.includes("function resolveApplication"), "Sheet actions do not use the hardened application resolver.");
-assert(baseSheet.includes("parts[tab] ?"), "Tab changes do not guard missing sheet parts.");
+assert(baseSheet.includes("if (!parts[tab])"), "Tab changes do not guard missing sheet parts.");
 assert(baseSheet.includes("CommanderConditionService"), "Commander sheets do not expose condition controls.");
+assert(baseSheet.includes("return app.render();"), "Changing sheet mode does not trigger a full rerender.");
 
 const hooks = await read("src/module/commander/runtime/hooks.js");
 assert(hooks.includes('Hooks.on("renderChatMessageHTML"'), "V14 chat render hook is missing.");
