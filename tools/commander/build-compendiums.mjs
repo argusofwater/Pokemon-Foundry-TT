@@ -82,7 +82,9 @@ function buildItem(record) {
     assignedActorUuid: "",
     consumedOnUse: Boolean(record.consumedOnUse),
     suppressed: false,
-    compatibility: asArray(record.compatibility)
+    compatibility: asArray(record.compatibility),
+    effects: asArray(record.effects),
+    sourceMetadata: record.sourceMetadata ?? {}
   });
   return document;
 }
@@ -110,6 +112,7 @@ function normalizeForm(record) {
     family: record.family,
     temporary: record.temporary ?? true,
     types: asArray(record.types),
+    canonicalStats: record.canonicalStats ?? {},
     stats: record.stats,
     abilitySlugs: asArray(record.abilitySlugs),
     movement: record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 },
@@ -136,6 +139,7 @@ function buildSpecies(record, forms) {
     formKind: record.formKind ?? "base",
     baseSpeciesSlug: record.baseSpeciesSlug ?? "",
     types: asArray(record.types),
+    canonicalStats: record.canonicalStats ?? {},
     stats: record.stats,
     movement: record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 },
     size: record.size ?? "medium",
