@@ -1,6 +1,7 @@
 import { CommanderActionTracker } from "../runtime/action-tracker.js";
 import { CommanderRollService } from "../runtime/roll-service.js";
 import { CommanderConditionService } from "../runtime/condition-service.js";
+import { CommanderSheetAutomation } from "../runtime/sheet-automation.js";
 
 function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
@@ -17,6 +18,13 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
       spendAction: CommanderActorSheetBase.spendAction,
       restoreAction: CommanderActorSheetBase.restoreAction,
       resetActions: CommanderActorSheetBase.resetActions,
+      quickDamage: CommanderActorSheetBase.quickDamage,
+      quickHeal: CommanderActorSheetBase.quickHeal,
+      fullHeal: CommanderActorSheetBase.fullHeal,
+      setZeroHp: CommanderActorSheetBase.setZeroHp,
+      automateSpendAction: CommanderActorSheetBase.automateSpendAction,
+      automateRestoreAction: CommanderActorSheetBase.automateRestoreAction,
+      automateResetActions: CommanderActorSheetBase.automateResetActions,
       rollCheck: CommanderActorSheetBase.rollCheck,
       openDocument: CommanderActorSheetBase.openDocument,
       deleteEmbedded: CommanderActorSheetBase.deleteEmbedded,
@@ -40,6 +48,7 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
       effects: this.actor.effects?.contents ?? [],
       commanderConditions: CommanderConditionService.getSheetContext(this.actor),
       actions: system.actions ?? {},
+      hpPercent: system.health?.hp?.max ? Math.round((Number(system.health.hp.value ?? 0) / Number(system.health.hp.max)) * 100) : 0,
       isGM: Boolean(game.user?.isGM)
     };
   }
@@ -70,19 +79,57 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
   static async spendAction(event, target) {
     const app = resolveApplication(target, this);
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
-    return CommanderActionTracker.spend(app.actor, target.dataset.actionType);
+    await CommanderActionTracker.spend(app.actor, target.dataset.actionType);
+    return app.render();
   }
 
   static async restoreAction(event, target) {
     const app = resolveApplication(target, this);
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
-    return CommanderActionTracker.restore(app.actor, target.dataset.actionType);
+    await CommanderActionTracker.restore(app.actor, target.dataset.actionType);
+    return app.render();
   }
 
   static async resetActions(event, target) {
     const app = resolveApplication(target, this);
     if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
-    return CommanderActionTracker.reset(app.actor);
+    await CommanderActionTracker.reset(app.actor);
+    return app.render();
+  }
+
+  static async quickDamage(event, target) {
+    const app = resolveApplication(target, this);
+    return CommanderSheetAutomation.adjustHp(app, target, "damage");
+  }
+
+  static async quickHeal(event, target) {
+    const app = resolveApplication(target, this);
+    return CommanderSheetAutomation.adjustHp(app, target, "heal");
+  }
+
+  static async fullHeal(event, target) {
+    const app = resolveApplication(target, this);
+    return CommanderSheetAutomation.setHp(app, target, "full");
+  }
+
+  static async setZeroHp(event, target) {
+    const app = resolveApplication(target, this);
+    return CommanderSheetAutomation.setHp(app, target, "zero");
+  }
+
+  static async automateSpendAction(event, target) {
+    const app = resolveApplication(target, this);
+    return CommanderSheetAutomation.changeAction(app, target, "spend");
+  }
+
+  static async automateRestoreAction(event, target) {
+    const app = resolveApplication(target, this);
+    return CommanderSheetAutomation.changeAction(app, target, "restore");
+  }
+
+  static async automateResetActions(event, target) {
+    const app = resolveApplication(target, this);
+    return CommanderSheetAutomation.changeAction(app, target, "reset");
   }
 
   static async rollCheck(event, target) {
