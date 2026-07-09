@@ -54,7 +54,7 @@ export class CommanderMoveData extends CommanderItemBase {
   static defineSchema() {
     return foundry.utils.mergeObject(super.defineSchema(), {
       type: new fields.StringField({ required: true, nullable: false, blank: false, initial: "normal" }),
-      category: new fields.StringField({ required: true, nullable: false, choices: ["physical", "special", "status"], initial: "status" }),
+      category: new fields.StringField({ required: true, nullable: false, choices: ["physical", "special", "status", "Physical", "Special", "Status"], initial: "status" }),
       power: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
       accuracy: new fields.NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
       accuracyModifier: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
@@ -76,7 +76,7 @@ export class CommanderMoveData extends CommanderItemBase {
       effects: objectArrayField(),
       contest: new fields.SchemaField({
         tags: tagsField(),
-        category: new fields.StringField({ required: true, nullable: false, choices: ["", "beauty", "cool", "clever", "cute", "tough", "freestyle"], initial: "" }),
+        category: new fields.StringField({ required: true, nullable: false, blank: true, choices: ["", "beauty", "cool", "clever", "cute", "tough", "freestyle"], initial: "" }),
         appeal: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 })
       }),
       tutorModification: new fields.SchemaField({
@@ -86,6 +86,11 @@ export class CommanderMoveData extends CommanderItemBase {
       }),
       sourceMetadata: new fields.ObjectField({ required: true, nullable: false, initial: {} })
     }, { inplace: false });
+  }
+
+  prepareDerivedData() {
+    this.category = String(this.category ?? "status").toLowerCase();
+    if (!this.contest.category) this.contest.category = "freestyle";
   }
 }
 
