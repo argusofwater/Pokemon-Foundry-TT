@@ -31,12 +31,22 @@ function rechargeField() {
   });
 }
 
+function commanderRangeField() {
+  return new fields.SchemaField({
+    value: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 1 }),
+    unit: new fields.StringField({ required: true, nullable: false, choices: ["self", "melee", "squares", "scene"], initial: "melee" }),
+    shape: new fields.StringField({ required: true, nullable: false, choices: ["single", "burst", "blast", "cone", "line", "wall", "zone"], initial: "single" }),
+    area: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 })
+  });
+}
+
 class CommanderItemBase extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       schema: schemaVersionField(),
       slug: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
       description: new fields.HTMLField({ required: true, nullable: false, blank: true, initial: "" }),
+      keywords: tagsField(),
       tags: tagsField(),
       automation: automationField(),
       source: new fields.SchemaField({
@@ -56,16 +66,15 @@ export class CommanderMoveData extends CommanderItemBase {
       type: new fields.StringField({ required: true, nullable: false, blank: false, initial: "normal" }),
       category: new fields.StringField({ required: true, nullable: false, choices: ["physical", "special", "status", "Physical", "Special", "Status"], initial: "status" }),
       power: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }),
+      damageBase: new fields.NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
+      damageBonus: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
       accuracy: new fields.NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
+      ac: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
       accuracyModifier: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
       accuracyHindered: new fields.BooleanField({ required: true, nullable: false, initial: false }),
       priority: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
-      range: new fields.SchemaField({
-        value: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 1 }),
-        unit: new fields.StringField({ required: true, nullable: false, choices: ["self", "melee", "squares", "scene"], initial: "melee" }),
-        shape: new fields.StringField({ required: true, nullable: false, choices: ["single", "burst", "blast", "cone", "line", "wall", "zone"], initial: "single" }),
-        area: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 })
-      }),
+      range: new fields.StringField({ required: true, nullable: false, blank: true, initial: "Melee" }),
+      commanderRange: commanderRangeField(),
       target: new fields.SchemaField({
         defense: new fields.StringField({ required: true, nullable: false, choices: ["physical", "special", "reflex", "none"], initial: "none" }),
         count: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 1 }),
@@ -79,6 +88,7 @@ export class CommanderMoveData extends CommanderItemBase {
         category: new fields.StringField({ required: true, nullable: false, blank: true, choices: ["", "beauty", "cool", "clever", "cute", "tough", "freestyle"], initial: "" }),
         appeal: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 })
       }),
+      contestType: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
       tutorModification: new fields.SchemaField({
         active: new fields.BooleanField({ required: true, nullable: false, initial: false }),
         name: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" }),
