@@ -2,6 +2,8 @@ import { PTUCONFIG } from "../config/index.js"
 import { GamePTU } from "../game-ptu.js"
 import { registerSettings } from "../../module/system/index.js"
 import { registerCommanderSettings } from "../../module/commander/settings.js"
+import { createCommanderController } from "../../module/commander/controller.js"
+import { registerCommanderDataModels } from "../../module/commander/data/register.js"
 import { registerHandlebarsHelpers } from "../handlebars.js"
 import { registerSheets } from "../sheets.js"
 import { registerTemplates } from "../templates.js"
@@ -9,6 +11,22 @@ import { insurgenceData, sageData, uraniumData } from "../config/data/fangame-sp
 import { measureDistances } from "../../module/canvas/helpers.js"
 import { registerCommanderRuntimeHooks } from "../../module/commander/runtime/hooks.js"
 
+function commanderSetting(key, fallback = true) {
+    try {
+        return game.settings.get("ptu", key);
+    } catch (error) {
+        console.warn(`Commander setting '${key}' was unavailable during PTU init; using ${fallback}.`, error);
+        return fallback;
+    }
+}
+
+function initializeCommanderBuild() {
+    registerCommanderSettings();
+    game.commander ??= createCommanderController();
+    if (commanderSetting("commanderEnabled", true) && commanderSetting("commanderMigrationConfirmed", true)) {
+        registerCommanderDataModels();
+    }
+}
 
 export const Init = {
     listen() {
@@ -72,7 +90,7 @@ export const Init = {
 
             // Register stuff with the Foundry client
             registerSettings();
-            registerCommanderSettings();
+            initializeCommanderBuild();
             registerSheets();
             registerCommanderRuntimeHooks();
             // registerFonts();
