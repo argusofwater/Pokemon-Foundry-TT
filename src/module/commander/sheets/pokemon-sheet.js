@@ -12,12 +12,7 @@ function buildFriendshipHearts(value, count = 10) {
   const perHeart = 255 / count;
   return Array.from({ length: count }, (_, index) => {
     const fill = Math.max(0, Math.min(1, (normalized - (index * perHeart)) / perHeart));
-    return {
-      index,
-      percent: Math.round(fill * 100),
-      filled: fill >= 1,
-      partial: fill > 0 && fill < 1
-    };
+    return { index, percent: Math.round(fill * 100), filled: fill >= 1, partial: fill > 0 && fill < 1 };
   });
 }
 
@@ -28,14 +23,9 @@ function getDropData(event) {
 }
 
 const COMMANDER_STAT_KEYS = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"];
-const STAT_LABELS = Object.freeze({
-  hp: "Hit Points",
-  attack: "Attack",
-  defense: "Defense",
-  specialAttack: "Special Attack",
-  specialDefense: "Special Defense",
-  speed: "Speed"
-});
+const STAT_LABELS = Object.freeze({ hp: "Hit Points", attack: "Attack", defense: "Defense", specialAttack: "Special Attack", specialDefense: "Special Defense", speed: "Speed" });
+const TALENT_TYPES = new Set(["pokeedge", "feat", "edge", "talent"]);
+const EQUIPMENT_TYPES = new Set(["item", "equipment", "consumable", "pokeball"]);
 
 function normalizeCommanderStat(systemStats, key) {
   const stat = systemStats?.[key] ?? {};
@@ -48,7 +38,42 @@ function normalizeCommanderStat(systemStats, key) {
   return { key, label: STAT_LABELS[key], species, level, path, nature, bonus, stage: Number(stat.stage ?? 0) || 0, final };
 }
 
-const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
+function itemSummary(item) {
+  const system = item.system ?? {};
+  return {
+    item,
+    type: item.type,
+    description: system.description ?? system.effect ?? system.summary ?? system.snippet ?? "",
+    frequency: system.recharge?.category ?? system.frequency ?? system.usage ?? "",
+    trigger: system.trigger ?? "",
+    category: system.category ?? system.talentType ?? system.abilityType ?? item.type,
+    tags: system.tags ?? system.keywords ?? [],
+    quantity: Number(system.quantity ?? 1),
+    slot: system.slot ?? "",
+    held: false
+  };
+}
+
+function evolutionSummary(evolution) {
+  return {
+    target: evolution.targetSpeciesSlug ?? evolution.slug ?? "Unknown",
+    method: evolution.method ?? "special",
+    level: evolution.level ?? "",
+    itemSlug: evolution.itemSlug ?? evolution.other?.evolutionItem?.slug ?? "",
+    condition: evolution.condition ?? evolution.other?.restrictions?.join?.(", ") ?? ""
+  };
+}
+
+function formSummary(form) {
+  return {
+    name: form.name ?? form.slug ?? "Unknown Form",
+    family: form.family ?? form.formKind ?? "form",
+    temporary: form.temporary !== false,
+    types: form.types ?? [],
+    requirements: form.requirements ?? {},
+    tags: form.tags ?? []
+  };
+}
 
 export class CommanderPokemonSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
@@ -62,7 +87,9 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
       clearMoveSlot: CommanderPokemonSheet.clearMoveSlot,
       setFriendship: CommanderPokemonSheet.setFriendship,
       adjustFriendship: CommanderPokemonSheet.adjustFriendship,
-      resetFriendshipResolve: CommanderPokemonSheet.resetFriendshipResolve
+      resetFriendshipResolve: CommanderPokemonSheet.resetFriendshipResolve,
+      toggleHeldItem: CommanderPokemonSheet.toggleHeldItem,
+      postPokemonSummary: CommanderPokemonSheet.postPokemonSummary
     }
   };
 
@@ -71,14 +98,14 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     navigation: { template: "systems/ptu/src/module/commander/templates/shared/navigation.hbs" },
     overview: { template: "systems/ptu/src/module/commander/templates/pokemon/overview.hbs" },
     moves: { template: "systems/ptu/src/module/commander/templates/pokemon/moves.hbs" },
-    abilities: { template: genericTab },
-    talents: { template: genericTab },
-    growth: { template: genericTab },
-    equipment: { template: genericTab },
+    abilities: { template: "systems/ptu/src/module/commander/templates/pokemon/abilities.hbs" },
+    talents: { template: "systems/ptu/src/module/commander/templates/pokemon/talents.hbs" },
+    growth: { template: "systems/ptu/src/module/commander/templates/pokemon/growth.hbs" },
+    equipment: { template: "systems/ptu/src/module/commander/templates/pokemon/equipment.hbs" },
     bond: { template: "systems/ptu/src/module/commander/templates/pokemon/bond.hbs" },
-    exploration: { template: genericTab },
+    exploration: { template: "systems/ptu/src/module/commander/templates/pokemon/exploration.hbs" },
     effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" },
-    biography: { template: genericTab }
+    biography: { template: "systems/ptu/src/module/commander/templates/pokemon/biography.hbs" }
   };
 
   async _prepareContext(options) {
@@ -88,6 +115,18 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     const equippedMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.equippedMoveUuids ?? [], 4);
     const reserveMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.reserveMoveUuids ?? [], 2);
     const embeddedMoves = this.actor.items.filter(item => item.type === "move");
+    const embeddedAbilities = this.actor.items.filter(item => item.type === "ability").map(itemSummary);
+    const talents = this.actor.items.filter(item => TALENT_TYPES.has(item.type)).map(itemSummary);
+    const heldItemUuid = this.actor.system.loadout?.heldItemUuid ?? "";
+    const equipment = this.actor.items.filter(item => EQUIPMENT_TYPES.has(item.type)).map(item => ({ ...itemSummary(item), held: item.uuid === heldItemUuid }));
+    equipment.sort((a, b) => Number(b.held) - Number(a.held) || a.item.name.localeCompare(b.item.name));
+    const speciesItem = this.actor.itemTypes?.species?.[0] ?? null;
+    const speciesSystem = speciesItem?.system ?? {};
+    const evolutions = (speciesSystem.evolutions ?? []).map(evolutionSummary);
+    const forms = (speciesSystem.forms ?? []).map(formSummary);
+    const capabilityItems = this.actor.items.filter(item => item.type === "capability").map(itemSummary);
+    const capabilitySlugs = [...new Set([...(this.actor.system.exploration?.capabilities ?? []), ...(speciesSystem.capabilitySlugs ?? [])])].sort((a, b) => String(a).localeCompare(String(b)));
+    const movement = speciesSystem.movement ?? speciesSystem.capabilities ?? {};
     const friendship = CommanderFriendshipService.getState(this.actor);
     const friendshipHearts = buildFriendshipHearts(friendship.value);
 
@@ -99,6 +138,16 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
       equippedMoves,
       reserveMoves,
       embeddedMoves,
+      embeddedAbilities,
+      talents,
+      equipment,
+      speciesItem,
+      speciesSystem,
+      evolutions,
+      forms,
+      capabilityItems,
+      capabilitySlugs,
+      movement,
       friendship,
       friendshipHearts
     };
@@ -115,12 +164,8 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     const element = event.currentTarget;
     const itemUuid = element?.dataset?.itemUuid;
     if (!itemUuid) return super._onDragStart?.(event);
-
     const slot = element.closest("[data-move-zone][data-move-index]");
-    const dragData = slot
-      ? { type: "CommanderMoveSlot", actorUuid: this.actor.uuid, itemUuid, zone: slot.dataset.moveZone, index: Number(slot.dataset.moveIndex) }
-      : { type: "Item", uuid: itemUuid };
-
+    const dragData = slot ? { type: "CommanderMoveSlot", actorUuid: this.actor.uuid, itemUuid, zone: slot.dataset.moveZone, index: Number(slot.dataset.moveIndex) } : { type: "Item", uuid: itemUuid };
     event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
   }
 
@@ -128,20 +173,16 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     const slot = event.target.closest?.("[data-move-zone][data-move-index]");
     if (!slot) return super._onDrop(event);
     if (!this.isEditable) return ui.notifications.warn("You do not have permission to edit this Pokémon.");
-
     const data = getDropData(event);
     const targetZone = slot.dataset.moveZone;
     const targetIndex = Number(slot.dataset.moveIndex);
-
     if (data.type === "CommanderMoveSlot") {
       if (data.actorUuid !== this.actor.uuid) return ui.notifications.warn("Move slots can only be rearranged on the same Pokémon.");
       return this.#moveSlot(data.zone, Number(data.index), targetZone, targetIndex);
     }
-
     if (data.type !== "Item") return ui.notifications.warn("Only Move Items can be assigned to move slots.");
     const dropped = data.uuid ? await fromUuid(data.uuid) : await Item.implementation.fromDropData(data);
     if (!dropped || dropped.type !== "move") return ui.notifications.warn("Only Move Items can be assigned to move slots.");
-
     const item = dropped.parent?.uuid === this.actor.uuid ? dropped : (await this.actor.createEmbeddedDocuments("Item", [dropped.toObject()]))?.[0];
     if (!item) return;
     return this.#assignMoveToSlot(item.uuid, targetZone, targetIndex);
@@ -194,6 +235,23 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     slots[index] = "";
     await app.actor.update({ [path]: slots });
     return app.render();
+  }
+
+  static async toggleHeldItem(event, target) {
+    const app = resolveApplication(target, this);
+    if (!app.isEditable) return ui.notifications.warn("You do not have permission to edit this actor.");
+    const item = app.actor.items.get(target.dataset.itemId);
+    if (!item) return ui.notifications.warn("That item could not be resolved.");
+    const current = app.actor.system.loadout?.heldItemUuid ?? "";
+    await app.actor.update({ "system.loadout.heldItemUuid": current === item.uuid ? "" : item.uuid });
+    return app.render();
+  }
+
+  static async postPokemonSummary(event, target) {
+    const app = resolveApplication(target, this);
+    const types = (app.actor.system.identity?.types ?? []).join(" / ") || "Unknown type";
+    const level = app.actor.system.identity?.level ?? "?";
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: app.actor }), content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(app.actor.name)}</h3><p>Level ${level} · ${foundry.utils.escapeHTML(types)}</p></section>` });
   }
 
   static async setFriendship(event, target) {
