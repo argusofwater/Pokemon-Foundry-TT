@@ -30,6 +30,15 @@ async function parseJson(target, label = relative(target)) {
   }
 }
 
+async function readText(target, label = relative(target)) {
+  try {
+    return await readFile(target, "utf8");
+  } catch (error) {
+    errors.push(`${label}: unable to read (${error.message})`);
+    return "";
+  }
+}
+
 async function walk(directory) {
   const results = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -72,6 +81,8 @@ async function validatePack(pack) {
     }
   }
 
+  if (!pack.system) warnings.push(`Pack '${pack.name}' omits system id; Foundry usually tolerates this, but Commander packaging expects 'ptu'.`);
+
   if (!selected) {
     warnings.push(`Pack '${pack.name}' has no local source yet: ${candidates.join(", ")}. This is allowed before generated LevelDB packs are built.`);
     return;
@@ -92,6 +103,43 @@ async function validatePack(pack) {
   } else if (pack.path.endsWith(".db") && relative(selected) !== pack.path) {
     warnings.push(`Pack '${pack.name}' declares legacy path '${pack.path}' but source is '${relative(selected)}'.`);
   }
+}
+
+async function validateCommanderBootstrap() {
+  const ptrPath = path.join(root, "src/ptr.js");
+  const initPath = path.join(root, "src/scripts/hooks/init.js");
+  const sheetsPath = path.join(root, "src/scripts/sheets.js");
+  const settingsPath = path.join(root, "src/module/commander/settings.js");
+  const dataRegisterPath = path.join(root, "src/module/commander/data/register.js");
+
+  const [ptr, init, sheets, settings, dataRegister] = await Promise.all([
+    readText(ptrPath), readText(initPath), readText(sheetsPath), readText(settingsPath), readText(dataRegisterPath)
+  ]);
+
+  if (ptr.includes("CommanderHooks")) errors.push("src/ptr.js must not register CommanderHooks separately; PTU init is the single Commander bootstrap source.");
+  if (!ptr.includes("PtuHooks.listen()")) errors.push("src/ptr.js does not call PtuHooks.listen().");
+
+  const requiredSnippets = [
+    "createCommanderController",
+    "registerCommanderDataModels",
+    "initializeCommanderBuild();",
+    "registerSheets();",
+    "GamePTU.onInit();"
+  ];
+  for (const snippet of requiredSnippets) if (!init.includes(snippet)) errors.push(`src/scripts/hooks/init.js missing Commander/PTU bootstrap snippet: ${snippet}`);
+  if (init.indexOf("initializeCommanderBuild();") > init.indexOf("registerSheets();")) errors.push("Commander must initialize before registerSheets() so Commander sheets become available.");
+  if (init.indexOf("registerSheets();") > init.indexOf("GamePTU.onInit();")) errors.push("Sheets should register before GamePTU.onInit() completes the PTU namespace setup.");
+
+  if (!sheets.includes("registerCommanderSheets")) errors.push("src/scripts/sheets.js no longer registers Commander sheets.");
+  if (!sheets.includes("commanderEnabled") || !sheets.includes("commanderMigrationConfirmed")) errors.push("src/scripts/sheets.js must gate Commander sheets on Commander settings.");
+
+  if (!settings.includes("registerSettingOnce")) errors.push("Commander settings must be idempotent; missing registerSettingOnce().");
+  if (!settings.includes("default: true")) warnings.push("Commander settings are not defaulting on; fresh private Commander worlds may boot without Commander sheets.");
+
+  if (!dataRegister.includes("CONFIG.Actor.dataModels.character") || !dataRegister.includes("CONFIG.Actor.dataModels.pokemon")) errors.push("Commander data model registration is missing actor data model assignment.");
+  if (!dataRegister.includes("installCommanderPreparationGuards")) warnings.push("Commander preparation guards are missing; legacy PTU actor prep may collide with Commander actor data.");
+
+  notes.push("Audited Commander bootstrap order and duplicate-hook traps.");
 }
 
 const manifestPath = path.join(root, "system.json");
@@ -136,6 +184,8 @@ for (const file of jsFiles) {
   if (result.status !== 0) errors.push(`${relative(file)}: JavaScript syntax error\n${result.stderr.trim()}`);
 }
 notes.push(`Checked ${checkedJs} JavaScript modules.`);
+
+await validateCommanderBootstrap();
 
 console.log("PTR system validation\n=====================");
 for (const note of notes) console.log(`NOTE  ${note}`);
