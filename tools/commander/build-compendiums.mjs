@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { BUILD_ROOT, SCHEMA_VERSION } from "./compendium-config.mjs";
 import { loadAndValidateSources } from "./validate-source.mjs";
 import { asArray, ensureDirectory, stableId, writeJsonFile } from "./utils.mjs";
+import { defaultItemImage, resolveSpeciesArtwork } from "./artwork-paths.mjs";
 
 function sourceMeta(record) {
   return { profile: record.rulesProfile ?? "commander", book: record.source?.dataset ?? "", page: record.source?.sourceId ?? "" };
@@ -40,7 +41,7 @@ function baseItemDocument(record, type) {
     _id: stableId(type, record.slug),
     name: record.name,
     type,
-    img: record.artwork?.portrait ?? record.img ?? "icons/svg/item-bag.svg",
+    img: defaultItemImage(type, record),
     system: {
       schema: { version: SCHEMA_VERSION, lastMigration: "" },
       slug: record.slug,
@@ -157,11 +158,12 @@ function buildTalent(record) {
 }
 
 function normalizeForm(record) {
+  const artwork = resolveSpeciesArtwork(record);
   return {
     slug: record.slug, name: record.name, family: record.family, temporary: record.temporary ?? true,
     types: asArray(record.types).map(titleCase), canonicalStats: record.canonicalStats ?? {}, stats: legacyStats(record.stats ?? {}), commanderStats: record.stats,
     abilitySlugs: asArray(record.abilitySlugs), movement: record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 },
-    size: record.size ?? "", portrait: record.artwork?.portrait ?? "", token: record.artwork?.token ?? "",
+    size: record.size ?? "", portrait: artwork.portrait, token: artwork.token,
     tokenWidth: record.tokenWidth ?? 1, tokenHeight: record.tokenHeight ?? 1,
     requirements: record.requirements ?? { itemSlug: "", trainerTalentSlug: "", trainerItemSlug: "", baseSpeciesSlugs: [record.baseSpeciesSlug], campaignFlag: "" },
     replacesMoveSlugs: asArray(record.replacesMoveSlugs), addsMoveSlugs: asArray(record.addsMoveSlugs), tags: asArray(record.tags)
@@ -225,7 +227,8 @@ function buildSpecies(record, forms) {
   const document = baseItemDocument(record, "species");
   const movement = record.movement ?? { overland: 5, swim: 0, fly: 0, burrow: 0, climb: 0 };
   const description = record.description ?? "";
-  document.img = record.artwork?.portrait ?? "icons/svg/mystery-man.svg";
+  const artwork = resolveSpeciesArtwork(record);
+  document.img = artwork.img;
   document.system = {
     schema: { version: SCHEMA_VERSION, lastMigration: "" },
     slug: record.slug,
@@ -281,7 +284,7 @@ function buildSpecies(record, forms) {
     forms: forms.map(normalizeForm),
     skills: defaultSkills(),
     keywords: asArray(record.tags),
-    artwork: record.artwork ?? { portrait: "", token: "" },
+    artwork: { ...(record.artwork ?? {}), portrait: artwork.portrait, token: artwork.token, source: artwork.source },
     source: record.source ?? { dataset: "", sourceId: record.slug, generation: null }
   };
   return document;
@@ -302,12 +305,16 @@ function runtimePack(entry, document) {
   return entry.config.pack;
 }
 
+function isPlaceholderArtwork(document) {
+  return !document.img || document.img === "icons/svg/item-bag.svg" || document.img === "icons/svg/mystery-man.svg" || document.img === "icons/svg/pawprint.svg";
+}
+
 function auditDocuments(packs) {
   const empty = {};
   for (const [pack, documents] of Object.entries(packs)) {
     empty[pack] = {
       missingDescription: documents.filter(document => !String(document.system?.description ?? document.system?.effect ?? "").trim()).map(document => document.system?.slug),
-      missingArtwork: documents.filter(document => !document.img || document.img === "icons/svg/item-bag.svg" || document.img === "icons/svg/mystery-man.svg").map(document => document.system?.slug),
+      missingArtwork: documents.filter(isPlaceholderArtwork).map(document => document.system?.slug),
       missingAutomationHandler: documents.filter(document => document.system?.automation?.state === "automatic" && !document.system?.automation?.handler).map(document => document.system?.slug)
     };
     if (pack === "species") {
