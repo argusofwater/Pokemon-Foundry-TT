@@ -4,14 +4,23 @@ function requireGm() {
   if (!game.user?.isGM) throw new Error("Commander Build controls require a GM user.");
 }
 
+function getCommanderSetting(key, fallback = true) {
+  try {
+    return game.settings.get("ptu", key);
+  } catch (error) {
+    console.warn(`Commander setting '${key}' was unavailable; using ${fallback}.`, error);
+    return fallback;
+  }
+}
+
 export function createCommanderController() {
   return {
     get enabled() {
-      return game.settings.get("ptu", "commanderEnabled");
+      return getCommanderSetting("commanderEnabled", true);
     },
 
     get confirmed() {
-      return game.settings.get("ptu", "commanderMigrationConfirmed");
+      return getCommanderSetting("commanderMigrationConfirmed", true);
     },
 
     preview() {
@@ -46,7 +55,7 @@ export function createCommanderController() {
       requireGm();
       if (!this.confirmed) throw new Error("Migration confirmation is required before enabling Commander Build.");
       await game.settings.set("ptu", "commanderEnabled", true);
-      ui.notifications.info("Commander Build enabled. Reload the World to activate V14 models and sheets.");
+      ui.notifications.info("Commander Build enabled. Reload the World to activate Commander models and sheets.");
       return true;
     },
 
