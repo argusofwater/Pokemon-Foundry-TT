@@ -21,6 +21,33 @@ function buildFriendshipHearts(value, count = 10) {
   });
 }
 
+function getDropData(event) {
+  const TextEditorV14 = foundry.applications?.ux?.TextEditor?.implementation;
+  if (TextEditorV14?.getDragEventData) return TextEditorV14.getDragEventData(event);
+  return TextEditor.getDragEventData(event);
+}
+
+const COMMANDER_STAT_KEYS = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"];
+const STAT_LABELS = Object.freeze({
+  hp: "Hit Points",
+  attack: "Attack",
+  defense: "Defense",
+  specialAttack: "Special Attack",
+  specialDefense: "Special Defense",
+  speed: "Speed"
+});
+
+function normalizeCommanderStat(systemStats, key) {
+  const stat = systemStats?.[key] ?? {};
+  const species = Number(stat.species ?? stat.value ?? 0) || 0;
+  const level = Number(stat.level ?? 0) || 0;
+  const path = Number(stat.path ?? 0) || 0;
+  const nature = Number(stat.nature ?? 0) || 0;
+  const bonus = Number(stat.bonus ?? 0) || 0;
+  const final = Number(stat.final ?? species + level + path + nature + bonus) || 0;
+  return { key, label: STAT_LABELS[key], species, level, path, nature, bonus, stage: Number(stat.stage ?? 0) || 0, final };
+}
+
 const genericTab = "systems/ptu/src/module/commander/templates/shared/generic-tab.hbs";
 
 export class CommanderPokemonSheet extends CommanderActorSheetBase {
@@ -56,21 +83,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
-    const labels = {
-      hp: "HP",
-      attack: "Attack",
-      defense: "Defense",
-      specialAttack: "Special Attack",
-      specialDefense: "Special Defense",
-      speed: "Speed"
-    };
-
-    const statList = Object.entries(this.actor.system.stats ?? {}).map(([key, stat]) => ({
-      key,
-      label: labels[key] ?? key,
-      ...stat
-    }));
-
+    const statList = COMMANDER_STAT_KEYS.map(key => normalizeCommanderStat(this.actor.system.stats ?? {}, key));
     const equippedMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.equippedMoveUuids ?? [], 4);
     const reserveMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.reserveMoveUuids ?? [], 2);
     const embeddedMoves = this.actor.items.filter(item => item.type === "move");
@@ -121,7 +134,7 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     if (!slot) return super._onDrop(event);
     if (!this.isEditable) return ui.notifications.warn("You do not have permission to edit this Pokémon.");
 
-    const data = TextEditor.getDragEventData(event);
+    const data = getDropData(event);
     const targetZone = slot.dataset.moveZone;
     const targetIndex = Number(slot.dataset.moveIndex);
 
@@ -131,20 +144,20 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     }
 
     if (data.type !== "Item") return ui.notifications.warn("Only Move Items can be assigned to move slots.");
-    const dropped = await Item.implementation.fromDropData(data);
+    const dropped = data.uuid ? await fromUuid(data.uuid) : await Item.implementation.fromDropData(data);
     if (!dropped || dropped.type !== "move") return ui.notifications.warn("Only Move Items can be assigned to move slots.");
 
     const item = dropped.parent?.uuid === this.actor.uuid
       ? dropped
-      : await Item.create(dropped.toObject(), { parent: this.actor });
+      : (await this.actor.createEmbeddedDocuments("Item", [dropped.toObject()]))?.[0];
     if (!item) return;
 
     return this.#assignMoveToSlot(item.uuid, targetZone, targetIndex);
   }
 
   async #moveSlot(sourceZone, sourceIndex, targetZone, targetIndex) {
-    const equipped = [...(this.actor.system.loadout?.equippedMoveUuids ?? ["", "", "", ""])];
-    const reserve = [...(this.actor.system.loadout?.reserveMoveUuids ?? ["", ""])];
+    const equipped = [...(this.actor.system.loadout?.equippedMoveUuids ?? ["", "", "", ""] )];
+    const reserve = [...(this.actor.system.loadout?.reserveMoveUuids ?? ["", ""] )];
     const source = sourceZone === "active" ? equipped : reserve;
     const target = targetZone === "active" ? equipped : reserve;
     const sourceUuid = source[sourceIndex] ?? "";
@@ -159,8 +172,8 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
   }
 
   async #assignMoveToSlot(uuid, zone, index) {
-    const equipped = [...(this.actor.system.loadout?.equippedMoveUuids ?? ["", "", "", ""])];
-    const reserve = [...(this.actor.system.loadout?.reserveMoveUuids ?? ["", ""])];
+    const equipped = [...(this.actor.system.loadout?.equippedMoveUuids ?? ["", "", "", ""] )];
+    const reserve = [...(this.actor.system.loadout?.reserveMoveUuids ?? ["", ""] )];
 
     for (let i = 0; i < equipped.length; i += 1) if (equipped[i] === uuid) equipped[i] = "";
     for (let i = 0; i < reserve.length; i += 1) if (reserve[i] === uuid) reserve[i] = "";
