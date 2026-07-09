@@ -1,0 +1,31 @@
+<section class="commander-tab commander-abilities-tab {{#unless (eq activeTab 'abilities')}}hidden{{/unless}}" data-tab="abilities">
+  <header class="commander-section-header">
+    <div>
+      <h2>Abilities</h2>
+      <p>Embedded Ability items inherited from species generation, training, or later advancement.</p>
+    </div>
+  </header>
+
+  {{#if embeddedAbilities.length}}
+    <div class="commander-grid">
+      {{#each embeddedAbilities as |entry|}}
+        <article class="commander-card accent-blue">
+          <h3>{{entry.item.name}}</h3>
+          <div class="commander-stat-row"><span>Type</span><span class="commander-value">{{entry.category}}</span></div>
+          {{#if entry.frequency}}<div class="commander-stat-row"><span>Recharge</span><span class="commander-value">{{entry.frequency}}</span></div>{{/if}}
+          {{#if entry.trigger}}<div class="commander-stat-row"><span>Trigger</span><span class="commander-value">{{entry.trigger}}</span></div>{{/if}}
+          <div class="commander-rich-text">{{{entry.description}}}</div>
+          <div class="commander-row-actions">
+            <button type="button" data-action="openDocument" data-uuid="{{entry.item.uuid}}">Open</button>
+            {{#if ../editable}}<button type="button" data-action="deleteEmbedded" data-item-id="{{entry.item.id}}">Delete</button>{{/if}}
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <article class="commander-card">
+      <h3>No Abilities</h3>
+      <p>Drag Ability items onto this Pokémon, or regenerate from a species with ability data.</p>
+    </article>
+  {{/if}}
+</section>
