@@ -1,0 +1,57 @@
+<section class="commander-tab commander-exploration-tab {{#unless (eq activeTab 'exploration')}}hidden{{/unless}}" data-tab="exploration">
+  <header class="commander-section-header">
+    <div>
+      <h2>Exploration</h2>
+      <p>Movement, capabilities, field utility, mounting, and environmental tags.</p>
+    </div>
+  </header>
+
+  <div class="commander-grid">
+    <article class="commander-card accent-blue">
+      <h3>Movement</h3>
+      <div class="commander-stat-row"><span>Overland</span><span class="commander-value">{{movement.overland}}</span></div>
+      <div class="commander-stat-row"><span>Swim</span><span class="commander-value">{{movement.swim}}</span></div>
+      <div class="commander-stat-row"><span>Fly</span><span class="commander-value">{{movement.fly}}</span></div>
+      <div class="commander-stat-row"><span>Burrow</span><span class="commander-value">{{movement.burrow}}</span></div>
+      <div class="commander-stat-row"><span>Climb</span><span class="commander-value">{{movement.climb}}</span></div>
+      <div class="commander-stat-row"><span>Mount</span><span class="commander-value">{{#if system.exploration.mountCapable}}Capable{{else}}No{{/if}}</span></div>
+    </article>
+
+    <article class="commander-card accent-red">
+      <h3>Physical Profile</h3>
+      <div class="commander-stat-row"><span>Height</span><span class="commander-value">{{speciesSystem.heightMeters}} m</span></div>
+      <div class="commander-stat-row"><span>Weight</span><span class="commander-value">{{speciesSystem.weightKg}} kg</span></div>
+      <div class="commander-stat-row"><span>Size</span><span class="commander-value">{{speciesSystem.size.sizeClass}}</span></div>
+      <div class="commander-stat-row"><span>Weight Class</span><span class="commander-value">{{speciesSystem.weightClass}}</span></div>
+    </article>
+  </div>
+
+  <article class="commander-card wide">
+    <h3>Capabilities</h3>
+    {{#if capabilitySlugs.length}}
+      <div class="commander-tag-list">
+        {{#each capabilitySlugs as |capability|}}<span class="commander-tag">{{capability}}</span>{{/each}}
+      </div>
+    {{else}}
+      <p>No capability slugs are embedded yet.</p>
+    {{/if}}
+  </article>
+
+  <article class="commander-card wide">
+    <h3>Capability Items</h3>
+    {{#if capabilityItems.length}}
+      <div class="commander-table">
+        {{#each capabilityItems as |entry|}}
+          <div class="commander-table-row">
+            <strong>{{entry.item.name}}</strong>
+            <span>{{entry.category}}</span>
+            <span>{{entry.description}}</span>
+            <div class="commander-row-actions"><button type="button" data-action="openDocument" data-uuid="{{entry.item.uuid}}">Open</button></div>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p>No embedded capability items yet. Species capabilities still appear above when available.</p>
+    {{/if}}
+  </article>
+</section>
