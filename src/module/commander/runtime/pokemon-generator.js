@@ -88,10 +88,10 @@ export class CommanderPokemonGenerator {
     };
 
     if (!generate) {
-      const { actorData, abilityDocuments, moveDocuments } = await CommanderSpeciesService.buildPokemonData(this.species, options);
+      const { actorData } = await CommanderSpeciesService.buildPokemonData(this.species, options);
       return {
         actor: actorData,
-        items: [...abilityDocuments, ...moveDocuments].map(document => document.toObject())
+        items: actorData.items ?? []
       };
     }
 
