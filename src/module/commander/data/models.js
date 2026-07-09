@@ -56,6 +56,13 @@ function attributeField(initial = 0) {
   });
 }
 
+function flexibleNumber(value, fallback = 0) {
+  if (typeof value === "number") return Number.isFinite(value) ? value : fallback;
+  if (value && typeof value === "object") return flexibleNumber(value.value ?? value.total ?? value.mod, fallback);
+  const number = Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+
 function pokemonStatField(initial = 5) {
   return new fields.SchemaField({
     species: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial }),
@@ -63,9 +70,20 @@ function pokemonStatField(initial = 5) {
     path: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
     nature: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
     bonus: new fields.NumberField({ required: true, nullable: false, integer: true, initial: 0 }),
-    stage: new fields.NumberField({ required: true, nullable: false, integer: true, min: -4, max: 4, initial: 0 }),
+    stage: new fields.AnyField({ required: true, nullable: false, initial: 0 }),
     final: new fields.NumberField({ required: true, nullable: false, integer: true, min: 0, initial })
   });
+}
+
+function normalizePokemonStat(stat, initial = 5) {
+  stat.species = flexibleNumber(stat.species ?? stat.value, initial);
+  stat.level = flexibleNumber(stat.level ?? stat.levelUp, 0);
+  stat.path = flexibleNumber(stat.path, 0);
+  stat.nature = flexibleNumber(stat.nature, 0);
+  stat.bonus = flexibleNumber(stat.bonus ?? stat.mod, 0);
+  stat.stage = Math.clamp(flexibleNumber(stat.stage, 0), -4, 4);
+  stat.final = Math.max(0, stat.species + stat.level + stat.path + stat.nature + stat.bonus);
+  return stat;
 }
 
 export class CommanderTrainerData extends foundry.abstract.TypeDataModel {
@@ -166,7 +184,7 @@ export class CommanderPokemonData extends foundry.abstract.TypeDataModel {
   }
 
   prepareDerivedData() {
-    for (const stat of Object.values(this.stats)) stat.final = Math.max(0, stat.species + stat.level + stat.path + stat.nature + stat.bonus);
+    for (const [key, stat] of Object.entries(this.stats)) normalizePokemonStat(stat, key === "hp" ? 10 : 5);
     this.health.hp.max = Math.max(1, this.stats.hp.final);
     this.health.hp.value = Math.clamp(this.health.hp.value, 0, this.health.hp.max);
     this.defenses.physical.final = this.defenses.physical.base + this.defenses.physical.bonus;
