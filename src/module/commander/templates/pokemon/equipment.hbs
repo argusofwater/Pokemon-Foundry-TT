@@ -1,0 +1,32 @@
+<section class="commander-tab commander-equipment-tab {{#unless (eq activeTab 'equipment')}}hidden{{/unless}}" data-tab="equipment">
+  <header class="commander-section-header">
+    <div>
+      <h2>Equipment</h2>
+      <p>Held items, carried equipment, consumables, and Pokémon-assigned gear.</p>
+    </div>
+  </header>
+
+  {{#if equipment.length}}
+    <div class="commander-table">
+      {{#each equipment as |entry|}}
+        <div class="commander-table-row">
+          <img src="{{entry.item.img}}" alt="{{entry.item.name}}">
+          <strong>{{entry.item.name}}</strong>
+          <span>{{entry.category}}</span>
+          <span>Qty {{entry.quantity}}</span>
+          <span>{{#if entry.held}}Held{{else}}Carried{{/if}}</span>
+          <div class="commander-row-actions">
+            <button type="button" data-action="openDocument" data-uuid="{{entry.item.uuid}}">Open</button>
+            {{#if ../editable}}<button type="button" data-action="toggleHeldItem" data-item-id="{{entry.item.id}}">{{#if entry.held}}Clear Held{{else}}Set Held{{/if}}</button>{{/if}}
+            {{#if ../editable}}<button type="button" data-action="deleteEmbedded" data-item-id="{{entry.item.id}}">Delete</button>{{/if}}
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <article class="commander-card">
+      <h3>No Equipment</h3>
+      <p>Drop an item onto the Pokémon sheet to assign held items or gear.</p>
+    </article>
+  {{/if}}
+</section>
