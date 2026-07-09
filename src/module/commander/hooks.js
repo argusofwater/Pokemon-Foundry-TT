@@ -11,18 +11,24 @@ function getCommanderSetting(key, fallback = true) {
   }
 }
 
+function ensureCommanderController() {
+  game.commander ??= createCommanderController();
+  return game.commander;
+}
+
 export const CommanderHooks = {
   listen() {
     Hooks.once("init", () => {
       registerCommanderSettings();
+      ensureCommanderController();
       const enabled = getCommanderSetting("commanderEnabled", true);
       const confirmed = getCommanderSetting("commanderMigrationConfirmed", true);
       if (enabled && confirmed) registerCommanderDataModels();
     });
 
     Hooks.once("ready", () => {
-      game.commander = createCommanderController();
-      if (game.user?.isGM && game.commander.enabled) {
+      const commander = ensureCommanderController();
+      if (game.user?.isGM && commander.enabled) {
         ui.notifications.info("Commander Build is active for this World.");
       }
     });
