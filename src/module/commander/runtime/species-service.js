@@ -55,6 +55,33 @@ function actorStat(value, levelValue = 0) {
   return { species, level, path: 0, nature: 0, bonus: 0, stage: 0, final: species + level };
 }
 
+function legacyStat(value, levelUp = 0) {
+  return {
+    value: Math.max(1, Number(value ?? 1)),
+    levelUp: Math.max(0, Number(levelUp ?? 0)),
+    mod: { value: 0, mod: 0 },
+    stage: { value: 0, mod: 0, total: 0 },
+    total: Math.max(1, Number(value ?? 1)) + Math.max(0, Number(levelUp ?? 0))
+  };
+}
+
+function legacyStats(baseStats, levelStats) {
+  return {
+    hp: legacyStat(baseStats.hp, levelStats.hp),
+    atk: legacyStat(baseStats.attack, levelStats.attack),
+    def: legacyStat(baseStats.defense, levelStats.defense),
+    spatk: legacyStat(baseStats.specialAttack, levelStats.specialAttack),
+    spdef: legacyStat(baseStats.specialDefense, levelStats.specialDefense),
+    spd: legacyStat(baseStats.speed, levelStats.speed)
+  };
+}
+
+function safePortrait(species) {
+  const portrait = species.system.artwork?.portrait || species.img;
+  if (portrait && portrait !== "icons/svg/mystery-man.svg" && portrait !== "icons/svg/item-bag.svg") return portrait;
+  return "icons/svg/pawprint.svg";
+}
+
 async function documentsBySlug(packId, slugs) {
   const wanted = new Set((slugs ?? []).filter(Boolean));
   if (!wanted.size) return [];
@@ -120,8 +147,8 @@ export class CommanderSpeciesService {
     const resolvedLevel = clampLevel(level);
     const baseStats = speciesStats(species.system);
     const levelStats = allocateLevelStats(baseStats, resolvedLevel, statRandomness);
-    const stats = Object.fromEntries(STAT_KEYS.map(key => [key, actorStat(baseStats[key], levelStats[key])]));
-    const portrait = species.system.artwork?.portrait || species.img;
+    const commanderStats = Object.fromEntries(STAT_KEYS.map(key => [key, actorStat(baseStats[key], levelStats[key])]));
+    const portrait = safePortrait(species);
     const size = tokenSize(sizeClass(species.system));
     const abilityDocuments = await documentsBySlug("ptu.abilities", species.system.abilitySlugs ?? []);
     const moveDocuments = await documentsBySlug("ptu.moves", starterMoveSlugs(species, resolvedLevel));
@@ -138,9 +165,6 @@ export class CommanderSpeciesService {
         actorLink: true,
         width: size,
         height: size,
-        displayBars: CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER,
-        displayName: CONST.TOKEN_DISPLAY_MODES.OWNER,
-        bar1: { attribute: "health.hp" },
         texture: { src: species.system.artwork?.token || portrait }
       },
       system: {
@@ -157,12 +181,17 @@ export class CommanderSpeciesService {
           trainerUuid: trainer?.uuid ?? ""
         },
         health: {
-          hp: { value: stats.hp.final, max: stats.hp.final },
+          hp: { value: commanderStats.hp.final, max: commanderStats.hp.final },
+          value: commanderStats.hp.final,
+          max: commanderStats.hp.final,
+          injuries: 0,
           temporaryHp: 0,
           wounds: 0,
           fatigue: "fresh"
         },
-        stats,
+        tempHp: 0,
+        commanderStats,
+        stats: legacyStats(baseStats, levelStats),
         defenses: {
           physical: { base: 10, bonus: 0, final: 10 },
           special: { base: 10, bonus: 0, final: 10 },
