@@ -1,0 +1,30 @@
+<section class="commander-tab commander-talents-tab {{#unless (eq activeTab 'talents')}}hidden{{/unless}}" data-tab="talents">
+  <header class="commander-section-header">
+    <div>
+      <h2>Talents & Poké Edges</h2>
+      <p>Species talents, training perks, Poké Edges, and Pokémon-facing features live here.</p>
+    </div>
+  </header>
+
+  {{#if talents.length}}
+    <div class="commander-grid">
+      {{#each talents as |entry|}}
+        <article class="commander-card accent-red">
+          <h3>{{entry.item.name}}</h3>
+          <div class="commander-stat-row"><span>Kind</span><span class="commander-value">{{entry.category}}</span></div>
+          {{#if entry.frequency}}<div class="commander-stat-row"><span>Action</span><span class="commander-value">{{entry.frequency}}</span></div>{{/if}}
+          <div class="commander-rich-text">{{{entry.description}}}</div>
+          <div class="commander-row-actions">
+            <button type="button" data-action="openDocument" data-uuid="{{entry.item.uuid}}">Open</button>
+            {{#if ../editable}}<button type="button" data-action="deleteEmbedded" data-item-id="{{entry.item.id}}">Delete</button>{{/if}}
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <article class="commander-card">
+      <h3>No Pokémon Talents Yet</h3>
+      <p>Drop Poké Edges, species talents, or training features onto this sheet when the Pokémon earns them.</p>
+    </article>
+  {{/if}}
+</section>
