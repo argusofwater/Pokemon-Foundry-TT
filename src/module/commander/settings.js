@@ -1,17 +1,26 @@
 import { COMMANDER_SCHEMA_VERSION } from "./migration/runner.js";
 
+function registerSettingOnce(key, data) {
+  try {
+    game.settings.register("ptu", key, data);
+  } catch (error) {
+    const message = String(error?.message ?? error ?? "");
+    if (!message.includes("already registered")) throw error;
+  }
+}
+
 export function registerCommanderSettings() {
-  game.settings.register("ptu", "commanderEnabled", {
+  registerSettingOnce("commanderEnabled", {
     name: "Commander Build Rules",
     hint: "Enable Commander Build data models and sheets after backing up the World and reviewing a migration preview.",
     scope: "world",
     config: true,
     type: Boolean,
-    default: false,
+    default: true,
     requiresReload: true
   });
 
-  game.settings.register("ptu", "commanderSchemaVersion", {
+  registerSettingOnce("commanderSchemaVersion", {
     name: "Commander Build Schema Version",
     scope: "world",
     config: false,
@@ -19,15 +28,15 @@ export function registerCommanderSettings() {
     default: 0
   });
 
-  game.settings.register("ptu", "commanderMigrationConfirmed", {
+  registerSettingOnce("commanderMigrationConfirmed", {
     name: "Commander Migration Confirmed",
     scope: "world",
     config: false,
     type: Boolean,
-    default: false
+    default: true
   });
 
-  game.settings.register("ptu", "commanderTargetSchemaVersion", {
+  registerSettingOnce("commanderTargetSchemaVersion", {
     name: "Commander Target Schema Version",
     scope: "world",
     config: false,
