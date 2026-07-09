@@ -77,7 +77,7 @@ function legacyStats(baseStats, levelStats) {
 }
 
 function safePortrait(species) {
-  const portrait = species.system.artwork?.portrait || species.img;
+  const portrait = species.system.artwork?.portrait || species.system.artwork?.token || species.img;
   if (portrait && portrait !== "icons/svg/mystery-man.svg" && portrait !== "icons/svg/item-bag.svg") return portrait;
   return "icons/svg/pawprint.svg";
 }
@@ -148,6 +148,7 @@ export class CommanderSpeciesService {
     const baseStats = speciesStats(species.system);
     const levelStats = allocateLevelStats(baseStats, resolvedLevel, statRandomness);
     const commanderStats = Object.fromEntries(STAT_KEYS.map(key => [key, actorStat(baseStats[key], levelStats[key])]));
+    const ptuLegacyStats = legacyStats(baseStats, levelStats);
     const portrait = safePortrait(species);
     const size = tokenSize(sizeClass(species.system));
     const abilityDocuments = await documentsBySlug("ptu.abilities", species.system.abilitySlugs ?? []);
@@ -182,16 +183,12 @@ export class CommanderSpeciesService {
         },
         health: {
           hp: { value: commanderStats.hp.final, max: commanderStats.hp.final },
-          value: commanderStats.hp.final,
-          max: commanderStats.hp.final,
-          injuries: 0,
           temporaryHp: 0,
           wounds: 0,
           fatigue: "fresh"
         },
-        tempHp: 0,
-        commanderStats,
-        stats: legacyStats(baseStats, levelStats),
+        stats: commanderStats,
+        ptuLegacyStats,
         defenses: {
           physical: { base: 10, bonus: 0, final: 10 },
           special: { base: 10, bonus: 0, final: 10 },
