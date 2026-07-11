@@ -17,6 +17,23 @@ function installCommanderPreparationGuards() {
   if (preparationGuardsInstalled) return;
   preparationGuardsInstalled = true;
 
+  Object.defineProperty(PTUActor.prototype, "types", {
+    configurable: true,
+    get() {
+      const override = this.synthetics?.typeOverride?.typing;
+      const commanderTypes = this.system?.identity?.types;
+      const legacyTyping = this.system?.typing;
+      const overwritten = this.system?.modifiers?.typeOverwrite;
+      const resolved = override
+        || commanderTypes
+        || legacyTyping
+        || (overwritten
+          ? (Array.isArray(overwritten) ? overwritten : [overwritten]).filter(Boolean)
+          : undefined);
+      return Array.isArray(resolved) && resolved.length ? resolved : ["Untyped"];
+    }
+  });
+
   for (const ActorClass of [PTUTrainerActor, PTUPokemonActor]) {
     const legacyPrepareBaseData = ActorClass.prototype.prepareBaseData;
     const legacyPrepareDerivedData = ActorClass.prototype.prepareDerivedData;
