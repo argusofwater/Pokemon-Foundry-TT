@@ -4,6 +4,16 @@ function clampLevel(level) {
   return Math.max(1, Math.min(100, Number(level) || 1));
 }
 
+function normalizeSlug(value) {
+  return String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[’']/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 function speciesStats(system = {}) {
   const stats = system.commanderStats ?? system.stats ?? {};
   return {
@@ -83,26 +93,56 @@ function safePortrait(species) {
 }
 
 async function documentsBySlug(packId, slugs) {
-  const wanted = new Set((slugs ?? []).filter(Boolean));
+  const wanted = new Set((slugs ?? []).map(normalizeSlug).filter(Boolean));
   if (!wanted.size) return [];
   const pack = game.packs.get(packId);
-  if (!pack) return [];
-  const index = await pack.getIndex({ fields: ["system.slug"] });
-  const ids = index.filter(entry => wanted.has(entry.system?.slug)).map(entry => entry._id);
-  const documents = [];
-  for (const id of ids) {
-    const document = await pack.getDocument(id);
-    if (document) documents.push(document);
+  if (!pack) {
+    console.warn(`Commander Build | Missing compendium '${packId}' while resolving generated Pokémon items.`);
+    return [];
   }
-  return documents;
+
+  const index = await pack.getIndex({ fields: ["system.slug"] });
+  const entries = index.filter(entry => wanted.has(normalizeSlug(entry.system?.slug ?? entry.name)));
+  const bySlug = new Map();
+  for (const entry of entries) {
+    const document = await pack.getDocument(entry._id);
+    if (document) bySlug.set(normalizeSlug(document.system?.slug ?? document.name), document);
+  }
+
+  return [...wanted].map(slug => bySlug.get(slug)).filter(Boolean);
+}
+
+function normalizedLearnset(species) {
+  const direct = Array.isArray(species.system.learnset) ? species.system.learnset : [];
+  const legacy = Array.isArray(species.system.moves?.level)
+    ? species.system.moves.level.map(entry => ({
+        moveSlug: entry.moveSlug ?? entry.slug ?? entry.name,
+        method: "level",
+        level: entry.level ?? 1
+      }))
+    : [];
+
+  const merged = new Map();
+  for (const entry of [...direct, ...legacy]) {
+    const moveSlug = normalizeSlug(entry.moveSlug ?? entry.slug ?? entry.name);
+    if (!moveSlug) continue;
+    const method = String(entry.method ?? "level").toLowerCase();
+    if (!merged.has(moveSlug) || method === "level") {
+      merged.set(moveSlug, { moveSlug, method, level: Number(entry.level ?? 1) || 1 });
+    }
+  }
+  return [...merged.values()];
 }
 
 function starterMoveSlugs(species, level = 1) {
-  const entries = (species.system.learnset ?? [])
-    .filter(entry => entry.method === "level" && Number(entry.level ?? 1) <= level)
-    .sort((a, b) => Number(a.level ?? 1) - Number(b.level ?? 1));
+  const entries = normalizedLearnset(species)
+    .filter(entry => entry.method === "level")
+    .sort((a, b) => Number(a.level ?? 1) - Number(b.level ?? 1) || a.moveSlug.localeCompare(b.moveSlug));
+
+  const eligible = entries.filter(entry => Number(entry.level ?? 1) <= level);
+  const selected = eligible.length ? eligible : entries.slice(0, 4);
   const unique = [];
-  for (const entry of entries) if (entry.moveSlug && !unique.includes(entry.moveSlug)) unique.push(entry.moveSlug);
+  for (const entry of selected) if (entry.moveSlug && !unique.includes(entry.moveSlug)) unique.push(entry.moveSlug);
   return unique.slice(-6);
 }
 
@@ -152,9 +192,16 @@ export class CommanderSpeciesService {
     const portrait = safePortrait(species);
     const size = tokenSize(sizeClass(species.system));
     const abilityDocuments = await documentsBySlug("ptu.abilities", species.system.abilitySlugs ?? []);
-    const moveDocuments = await documentsBySlug("ptu.moves", starterMoveSlugs(species, resolvedLevel));
+    const requestedMoveSlugs = starterMoveSlugs(species, resolvedLevel);
+    const moveDocuments = await documentsBySlug("ptu.moves", requestedMoveSlugs);
     const speciesItem = species.toObject();
     delete speciesItem._id;
+
+    if (requestedMoveSlugs.length && moveDocuments.length !== requestedMoveSlugs.length) {
+      const resolved = new Set(moveDocuments.map(move => normalizeSlug(move.system?.slug ?? move.name)));
+      const missing = requestedMoveSlugs.filter(slug => !resolved.has(normalizeSlug(slug)));
+      console.warn(`Commander Build | ${species.name} generated with unresolved moves: ${missing.join(", ")}`);
+    }
 
     const actorData = {
       name: name || species.name,
@@ -223,9 +270,13 @@ export class CommanderSpeciesService {
   }
 
   static async createPokemonFromSpecies(species, options = {}) {
-    const { actorData } = await this.buildPokemonData(species, options);
+    const { actorData, moveDocuments } = await this.buildPokemonData(species, options);
     const actor = await Actor.create(actorData);
     if (!actor) return null;
+
+    if (!(actor.itemTypes?.move?.length) && moveDocuments.length) {
+      await actor.createEmbeddedDocuments("Item", embeddedItemData(moveDocuments));
+    }
 
     const { abilities, equipped, reserve } = loadoutFromActor(actor);
     await actor.update({
