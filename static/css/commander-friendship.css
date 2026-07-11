@@ -46,7 +46,6 @@
   width: 18px;
   height: 18px;
   overflow: hidden;
-  color: var(--commander-friendship-empty);
   font-size: 18px;
   line-height: 18px;
   text-align: center;
@@ -59,10 +58,8 @@
   display: block;
   overflow: hidden;
   height: 100%;
-  background: linear-gradient(180deg, var(--commander-friendship-pink-light), var(--commander-friendship-pink));
-  -webkit-mask: linear-gradient(#000 0 0);
-  mask: linear-gradient(#000 0 0);
-  z-index: 1;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .commander-heart-fill::before {
@@ -79,8 +76,8 @@
 .commander-heart-outline {
   position: absolute;
   inset: 0;
-  z-index: 2;
-  color: transparent;
+  z-index: 1;
+  color: var(--commander-friendship-empty);
   -webkit-text-stroke: 1px rgba(255, 223, 237, 0.9);
   text-shadow: 0 1px 1px rgba(78, 22, 49, 0.5);
   pointer-events: none;
