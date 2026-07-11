@@ -72,10 +72,6 @@ class PTUItem extends Item {
         return this.system.referenceEffect ?? null;
     }
 
-    get schemaVersion() {
-        return Number(this.system.schema?.version) || null;
-    }
-
     get isClass() {
         return this.img.includes("class");
     }
@@ -152,10 +148,6 @@ class PTUItem extends Item {
         return container;
     }
 
-    /**
-     * Retrieve all roll option from the requested domains. Micro-optimized in an excessively verbose for-loop.
-     * @param domains The domains of discourse from which to pull options. Always includes the "all" domain.
-     */
     getRollOptions(domains = []) {
         if (!Array.isArray(domains)) domains = [domains];
         const withAll = Array.from(new Set(["all", ...domains]));
@@ -198,4 +190,15 @@ class PTUItem extends Item {
     }
 }
 
-export { PTUItem }
+const PTUItemProxy = new Proxy(PTUItem, {
+    construct(_target, args) {
+        const subType = args[0]?.system?.subtype;
+        if (subType && subType !== "item") {
+            return new CONFIG.PTU.Item.documentClasses[subType](...args);
+        }
+
+        return new CONFIG.PTU.Item.documentClasses[args[0].type](...args);
+    }
+});
+
+export { PTUItem, PTUItemProxy }
