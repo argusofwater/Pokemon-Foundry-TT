@@ -185,7 +185,8 @@ export class CommanderPokemonData extends foundry.abstract.TypeDataModel {
 
   prepareDerivedData() {
     for (const [key, stat] of Object.entries(this.stats)) normalizePokemonStat(stat, key === "hp" ? 10 : 5);
-    this.health.hp.max = Math.max(1, this.stats.hp.final);
+    const level = Math.clamp(Number(this.identity.level ?? 1), 1, 100);
+    this.health.hp.max = Math.max(1, level + (this.stats.hp.final * 3) + 10);
     this.health.hp.value = Math.clamp(this.health.hp.value, 0, this.health.hp.max);
     this.defenses.physical.final = this.defenses.physical.base + this.defenses.physical.bonus;
     this.defenses.special.final = this.defenses.special.base + this.defenses.special.bonus;
