@@ -37,8 +37,8 @@ jobs:
       - name: Publish prerelease
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: commander-test-v48
-          name: Commander Build Test v48
+          tag_name: commander-test-v49
+          name: Commander Build Test v49
           prerelease: true
           make_latest: false
           files: build/release/ptu.zip
