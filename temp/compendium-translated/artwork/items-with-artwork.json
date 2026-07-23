@@ -71,7 +71,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -128,7 +128,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -233,8 +233,8 @@
       "generation-8"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -380,7 +380,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -437,7 +437,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -584,7 +584,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -687,7 +687,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -744,7 +744,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -982,7 +982,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -1129,7 +1129,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -1186,7 +1186,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -1280,7 +1280,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -1876,7 +1876,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -1933,7 +1933,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -2297,8 +2297,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -2353,8 +2353,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -2404,8 +2404,8 @@
       "generation-5"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -2504,7 +2504,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -2611,7 +2611,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -2711,7 +2711,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -2763,7 +2763,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -2952,7 +2952,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -3097,8 +3097,8 @@
       "generation-5"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -3455,7 +3455,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -3643,8 +3643,8 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -4005,8 +4005,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -4061,8 +4061,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -4294,7 +4294,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -4389,7 +4389,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -4531,8 +4531,8 @@
       "generation-5"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -4585,8 +4585,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -4637,7 +4637,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -4774,8 +4774,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -4869,7 +4869,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -4925,8 +4925,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -4977,7 +4977,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -5031,8 +5031,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -5303,8 +5303,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -5355,7 +5355,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -5629,8 +5629,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -5735,8 +5735,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -5787,7 +5787,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -5934,7 +5934,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -6033,8 +6033,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -6170,8 +6170,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -6222,7 +6222,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -6316,7 +6316,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -6410,8 +6410,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -6466,8 +6466,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -6607,8 +6607,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -6706,8 +6706,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -6760,8 +6760,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -6857,8 +6857,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -6952,7 +6952,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -7089,8 +7089,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -7145,8 +7145,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -7501,7 +7501,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -7683,7 +7683,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -7787,7 +7787,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -7844,7 +7844,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -7901,7 +7901,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -8000,8 +8000,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -8056,8 +8056,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -8108,7 +8108,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -8298,8 +8298,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -8354,8 +8354,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -8498,7 +8498,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -8638,8 +8638,8 @@
       "generation-8"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -8777,8 +8777,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -8833,8 +8833,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -8885,7 +8885,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -9032,7 +9032,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -9125,8 +9125,8 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -9349,7 +9349,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -9453,7 +9453,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -9647,8 +9647,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -9744,8 +9744,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -9800,8 +9800,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -9943,8 +9943,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -10040,8 +10040,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -10183,7 +10183,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -10608,7 +10608,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -10665,7 +10665,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -11230,7 +11230,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -11372,7 +11372,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -11659,8 +11659,8 @@
       "generation-8"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -12124,7 +12124,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -12219,7 +12219,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -12454,7 +12454,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -12513,8 +12513,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -12565,7 +12565,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -12622,7 +12622,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -12717,7 +12717,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -12999,7 +12999,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -13051,7 +13051,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -13201,8 +13201,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -14564,7 +14564,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -14810,7 +14810,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -14869,8 +14869,8 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -15050,8 +15050,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -15106,8 +15106,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -15951,8 +15951,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -16057,8 +16057,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -16152,7 +16152,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -17046,8 +17046,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -17102,8 +17102,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -17517,7 +17517,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -17799,7 +17799,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -17856,7 +17856,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -17913,7 +17913,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -17970,7 +17970,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -18065,7 +18065,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -18204,7 +18204,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -18389,8 +18389,8 @@
       "generation-5"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -18621,7 +18621,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -18719,8 +18719,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -18771,7 +18771,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -19201,8 +19201,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -19255,8 +19255,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -19439,7 +19439,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -19533,8 +19533,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -19589,8 +19589,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -19641,7 +19641,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -19794,8 +19794,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -19975,7 +19975,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -20576,8 +20576,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -25071,7 +25071,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -25345,7 +25345,7 @@
       "generation-6"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -25402,7 +25402,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
@@ -25543,8 +25543,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -25642,8 +25642,8 @@
       "generation-7"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -25836,8 +25836,8 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -26205,8 +26205,8 @@
       "generation-4"
     ],
     "automation": {
-      "state": "structured",
-      "handler": "",
+      "state": "prompted",
+      "handler": "commander.form.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },
     "source": {
@@ -26300,7 +26300,7 @@
       "generation-9"
     ],
     "automation": {
-      "state": "structured",
+      "state": "prompted",
       "handler": "commander.mega.activate",
       "notes": "Translated from frozen Pokémon Showdown item data; complex hooks remain manual until reviewed."
     },

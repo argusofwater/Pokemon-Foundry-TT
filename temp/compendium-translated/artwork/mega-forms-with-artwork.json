@@ -8,6 +8,14 @@
       "grass",
       "poison"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 100,
+      "defense": 123,
+      "specialAttack": 122,
+      "specialDefense": 120,
+      "speed": 80
+    },
     "stats": {
       "hp": 8,
       "attack": 10,
@@ -64,6 +72,14 @@
       "fire",
       "dragon"
     ],
+    "canonicalStats": {
+      "hp": 78,
+      "attack": 130,
+      "defense": 111,
+      "specialAttack": 130,
+      "specialDefense": 85,
+      "speed": 100
+    },
     "stats": {
       "hp": 8,
       "attack": 13,
@@ -120,6 +136,14 @@
       "fire",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 78,
+      "attack": 104,
+      "defense": 78,
+      "specialAttack": 159,
+      "specialDefense": 115,
+      "speed": 100
+    },
     "stats": {
       "hp": 8,
       "attack": 10,
@@ -175,6 +199,14 @@
     "types": [
       "water"
     ],
+    "canonicalStats": {
+      "hp": 79,
+      "attack": 103,
+      "defense": 120,
+      "specialAttack": 135,
+      "specialDefense": 115,
+      "speed": 78
+    },
     "stats": {
       "hp": 8,
       "attack": 10,
@@ -231,6 +263,14 @@
       "bug",
       "poison"
     ],
+    "canonicalStats": {
+      "hp": 65,
+      "attack": 150,
+      "defense": 40,
+      "specialAttack": 15,
+      "specialDefense": 80,
+      "speed": 145
+    },
     "stats": {
       "hp": 7,
       "attack": 15,
@@ -286,6 +326,14 @@
       "normal",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 83,
+      "attack": 80,
+      "defense": 80,
+      "specialAttack": 135,
+      "specialDefense": 80,
+      "speed": 121
+    },
     "stats": {
       "hp": 8,
       "attack": 8,
@@ -341,6 +389,14 @@
       "fairy",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 95,
+      "attack": 80,
+      "defense": 93,
+      "specialAttack": 135,
+      "specialDefense": 110,
+      "speed": 70
+    },
     "stats": {
       "hp": 10,
       "attack": 8,
@@ -397,6 +453,14 @@
     "types": [
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 55,
+      "attack": 50,
+      "defense": 65,
+      "specialAttack": 175,
+      "specialDefense": 105,
+      "speed": 150
+    },
     "stats": {
       "hp": 6,
       "attack": 5,
@@ -452,6 +516,14 @@
       "grass",
       "poison"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 125,
+      "defense": 85,
+      "specialAttack": 135,
+      "specialDefense": 95,
+      "speed": 70
+    },
     "stats": {
       "hp": 8,
       "attack": 13,
@@ -508,6 +580,14 @@
       "water",
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 95,
+      "attack": 75,
+      "defense": 180,
+      "specialAttack": 130,
+      "specialDefense": 80,
+      "speed": 30
+    },
     "stats": {
       "hp": 10,
       "attack": 8,
@@ -564,6 +644,14 @@
       "ghost",
       "poison"
     ],
+    "canonicalStats": {
+      "hp": 60,
+      "attack": 65,
+      "defense": 80,
+      "specialAttack": 170,
+      "specialDefense": 95,
+      "speed": 130
+    },
     "stats": {
       "hp": 6,
       "attack": 7,
@@ -618,6 +706,14 @@
     "types": [
       "normal"
     ],
+    "canonicalStats": {
+      "hp": 105,
+      "attack": 125,
+      "defense": 100,
+      "specialAttack": 60,
+      "specialDefense": 100,
+      "speed": 100
+    },
     "stats": {
       "hp": 11,
       "attack": 13,
@@ -673,6 +769,14 @@
       "water",
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 60,
+      "attack": 140,
+      "defense": 105,
+      "specialAttack": 130,
+      "specialDefense": 105,
+      "speed": 120
+    },
     "stats": {
       "hp": 6,
       "attack": 14,
@@ -730,6 +834,14 @@
       "bug",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 65,
+      "attack": 155,
+      "defense": 120,
+      "specialAttack": 65,
+      "specialDefense": 90,
+      "speed": 105
+    },
     "stats": {
       "hp": 7,
       "attack": 16,
@@ -785,6 +897,14 @@
       "water",
       "dark"
     ],
+    "canonicalStats": {
+      "hp": 95,
+      "attack": 155,
+      "defense": 109,
+      "specialAttack": 70,
+      "specialDefense": 130,
+      "speed": 81
+    },
     "stats": {
       "hp": 10,
       "attack": 16,
@@ -841,6 +961,14 @@
       "rock",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 135,
+      "defense": 85,
+      "specialAttack": 70,
+      "specialDefense": 95,
+      "speed": 150
+    },
     "stats": {
       "hp": 8,
       "attack": 14,
@@ -896,6 +1024,14 @@
       "dragon",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 91,
+      "attack": 124,
+      "defense": 115,
+      "specialAttack": 145,
+      "specialDefense": 125,
+      "speed": 100
+    },
     "stats": {
       "hp": 9,
       "attack": 12,
@@ -953,6 +1089,14 @@
       "psychic",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 106,
+      "attack": 190,
+      "defense": 100,
+      "specialAttack": 154,
+      "specialDefense": 100,
+      "speed": 130
+    },
     "stats": {
       "hp": 11,
       "attack": 19,
@@ -1007,6 +1151,14 @@
     "types": [
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 106,
+      "attack": 150,
+      "defense": 70,
+      "specialAttack": 194,
+      "specialDefense": 120,
+      "speed": 140
+    },
     "stats": {
       "hp": 11,
       "attack": 15,
@@ -1062,6 +1214,14 @@
       "grass",
       "fairy"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 92,
+      "defense": 115,
+      "specialAttack": 143,
+      "specialDefense": 115,
+      "speed": 80
+    },
     "stats": {
       "hp": 8,
       "attack": 9,
@@ -1119,6 +1279,14 @@
       "water",
       "dragon"
     ],
+    "canonicalStats": {
+      "hp": 85,
+      "attack": 165,
+      "defense": 125,
+      "specialAttack": 89,
+      "specialDefense": 93,
+      "speed": 78
+    },
     "stats": {
       "hp": 9,
       "attack": 17,
@@ -1176,6 +1344,14 @@
       "electric",
       "dragon"
     ],
+    "canonicalStats": {
+      "hp": 90,
+      "attack": 95,
+      "defense": 105,
+      "specialAttack": 165,
+      "specialDefense": 110,
+      "speed": 45
+    },
     "stats": {
       "hp": 9,
       "attack": 10,
@@ -1232,6 +1408,14 @@
       "steel",
       "ground"
     ],
+    "canonicalStats": {
+      "hp": 75,
+      "attack": 125,
+      "defense": 230,
+      "specialAttack": 55,
+      "specialDefense": 95,
+      "speed": 30
+    },
     "stats": {
       "hp": 8,
       "attack": 13,
@@ -1287,6 +1471,14 @@
       "bug",
       "steel"
     ],
+    "canonicalStats": {
+      "hp": 70,
+      "attack": 150,
+      "defense": 140,
+      "specialAttack": 65,
+      "specialDefense": 100,
+      "speed": 75
+    },
     "stats": {
       "hp": 7,
       "attack": 15,
@@ -1342,6 +1534,14 @@
       "bug",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 185,
+      "defense": 115,
+      "specialAttack": 40,
+      "specialDefense": 105,
+      "speed": 75
+    },
     "stats": {
       "hp": 8,
       "attack": 19,
@@ -1397,6 +1597,14 @@
       "steel",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 65,
+      "attack": 140,
+      "defense": 110,
+      "specialAttack": 40,
+      "specialDefense": 100,
+      "speed": 110
+    },
     "stats": {
       "hp": 7,
       "attack": 14,
@@ -1454,6 +1662,14 @@
       "dark",
       "fire"
     ],
+    "canonicalStats": {
+      "hp": 75,
+      "attack": 90,
+      "defense": 90,
+      "specialAttack": 140,
+      "specialDefense": 90,
+      "speed": 115
+    },
     "stats": {
       "hp": 8,
       "attack": 9,
@@ -1509,6 +1725,14 @@
       "rock",
       "dark"
     ],
+    "canonicalStats": {
+      "hp": 100,
+      "attack": 164,
+      "defense": 150,
+      "specialAttack": 95,
+      "specialDefense": 120,
+      "speed": 71
+    },
     "stats": {
       "hp": 10,
       "attack": 16,
@@ -1564,6 +1788,14 @@
       "grass",
       "dragon"
     ],
+    "canonicalStats": {
+      "hp": 70,
+      "attack": 110,
+      "defense": 75,
+      "specialAttack": 145,
+      "specialDefense": 85,
+      "speed": 145
+    },
     "stats": {
       "hp": 7,
       "attack": 11,
@@ -1620,6 +1852,14 @@
       "fire",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 160,
+      "defense": 80,
+      "specialAttack": 130,
+      "specialDefense": 80,
+      "speed": 100
+    },
     "stats": {
       "hp": 8,
       "attack": 16,
@@ -1675,6 +1915,14 @@
       "water",
       "ground"
     ],
+    "canonicalStats": {
+      "hp": 100,
+      "attack": 150,
+      "defense": 110,
+      "specialAttack": 95,
+      "specialDefense": 110,
+      "speed": 70
+    },
     "stats": {
       "hp": 10,
       "attack": 15,
@@ -1731,6 +1979,14 @@
       "psychic",
       "fairy"
     ],
+    "canonicalStats": {
+      "hp": 68,
+      "attack": 85,
+      "defense": 65,
+      "specialAttack": 165,
+      "specialDefense": 135,
+      "speed": 100
+    },
     "stats": {
       "hp": 7,
       "attack": 9,
@@ -1786,6 +2042,14 @@
       "dark",
       "ghost"
     ],
+    "canonicalStats": {
+      "hp": 50,
+      "attack": 85,
+      "defense": 125,
+      "specialAttack": 85,
+      "specialDefense": 115,
+      "speed": 20
+    },
     "stats": {
       "hp": 5,
       "attack": 9,
@@ -1841,6 +2105,14 @@
       "steel",
       "fairy"
     ],
+    "canonicalStats": {
+      "hp": 50,
+      "attack": 105,
+      "defense": 125,
+      "specialAttack": 55,
+      "specialDefense": 95,
+      "speed": 50
+    },
     "stats": {
       "hp": 5,
       "attack": 11,
@@ -1896,6 +2168,14 @@
     "types": [
       "steel"
     ],
+    "canonicalStats": {
+      "hp": 70,
+      "attack": 140,
+      "defense": 230,
+      "specialAttack": 60,
+      "specialDefense": 80,
+      "speed": 50
+    },
     "stats": {
       "hp": 7,
       "attack": 14,
@@ -1951,6 +2231,14 @@
       "fighting",
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 60,
+      "attack": 100,
+      "defense": 85,
+      "specialAttack": 80,
+      "specialDefense": 85,
+      "speed": 100
+    },
     "stats": {
       "hp": 6,
       "attack": 10,
@@ -2005,6 +2293,14 @@
     "types": [
       "electric"
     ],
+    "canonicalStats": {
+      "hp": 70,
+      "attack": 75,
+      "defense": 80,
+      "specialAttack": 135,
+      "specialDefense": 80,
+      "speed": 135
+    },
     "stats": {
       "hp": 7,
       "attack": 8,
@@ -2060,6 +2356,14 @@
       "water",
       "dark"
     ],
+    "canonicalStats": {
+      "hp": 70,
+      "attack": 140,
+      "defense": 70,
+      "specialAttack": 110,
+      "specialDefense": 65,
+      "speed": 105
+    },
     "stats": {
       "hp": 7,
       "attack": 14,
@@ -2115,6 +2419,14 @@
       "fire",
       "ground"
     ],
+    "canonicalStats": {
+      "hp": 70,
+      "attack": 120,
+      "defense": 100,
+      "specialAttack": 145,
+      "specialDefense": 105,
+      "speed": 20
+    },
     "stats": {
       "hp": 7,
       "attack": 12,
@@ -2170,6 +2482,14 @@
       "dragon",
       "fairy"
     ],
+    "canonicalStats": {
+      "hp": 75,
+      "attack": 110,
+      "defense": 110,
+      "specialAttack": 110,
+      "specialDefense": 105,
+      "speed": 80
+    },
     "stats": {
       "hp": 8,
       "attack": 11,
@@ -2225,6 +2545,14 @@
     "types": [
       "ghost"
     ],
+    "canonicalStats": {
+      "hp": 64,
+      "attack": 165,
+      "defense": 75,
+      "specialAttack": 93,
+      "specialDefense": 83,
+      "speed": 75
+    },
     "stats": {
       "hp": 6,
       "attack": 17,
@@ -2279,6 +2607,14 @@
     "types": [
       "dark"
     ],
+    "canonicalStats": {
+      "hp": 65,
+      "attack": 150,
+      "defense": 60,
+      "specialAttack": 115,
+      "specialDefense": 60,
+      "speed": 115
+    },
     "stats": {
       "hp": 7,
       "attack": 15,
@@ -2333,6 +2669,14 @@
     "types": [
       "ice"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 120,
+      "defense": 80,
+      "specialAttack": 120,
+      "specialDefense": 80,
+      "speed": 100
+    },
     "stats": {
       "hp": 8,
       "attack": 12,
@@ -2389,6 +2733,14 @@
       "dragon",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 95,
+      "attack": 145,
+      "defense": 130,
+      "specialAttack": 120,
+      "specialDefense": 90,
+      "speed": 120
+    },
     "stats": {
       "hp": 10,
       "attack": 15,
@@ -2444,6 +2796,14 @@
       "steel",
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 145,
+      "defense": 150,
+      "specialAttack": 105,
+      "specialDefense": 110,
+      "speed": 110
+    },
     "stats": {
       "hp": 8,
       "attack": 15,
@@ -2499,6 +2859,14 @@
       "dragon",
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 100,
+      "defense": 120,
+      "specialAttack": 140,
+      "specialDefense": 150,
+      "speed": 110
+    },
     "stats": {
       "hp": 8,
       "attack": 10,
@@ -2554,6 +2922,14 @@
       "dragon",
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 80,
+      "attack": 130,
+      "defense": 100,
+      "specialAttack": 160,
+      "specialDefense": 120,
+      "speed": 110
+    },
     "stats": {
       "hp": 8,
       "attack": 13,
@@ -2609,6 +2985,14 @@
       "dragon",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 105,
+      "attack": 180,
+      "defense": 100,
+      "specialAttack": 180,
+      "specialDefense": 100,
+      "speed": 115
+    },
     "stats": {
       "hp": 11,
       "attack": 18,
@@ -2664,6 +3048,14 @@
       "normal",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 65,
+      "attack": 136,
+      "defense": 94,
+      "specialAttack": 54,
+      "specialDefense": 96,
+      "speed": 135
+    },
     "stats": {
       "hp": 7,
       "attack": 14,
@@ -2720,6 +3112,14 @@
       "dragon",
       "ground"
     ],
+    "canonicalStats": {
+      "hp": 108,
+      "attack": 170,
+      "defense": 115,
+      "specialAttack": 120,
+      "specialDefense": 95,
+      "speed": 92
+    },
     "stats": {
       "hp": 11,
       "attack": 17,
@@ -2776,6 +3176,14 @@
       "fighting",
       "steel"
     ],
+    "canonicalStats": {
+      "hp": 70,
+      "attack": 145,
+      "defense": 88,
+      "specialAttack": 140,
+      "specialDefense": 70,
+      "speed": 112
+    },
     "stats": {
       "hp": 7,
       "attack": 15,
@@ -2832,6 +3240,14 @@
       "grass",
       "ice"
     ],
+    "canonicalStats": {
+      "hp": 90,
+      "attack": 132,
+      "defense": 105,
+      "specialAttack": 132,
+      "specialDefense": 105,
+      "speed": 30
+    },
     "stats": {
       "hp": 9,
       "attack": 13,
@@ -2888,6 +3304,14 @@
       "psychic",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 68,
+      "attack": 165,
+      "defense": 95,
+      "specialAttack": 65,
+      "specialDefense": 115,
+      "speed": 110
+    },
     "stats": {
       "hp": 7,
       "attack": 17,
@@ -2943,6 +3367,14 @@
       "ice",
       "ghost"
     ],
+    "canonicalStats": {
+      "hp": 70,
+      "attack": 80,
+      "defense": 70,
+      "specialAttack": 140,
+      "specialDefense": 100,
+      "speed": 120
+    },
     "stats": {
       "hp": 7,
       "attack": 8,
@@ -3000,6 +3432,14 @@
       "fire",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 110,
+      "attack": 148,
+      "defense": 75,
+      "specialAttack": 110,
+      "specialDefense": 110,
+      "speed": 75
+    },
     "stats": {
       "hp": 11,
       "attack": 15,
@@ -3056,6 +3496,14 @@
       "ground",
       "steel"
     ],
+    "canonicalStats": {
+      "hp": 110,
+      "attack": 135,
+      "defense": 60,
+      "specialAttack": 50,
+      "specialDefense": 65,
+      "speed": 88
+    },
     "stats": {
       "hp": 11,
       "attack": 14,
@@ -3113,6 +3561,14 @@
       "normal",
       "fairy"
     ],
+    "canonicalStats": {
+      "hp": 103,
+      "attack": 60,
+      "defense": 126,
+      "specialAttack": 80,
+      "specialDefense": 126,
+      "speed": 50
+    },
     "stats": {
       "hp": 10,
       "attack": 6,
@@ -3168,6 +3624,14 @@
       "bug",
       "poison"
     ],
+    "canonicalStats": {
+      "hp": 60,
+      "attack": 140,
+      "defense": 149,
+      "specialAttack": 75,
+      "specialDefense": 99,
+      "speed": 62
+    },
     "stats": {
       "hp": 6,
       "attack": 14,
@@ -3225,6 +3689,14 @@
       "dark",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 65,
+      "attack": 130,
+      "defense": 135,
+      "specialAttack": 55,
+      "specialDefense": 135,
+      "speed": 68
+    },
     "stats": {
       "hp": 7,
       "attack": 13,
@@ -3282,6 +3754,14 @@
     "types": [
       "electric"
     ],
+    "canonicalStats": {
+      "hp": 85,
+      "attack": 145,
+      "defense": 80,
+      "specialAttack": 135,
+      "specialDefense": 90,
+      "speed": 80
+    },
     "stats": {
       "hp": 9,
       "attack": 15,
@@ -3337,6 +3817,14 @@
       "ghost",
       "fire"
     ],
+    "canonicalStats": {
+      "hp": 60,
+      "attack": 75,
+      "defense": 110,
+      "specialAttack": 175,
+      "specialDefense": 110,
+      "speed": 90
+    },
     "stats": {
       "hp": 6,
       "attack": 8,
@@ -3394,6 +3882,14 @@
       "grass",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 88,
+      "attack": 137,
+      "defense": 172,
+      "specialAttack": 74,
+      "specialDefense": 115,
+      "speed": 44
+    },
     "stats": {
       "hp": 9,
       "attack": 14,
@@ -3450,6 +3946,14 @@
       "fire",
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 75,
+      "attack": 69,
+      "defense": 72,
+      "specialAttack": 159,
+      "specialDefense": 125,
+      "speed": 134
+    },
     "stats": {
       "hp": 8,
       "attack": 7,
@@ -3506,6 +4010,14 @@
       "water",
       "dark"
     ],
+    "canonicalStats": {
+      "hp": 72,
+      "attack": 125,
+      "defense": 77,
+      "specialAttack": 133,
+      "specialDefense": 81,
+      "speed": 142
+    },
     "stats": {
       "hp": 7,
       "attack": 13,
@@ -3562,6 +4074,14 @@
       "fire",
       "normal"
     ],
+    "canonicalStats": {
+      "hp": 86,
+      "attack": 88,
+      "defense": 92,
+      "specialAttack": 129,
+      "specialDefense": 86,
+      "speed": 126
+    },
     "stats": {
       "hp": 9,
       "attack": 9,
@@ -3618,6 +4138,14 @@
     "types": [
       "fairy"
     ],
+    "canonicalStats": {
+      "hp": 74,
+      "attack": 85,
+      "defense": 87,
+      "specialAttack": 155,
+      "specialDefense": 148,
+      "speed": 102
+    },
     "stats": {
       "hp": 7,
       "attack": 9,
@@ -3674,6 +4202,14 @@
       "dark",
       "psychic"
     ],
+    "canonicalStats": {
+      "hp": 86,
+      "attack": 102,
+      "defense": 88,
+      "specialAttack": 98,
+      "specialDefense": 120,
+      "speed": 88
+    },
     "stats": {
       "hp": 9,
       "attack": 10,
@@ -3732,6 +4268,14 @@
       "rock",
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 72,
+      "attack": 140,
+      "defense": 130,
+      "specialAttack": 64,
+      "specialDefense": 106,
+      "speed": 88
+    },
     "stats": {
       "hp": 7,
       "attack": 14,
@@ -3789,6 +4333,14 @@
       "poison",
       "dragon"
     ],
+    "canonicalStats": {
+      "hp": 65,
+      "attack": 85,
+      "defense": 105,
+      "specialAttack": 132,
+      "specialDefense": 163,
+      "speed": 44
+    },
     "stats": {
       "hp": 7,
       "attack": 9,
@@ -3847,6 +4399,14 @@
       "fighting",
       "flying"
     ],
+    "canonicalStats": {
+      "hp": 78,
+      "attack": 137,
+      "defense": 100,
+      "specialAttack": 74,
+      "specialDefense": 93,
+      "speed": 118
+    },
     "stats": {
       "hp": 8,
       "attack": 14,
@@ -3905,6 +4465,14 @@
       "dragon",
       "ground"
     ],
+    "canonicalStats": {
+      "hp": 216,
+      "attack": 70,
+      "defense": 91,
+      "specialAttack": 216,
+      "specialDefense": 85,
+      "speed": 100
+    },
     "stats": {
       "hp": 22,
       "attack": 7,
@@ -3954,6 +4522,14 @@
       "rock",
       "fairy"
     ],
+    "canonicalStats": {
+      "hp": 50,
+      "attack": 160,
+      "defense": 110,
+      "specialAttack": 160,
+      "specialDefense": 110,
+      "speed": 110
+    },
     "stats": {
       "hp": 5,
       "attack": 16,
@@ -4009,6 +4585,14 @@
       "normal",
       "dragon"
     ],
+    "canonicalStats": {
+      "hp": 78,
+      "attack": 85,
+      "defense": 110,
+      "specialAttack": 160,
+      "specialDefense": 116,
+      "speed": 36
+    },
     "stats": {
       "hp": 8,
       "attack": 9,
@@ -4066,6 +4650,14 @@
     "types": [
       "fighting"
     ],
+    "canonicalStats": {
+      "hp": 65,
+      "attack": 135,
+      "defense": 135,
+      "specialAttack": 70,
+      "specialDefense": 65,
+      "speed": 100
+    },
     "stats": {
       "hp": 7,
       "attack": 14,
