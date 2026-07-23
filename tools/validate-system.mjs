@@ -185,6 +185,7 @@ async function validateCommanderPokemonSheet() {
   const legalityPath = path.join(root, "src/module/commander/runtime/move-legality.js");
   const runtimeHooksPath = path.join(root, "src/module/commander/runtime/hooks.js");
   const translatorPath = path.join(root, "tools/commander/translate-learnsets.mjs");
+  const learnsetReportPath = path.join(root, "temp/compendium-translated/learnsets/translation-report.json");
   const [sheet, model, speciesModel, speciesService, legality, runtimeHooks, translator] = await Promise.all([
     readText(sheetPath),
     readText(modelPath),
@@ -217,6 +218,19 @@ async function validateCommanderPokemonSheet() {
   if (!legality.includes("UNIVERSAL_MOVE_SLUGS") || !legality.includes("not in this species' canonical learnset")) errors.push("Canonical move-legality service is incomplete.");
   if (!speciesModel.includes('"machine"')) errors.push("Species learnset schema does not accept normalized machine moves.");
   if (!translator.includes("latestGeneration") || !translator.includes("newest available canonical generation")) errors.push("Learnset translation does not fall back for species absent from Gen 9.");
+
+  const learnsetReport = await parseJson(learnsetReportPath);
+  if (learnsetReport) {
+    if (learnsetReport.speciesWithoutCanonicalLearnsets !== 0) {
+      errors.push(`Canonical learnset translation left ${learnsetReport.speciesWithoutCanonicalLearnsets} Species record(s) without moves.`);
+    }
+    if (learnsetReport.speciesWithCanonicalLearnsets !== learnsetReport.speciesRecords) {
+      errors.push("Canonical learnset coverage does not match the translated Species count.");
+    }
+    if (learnsetReport.unresolvedMoveSlugs?.length) {
+      errors.push(`Canonical learnsets contain unresolved moves: ${learnsetReport.unresolvedMoveSlugs.join(", ")}`);
+    }
+  }
 
   notes.push("Audited Commander Pokémon tabs, identity data, starting moves, and canonical move enforcement.");
 }
