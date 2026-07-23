@@ -1,21 +1,30 @@
-const STAT_KEYS = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"];
 const processingPokemon = new Set();
 const processingTrainers = new Set();
 
-function xpThreshold(level) {
-    return Math.max(10, Math.min(100, Number(level) || 1) * 10);
+export function xpThreshold(level) {
+    return 10 + (Math.max(1, Number(level) || 1) * 2);
 }
 
-function growthStat(path, level, stats = {}) {
-    const normalized = String(path ?? "balanced").toLowerCase();
-    if (normalized === "striker") return "attack";
-    if (normalized === "specialist") return "specialAttack";
-    if (normalized === "swift") return "speed";
-    if (normalized === "bulwark") return Number(level) % 2 === 0 ? "defense" : "specialDefense";
-    if (normalized === "custom") {
-        return [...STAT_KEYS].sort((a, b) => Number(stats[a]?.final ?? 0) - Number(stats[b]?.final ?? 0))[0] ?? "hp";
+export function combatXpForLevel(level) {
+    return Math.max(1, Number(level) || 1) * 2;
+}
+
+export function trainingXpForTrainerLevel(level) {
+    return Math.max(5, Math.max(1, Number(level) || 1));
+}
+
+export function calculateLevelGain(startLevel, storedExperience, awardedExperience = 0) {
+    let level = Math.clamp ? Math.clamp(Number(startLevel) || 1, 1, 100) : Math.min(100, Math.max(1, Number(startLevel) || 1));
+    let experience = Math.max(0, Number(storedExperience) || 0) + Math.max(0, Number(awardedExperience) || 0);
+    let levelsGained = 0;
+
+    while (level < 100 && experience >= xpThreshold(level)) {
+        experience -= xpThreshold(level);
+        level += 1;
+        levelsGained += 1;
     }
-    return STAT_KEYS[Math.max(0, (Number(level) || 1) - 1) % STAT_KEYS.length];
+    if (level >= 100) experience = 0;
+    return { level, experience, levelsGained };
 }
 
 function evolutionEligible(actor, level) {
@@ -27,50 +36,59 @@ function evolutionEligible(actor, level) {
     });
 }
 
-async function applyPokemonProgression(actor) {
-    if (!actor || actor.type !== "pokemon" || !actor.system?.schema) return;
-    if (processingPokemon.has(actor.uuid)) return;
+async function applyPokemonExperience(actor, amount, { source = "experience", createMessage = true } = {}) {
+    if (!actor || actor.type !== "pokemon" || !actor.system?.schema) return null;
+    if (actor.system.progression?.mode === "milestone") return null;
+    if (processingPokemon.has(actor.uuid)) return null;
 
+    const award = Math.max(0, Math.floor(Number(amount) || 0));
     processingPokemon.add(actor.uuid);
     try {
-        let level = Math.max(1, Number(actor.system.identity?.level ?? 1));
-        let experience = Math.max(0, Number(actor.system.progression?.experience ?? 0));
-        const statGrowth = Object.fromEntries(STAT_KEYS.map(key => [key, 0]));
-        let levelsGained = 0;
-
-        while (level < 100 && experience >= xpThreshold(level)) {
-            experience -= xpThreshold(level);
-            level += 1;
-            levelsGained += 1;
-            const statKey = growthStat(actor.system.identity?.trainingPath, level, actor.system.stats);
-            statGrowth[statKey] += 1;
-        }
-
-        if (!levelsGained) return;
-
+        const startLevel = Math.max(1, Number(actor.system.identity?.level ?? 1));
+        const result = calculateLevelGain(startLevel, actor.system.progression?.experience, award);
         const updates = {
-            "system.identity.level": level,
-            "system.progression.experience": experience,
-            "system.progression.evolutionEligible": evolutionEligible(actor, level)
+            "system.identity.level": result.level,
+            "system.progression.experience": result.experience,
+            "system.progression.evolutionEligible": evolutionEligible(actor, result.level)
         };
-
-        let hpGrowth = 0;
-        for (const [key, amount] of Object.entries(statGrowth)) {
-            if (!amount) continue;
-            updates[`system.stats.${key}.level`] = Number(actor.system.stats?.[key]?.level ?? 0) + amount;
-            if (key === "hp") hpGrowth += amount;
+        if (result.levelsGained) {
+            updates["system.progression.pendingAdvancements"] =
+                Math.max(0, Number(actor.system.progression?.pendingAdvancements ?? 0)) + result.levelsGained;
         }
-        if (hpGrowth) updates["system.health.hp.value"] = Number(actor.system.health?.hp?.value ?? 0) + hpGrowth;
 
         await actor.update(updates, { commanderProgression: true });
-        ui.notifications.info(`${actor.name} reached Level ${level}!`);
-        await ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor }),
-            content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(actor.name)} grew stronger!</h3><p>Reached Level ${level} and gained ${levelsGained} level${levelsGained === 1 ? "" : "s"}.</p></section>`
-        });
+        if (result.levelsGained) {
+            ui.notifications.info(`${actor.name} reached Level ${result.level}! Advancement choices are pending.`);
+        }
+        if (!award && !result.levelsGained) return null;
+        if (createMessage && award) {
+            const levelText = result.levelsGained
+                ? `<p>Reached Level ${result.level}; ${result.levelsGained} advancement choice${result.levelsGained === 1 ? " is" : "s are"} pending.</p>`
+                : "";
+            await ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({ actor }),
+                content: `<section class="commander-chat-card"><h3>${foundry.utils.escapeHTML(actor.name)} gained experience</h3><p><strong>${award} XP</strong> from ${foundry.utils.escapeHTML(source)}.</p>${levelText}</section>`
+            });
+        }
+        return { ...result, awarded: award };
     } finally {
         processingPokemon.delete(actor.uuid);
     }
+}
+
+export async function awardPokemonExperience(actor, amount, options = {}) {
+    const award = Math.max(0, Math.floor(Number(amount) || 0));
+    if (!award) return null;
+    return applyPokemonExperience(actor, award, options);
+}
+
+async function processStoredPokemonExperience(actor) {
+    return applyPokemonExperience(actor, 0, { source: "manual adjustment", createMessage: false });
+}
+
+function getTrainingCap(trainer) {
+    const cap = Number(trainer.system.attributes?.level?.cap?.training ?? trainer.attributes?.level?.cap?.training);
+    return Number.isFinite(cap) && cap > 0 ? cap : Infinity;
 }
 
 async function awardTrainingExperience(trainer) {
@@ -79,7 +97,6 @@ async function awardTrainingExperience(trainer) {
 
     const downtime = trainer.getFlag("ptu", "commanderDowntime") ?? {};
     if (downtime.category !== "training") return;
-
     const progress = Math.max(0, Number(downtime.progress ?? 0));
     const processed = Math.max(0, Number(trainer.getFlag("ptu", "commanderTrainingAwardProgress") ?? 0));
 
@@ -89,9 +106,8 @@ async function awardTrainingExperience(trainer) {
             await trainer.setFlag("ptu", "commanderTrainingAwardProgress", progress);
             return;
         }
-
-        const gainedProgress = progress - processed;
-        if (gainedProgress <= 0) return;
+        const successfulActions = progress - processed;
+        if (successfulActions <= 0) return;
 
         const activeUuid = trainer.system.team?.activePokemonUuid;
         const pokemon = activeUuid ? await fromUuid(activeUuid) : null;
@@ -100,39 +116,102 @@ async function awardTrainingExperience(trainer) {
             await trainer.setFlag("ptu", "commanderTrainingAwardProgress", progress);
             return;
         }
+        if (Number(pokemon.system.identity?.level ?? 1) > getTrainingCap(trainer)) {
+            ui.notifications.warn(`${pokemon.name} is above this Trainer's training level cap.`);
+            await trainer.setFlag("ptu", "commanderTrainingAwardProgress", progress);
+            return;
+        }
 
-        const experienceGained = gainedProgress * 10;
-        const currentExperience = Math.max(0, Number(pokemon.system.progression?.experience ?? 0));
-        await pokemon.update({ "system.progression.experience": currentExperience + experienceGained }, { commanderTraining: true });
+        const trainerLevel = Number(trainer.system.identity?.level ?? trainer.system.level?.current ?? 1);
+        const experienceGained = successfulActions * trainingXpForTrainerLevel(trainerLevel);
+        await awardPokemonExperience(pokemon, experienceGained, { source: "training" });
         await trainer.setFlag("ptu", "commanderTrainingAwardProgress", progress);
-
-        ui.notifications.info(`${pokemon.name} gained ${experienceGained} XP from training.`);
-        await ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor: trainer }),
-            content: `<section class="commander-chat-card"><h3>Training Complete</h3><p>${foundry.utils.escapeHTML(pokemon.name)} gained <strong>${experienceGained} XP</strong>.</p></section>`
-        });
     } finally {
         processingTrainers.delete(trainer.uuid);
     }
+}
+
+export function buildCombatXpPreview(combat) {
+    const combatants = Array.from(combat?.combatants ?? []);
+    const defeated = combatants.filter(entry =>
+        entry.actor?.type === "pokemon" &&
+        entry.defeated &&
+        entry.actor.system?.schema &&
+        Number(entry.token?.disposition ?? entry.token?.document?.disposition ?? 0) === -1
+    );
+    const participants = combatants.filter(entry =>
+        entry.actor?.type === "pokemon" &&
+        !entry.defeated &&
+        entry.actor.system?.schema &&
+        entry.actor.system.progression?.mode !== "milestone" &&
+        Number(entry.token?.disposition ?? entry.token?.document?.disposition ?? 0) !== -1
+    );
+    const pool = defeated.reduce((sum, entry) => sum + combatXpForLevel(entry.actor.system.identity?.level), 0);
+    return { defeated, participants, pool };
+}
+
+async function confirmCombatAward(combat, preview) {
+    const names = preview.participants.map(entry => foundry.utils.escapeHTML(entry.actor.name)).join(", ") || "None";
+    const content = `<form><p>Eligible Pokémon: ${names}</p><div class="form-group"><label>Total XP pool</label><input name="xpPool" type="number" min="0" step="1" value="${preview.pool}"></div><p>The pool is split evenly among eligible, non-fainted participating Pokémon.</p></form>`;
+    return foundry.applications.api.DialogV2.prompt({
+        window: { title: `Award Pokémon XP: ${combat.name}` },
+        content,
+        ok: {
+            label: "Award XP",
+            callback: (_event, button) => Math.max(0, Math.floor(Number(button.form.elements.xpPool.value) || 0))
+        },
+        rejectClose: false
+    });
+}
+
+export async function awardCombatExperience(combat, { pool = null, confirm = true } = {}) {
+    if (!game.user?.isGM || !combat?.id) return null;
+    const ledger = foundry.utils.deepClone(game.settings.get("ptu", "commanderCombatXpLedger") ?? {});
+    if (ledger[combat.id]) return null;
+
+    const preview = buildCombatXpPreview(combat);
+    let approvedPool = pool === null ? preview.pool : Math.max(0, Math.floor(Number(pool) || 0));
+    if (confirm) approvedPool = await confirmCombatAward(combat, { ...preview, pool: approvedPool });
+    if (approvedPool === null || approvedPool === undefined || !preview.participants.length) return null;
+
+    const each = Math.floor(approvedPool / preview.participants.length);
+    const remainder = approvedPool - (each * preview.participants.length);
+    const awards = [];
+    for (const [index, participant] of preview.participants.entries()) {
+        const amount = each + (index < remainder ? 1 : 0);
+        if (amount) awards.push(await awardPokemonExperience(participant.actor, amount, { source: combat.name, createMessage: false }));
+    }
+
+    ledger[combat.id] = { awardedAt: Date.now(), pool: approvedPool, actorUuids: preview.participants.map(entry => entry.actor.uuid) };
+    await game.settings.set("ptu", "commanderCombatXpLedger", ledger);
+    await ChatMessage.create({
+        content: `<section class="commander-chat-card"><h3>Combat Experience Awarded</h3><p>${approvedPool} XP split among ${preview.participants.length} participating Pokémon.</p></section>`
+    });
+    return { pool: approvedPool, awards };
 }
 
 export const CommanderProgression = {
     listen() {
         Hooks.on("updateActor", async (actor, changed, options) => {
             if (options?.commanderProgression) return;
-
             if (actor.type === "pokemon" && actor.system?.schema) {
-                const xpChanged = foundry.utils.hasProperty(changed, "system.progression.experience");
-                if (xpChanged || options?.commanderTraining) await applyPokemonProgression(actor);
+                if (foundry.utils.hasProperty(changed, "system.progression.experience")) {
+                    await processStoredPokemonExperience(actor);
+                }
                 return;
             }
-
-            if (actor.type === "character" && actor.system?.schema) {
-                const downtimeChanged = foundry.utils.hasProperty(changed, "flags.ptu.commanderDowntime");
-                if (downtimeChanged) await awardTrainingExperience(actor);
+            if (actor.type === "character" && actor.system?.schema &&
+                foundry.utils.hasProperty(changed, "flags.ptu.commanderDowntime")) {
+                await awardTrainingExperience(actor);
             }
         });
+        Hooks.on("deleteCombat", combat => awardCombatExperience(combat));
     },
     xpThreshold,
-    applyPokemonProgression
+    combatXpForLevel,
+    trainingXpForTrainerLevel,
+    calculateLevelGain,
+    awardPokemonExperience,
+    awardCombatExperience,
+    buildCombatXpPreview
 };

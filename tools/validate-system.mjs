@@ -134,7 +134,10 @@ async function validateCommanderBootstrap() {
   if (!sheets.includes("commanderEnabled") || !sheets.includes("commanderMigrationConfirmed")) errors.push("src/scripts/sheets.js must gate Commander sheets on Commander settings.");
 
   if (!settings.includes("registerSettingOnce")) errors.push("Commander settings must be idempotent; missing registerSettingOnce().");
-  if (!settings.includes("default: true")) warnings.push("Commander settings are not defaulting on; fresh private Commander worlds may boot without Commander sheets.");
+  if (!settings.match(/commanderEnabled[\s\S]*?default:\s*false/) ||
+      !settings.match(/commanderMigrationConfirmed[\s\S]*?default:\s*false/)) {
+    errors.push("Commander models and migration confirmation must default off to protect legacy actors.");
+  }
 
   if (!dataRegister.includes("CONFIG.Actor.dataModels.character") || !dataRegister.includes("CONFIG.Actor.dataModels.pokemon")) errors.push("Commander data model registration is missing actor data model assignment.");
   if (!dataRegister.includes("installCommanderPreparationGuards")) warnings.push("Commander preparation guards are missing; legacy PTU actor prep may collide with Commander actor data.");

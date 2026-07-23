@@ -57,12 +57,17 @@ export class CommanderActionTracker {
     const sharedUpdates = {};
 
     if (type === "main") {
+      if (!actions.mainUsed) return;
       actorUpdates["system.actions.mainUsed"] = false;
       sharedUpdates["system.actions.sharedMainRemaining"] = Math.min(2, Number(actions.sharedMainRemaining ?? 0) + 1);
     } else if (type === "move") {
+      if (!actions.moveUsed) return;
       actorUpdates["system.actions.moveUsed"] = false;
       sharedUpdates["system.actions.sharedMoveRemaining"] = Math.min(2, Number(actions.sharedMoveRemaining ?? 0) + 1);
-    } else if (type === "reaction") actorUpdates["system.actions.reactionUsed"] = false;
+    } else if (type === "reaction") {
+      if (!actions.reactionUsed) return;
+      actorUpdates["system.actions.reactionUsed"] = false;
+    }
     else return;
 
     return this.updateLinked(actor, actorUpdates, sharedUpdates);

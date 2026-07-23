@@ -2,7 +2,7 @@ import { registerCommanderDataModels } from "./data/register.js";
 import { createCommanderController } from "./controller.js";
 import { registerCommanderSettings } from "./settings.js";
 
-function getCommanderSetting(key, fallback = true) {
+function getCommanderSetting(key, fallback = false) {
   try {
     return game.settings.get("ptu", key);
   } catch (error) {
@@ -21,8 +21,8 @@ export const CommanderHooks = {
     Hooks.once("init", () => {
       registerCommanderSettings();
       ensureCommanderController();
-      const enabled = getCommanderSetting("commanderEnabled", true);
-      const confirmed = getCommanderSetting("commanderMigrationConfirmed", true);
+      const enabled = getCommanderSetting("commanderEnabled", false);
+      const confirmed = getCommanderSetting("commanderMigrationConfirmed", false);
       if (enabled && confirmed) registerCommanderDataModels();
     });
 

@@ -2,6 +2,29 @@
 
 This file records private-table changes made on top of Pokémon Tabletop Reunited 1e. Upstream attribution remains in `system.json` and the original project documentation.
 
+## 4.4.3-private.54
+
+### Pokémon progression
+
+- Replaced the provisional v52 progression math with the Commander XP baseline.
+- Pokémon now require `10 + (current level × 2)` XP for their next level.
+- Defeated hostile Pokémon contribute `level × 2` XP to an adjustable encounter pool.
+- Eligible participating, non-fainted Pokémon split combat XP evenly, with deterministic remainder distribution.
+- Successful training awards the active Pokémon the Trainer's level in XP, with a minimum of 5 XP.
+- Added multi-level awards, a level-100 cap, evolution eligibility updates, and pending advancement choices.
+- Removed automatic Training Path stat assignment; level-up decisions remain pending until their authoritative rules are locked.
+- Added a permanent combat-award ledger to prevent an encounter from granting XP twice.
+- Added a separate Disabled/Milestone/XP world setting for optional Trainer progression.
+- New Commander Pokémon default to XP progression while existing actors retain their saved mode.
+
+### Safety and release integrity
+
+- Commander models now remain off until a GM confirms and completes actor migration.
+- Repeatedly restoring an unused action no longer duplicates shared actions.
+- Release packaging restores unchanged upstream compendiums before overwriting Commander-generated packs.
+- The release job now fails if any compendium declared in `system.json` is absent.
+- Added executable progression regression tests.
+
 ## 4.4.3-private.1
 
 ### Development tooling

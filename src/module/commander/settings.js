@@ -16,7 +16,7 @@ export function registerCommanderSettings() {
     scope: "world",
     config: true,
     type: Boolean,
-    default: true,
+    default: false,
     requiresReload: true
   });
 
@@ -33,7 +33,29 @@ export function registerCommanderSettings() {
     scope: "world",
     config: false,
     type: Boolean,
-    default: true
+    default: false
+  });
+
+  registerSettingOnce("commanderTrainerProgression", {
+    name: "Trainer Progression",
+    hint: "Choose whether Trainer advancement is disabled, milestone-based, or experience-based. Pokémon experience remains active independently.",
+    scope: "world",
+    config: true,
+    type: String,
+    choices: {
+      disabled: "Disabled",
+      milestone: "Milestone",
+      xp: "Experience"
+    },
+    default: "disabled"
+  });
+
+  registerSettingOnce("commanderCombatXpLedger", {
+    name: "Commander Combat XP Ledger",
+    scope: "world",
+    config: false,
+    type: Object,
+    default: {}
   });
 
   registerSettingOnce("commanderTargetSchemaVersion", {

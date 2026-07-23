@@ -11,7 +11,7 @@ import { insurgenceData, sageData, uraniumData } from "../config/data/fangame-sp
 import { measureDistances } from "../../module/canvas/helpers.js"
 import { registerCommanderRuntimeHooks } from "../../module/commander/runtime/hooks.js"
 
-function commanderSetting(key, fallback = true) {
+function commanderSetting(key, fallback = false) {
     try {
         return game.settings.get("ptu", key);
     } catch (error) {
@@ -23,7 +23,7 @@ function commanderSetting(key, fallback = true) {
 function initializeCommanderBuild() {
     registerCommanderSettings();
     game.commander ??= createCommanderController();
-    if (commanderSetting("commanderEnabled", true) && commanderSetting("commanderMigrationConfirmed", true)) {
+    if (commanderSetting("commanderEnabled", false) && commanderSetting("commanderMigrationConfirmed", false)) {
         registerCommanderDataModels();
     }
 }

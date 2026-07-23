@@ -4,7 +4,7 @@ function requireGm() {
   if (!game.user?.isGM) throw new Error("Commander Build controls require a GM user.");
 }
 
-function getCommanderSetting(key, fallback = true) {
+function getCommanderSetting(key, fallback = false) {
   try {
     return game.settings.get("ptu", key);
   } catch (error) {
@@ -16,11 +16,11 @@ function getCommanderSetting(key, fallback = true) {
 export function createCommanderController() {
   return {
     get enabled() {
-      return getCommanderSetting("commanderEnabled", true);
+      return getCommanderSetting("commanderEnabled", false);
     },
 
     get confirmed() {
-      return getCommanderSetting("commanderMigrationConfirmed", true);
+      return getCommanderSetting("commanderMigrationConfirmed", false);
     },
 
     preview() {
@@ -54,6 +54,8 @@ export function createCommanderController() {
     async enable() {
       requireGm();
       if (!this.confirmed) throw new Error("Migration confirmation is required before enabling Commander Build.");
+      const pending = collectCommanderMigrationReport();
+      if (pending.length) throw new Error(`Migrate all ${pending.length} pending actor(s) before enabling Commander Build.`);
       await game.settings.set("ptu", "commanderEnabled", true);
       ui.notifications.info("Commander Build enabled. Reload the World to activate Commander models and sheets.");
       return true;
