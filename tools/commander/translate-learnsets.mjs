@@ -7,6 +7,8 @@ const RAW_ROOT = path.resolve("temp/compendium-raw");
 const TRANSLATED_ROOT = path.resolve("temp/compendium-translated");
 const OUTPUT_ROOT = path.resolve("temp/compendium-translated/learnsets");
 
+// Learnsets have a dedicated workflow lane because their generated sources feed
+// both sheet legality and release packaging; unrelated translators must not cancel them.
 function propertyName(node) {
   if (ts.isIdentifier(node) || ts.isStringLiteral(node) || ts.isNumericLiteral(node)) return String(node.text);
   if (ts.isComputedPropertyName(node)) return evaluate(node.expression);

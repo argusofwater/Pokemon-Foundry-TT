@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: commander-compendium-writer
+  group: commander-learnset-writer
   cancel-in-progress: false
 
 jobs:

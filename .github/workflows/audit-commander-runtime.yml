@@ -10,6 +10,7 @@ on:
       - "src/scripts/hooks/init.js"
       - "tools/audit-commander-runtime.mjs"
       - "tools/commander/**"
+      - "temp/compendium-translated/learnsets/**"
       - ".github/workflows/audit-commander-runtime.yml"
       - "package.json"
       - "system.json"
