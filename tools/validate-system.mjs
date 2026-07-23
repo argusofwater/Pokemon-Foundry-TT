@@ -177,6 +177,50 @@ async function validateCommanderTrainerSheet() {
   notes.push("Audited Commander Trainer tabs, identity fields, and locked Roles.");
 }
 
+async function validateCommanderPokemonSheet() {
+  const sheetPath = path.join(root, "src/module/commander/sheets/pokemon-sheet.js");
+  const modelPath = path.join(root, "src/module/commander/data/models.js");
+  const speciesModelPath = path.join(root, "src/module/commander/data/species-model.js");
+  const speciesServicePath = path.join(root, "src/module/commander/runtime/species-service.js");
+  const legalityPath = path.join(root, "src/module/commander/runtime/move-legality.js");
+  const runtimeHooksPath = path.join(root, "src/module/commander/runtime/hooks.js");
+  const translatorPath = path.join(root, "tools/commander/translate-learnsets.mjs");
+  const [sheet, model, speciesModel, speciesService, legality, runtimeHooks, translator] = await Promise.all([
+    readText(sheetPath),
+    readText(modelPath),
+    readText(speciesModelPath),
+    readText(speciesServicePath),
+    readText(legalityPath),
+    readText(runtimeHooksPath),
+    readText(translatorPath)
+  ]);
+
+  const requiredTabs = ["overview", "moves", "abilities", "talents", "growth", "equipment", "bond", "exploration", "effects", "biography"];
+  for (const tab of requiredTabs) {
+    if (!sheet.match(new RegExp(`\\b${tab}:\\s*\\{\\s*template:`))) errors.push(`Commander Pokémon sheet is missing the '${tab}' part.`);
+    const templatePath = tab === "effects"
+      ? path.join(root, "src/module/commander/templates/shared/effects.hbs")
+      : path.join(root, `src/module/commander/templates/pokemon/${tab}.hbs`);
+    const template = await readText(templatePath);
+    if (!template.includes(`data-tab="${tab}"`)) errors.push(`Commander Pokémon '${tab}' template has no matching data-tab.`);
+    if (!template.includes(`activeTab '${tab}'`)) errors.push(`Commander Pokémon '${tab}' template does not hide when inactive.`);
+  }
+
+  for (const field of ["speciesUuid", "speciesName", "level", "evolutionStage", "types", "nature", "trainingPath", "lifecycle", "trainerUuid"]) {
+    if (!model.includes(`${field}:`)) errors.push(`Commander Pokémon schema is missing identity field '${field}'.`);
+  }
+
+  if (!speciesService.includes("starterMoveSlugs(learnsetSpecies, resolvedLevel)")) errors.push("Generated Pokémon do not receive canonical starting moves.");
+  if (!speciesService.match(/progression:\s*\{\s*mode:\s*"xp"/)) errors.push("Generated Pokémon must default to XP progression.");
+  if (!sheet.includes("checkActorMove(this.actor, dropped)")) errors.push("Pokémon move-slot drops do not enforce the canonical learnset.");
+  if (!runtimeHooks.includes('Hooks.on("preCreateItem"') || !runtimeHooks.includes("checkActorMove(actor, item)")) errors.push("Direct embedded Move creation is not protected by canonical legality validation.");
+  if (!legality.includes("UNIVERSAL_MOVE_SLUGS") || !legality.includes("not in this species' canonical learnset")) errors.push("Canonical move-legality service is incomplete.");
+  if (!speciesModel.includes('"machine"')) errors.push("Species learnset schema does not accept normalized machine moves.");
+  if (!translator.includes("latestGeneration") || !translator.includes("newest available canonical generation")) errors.push("Learnset translation does not fall back for species absent from Gen 9.");
+
+  notes.push("Audited Commander Pokémon tabs, identity data, starting moves, and canonical move enforcement.");
+}
+
 const manifestPath = path.join(root, "system.json");
 const manifest = await parseJson(manifestPath, "system.json");
 if (!manifest) process.exitCode = 1;
@@ -222,6 +266,7 @@ notes.push(`Checked ${checkedJs} JavaScript modules.`);
 
 await validateCommanderBootstrap();
 await validateCommanderTrainerSheet();
+await validateCommanderPokemonSheet();
 
 console.log("PTR system validation\n=====================");
 for (const note of notes) console.log(`NOTE  ${note}`);

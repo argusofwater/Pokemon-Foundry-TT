@@ -81,17 +81,32 @@ function parseLearnMethod(code) {
   };
 }
 
-function choosePreferredSource(codes) {
-  const parsed = codes.map(parseLearnMethod).filter(Boolean).filter(entry => entry.generation === 9);
+function latestGeneration(entry, table, seen = new Set()) {
+  if (!entry || seen.has(entry)) return 0;
+  seen.add(entry);
+  const record = table[entry];
+  const own = Object.values(record?.learnset ?? {})
+    .flatMap(codes => (Array.isArray(codes) ? codes : [codes]))
+    .map(parseLearnMethod)
+    .filter(Boolean)
+    .reduce((maximum, source) => Math.max(maximum, source.generation), 0);
+  const parent = typeof record?.inherit === "string"
+    ? latestGeneration(record.inherit, table, seen)
+    : 0;
+  return Math.max(own, parent);
+}
+
+function choosePreferredSource(codes, generation) {
+  const parsed = codes.map(parseLearnMethod).filter(Boolean).filter(entry => entry.generation === generation);
   if (!parsed.length) return null;
-  const priority = { level: 0, egg: 1, machine: 2, tutor: 3, event: 4, restricted: 5 };
+  const priority = { level: 0, egg: 1, machine: 2, tutor: 3, event: 4, restricted: 5, "dream-world": 6, "virtual-console": 7 };
   parsed.sort((a, b) => (priority[a.method] ?? 99) - (priority[b.method] ?? 99) || (a.level ?? 999) - (b.level ?? 999));
   const preferred = parsed[0];
   return {
     method: preferred.method,
     level: preferred.level,
     eventIndex: preferred.eventIndex,
-    source: "showdown-gen9",
+    source: `showdown-gen${generation}`,
     sourceCodes: parsed.map(entry => entry.sourceCode)
   };
 }
@@ -100,10 +115,10 @@ function buildMoveIdMap(moves) {
   return new Map(Object.entries(moves).map(([key, move]) => [key, sluggify(move?.name ?? key)]));
 }
 
-function directLearnset(entry, moveIdMap) {
+function directLearnset(entry, moveIdMap, generation) {
   const output = [];
   for (const [moveId, codes] of Object.entries(entry?.learnset ?? {})) {
-    const source = choosePreferredSource(Array.isArray(codes) ? codes : [codes]);
+    const source = choosePreferredSource(Array.isArray(codes) ? codes : [codes], generation);
     if (!source) continue;
     output.push({
       moveSlug: moveIdMap.get(moveId) ?? sluggify(moveId),
@@ -117,15 +132,16 @@ function directLearnset(entry, moveIdMap) {
   return output;
 }
 
-function resolveLearnset(key, table, moveIdMap, seen = new Set()) {
+function resolveLearnset(key, table, moveIdMap, seen = new Set(), generation = null) {
   if (!key || seen.has(key)) return [];
   seen.add(key);
   const entry = table[key];
-  const own = directLearnset(entry, moveIdMap);
+  const resolvedGeneration = generation ?? latestGeneration(key, table);
+  const own = directLearnset(entry, moveIdMap, resolvedGeneration);
   if (!entry?.inherit) return own;
   const parentKey = typeof entry.inherit === "string" ? entry.inherit : null;
   if (!parentKey) return own;
-  const inherited = resolveLearnset(parentKey, table, moveIdMap, seen);
+  const inherited = resolveLearnset(parentKey, table, moveIdMap, seen, resolvedGeneration);
   const merged = new Map(inherited.map(move => [move.moveSlug, move]));
   for (const move of own) merged.set(move.moveSlug, move);
   return [...merged.values()];
@@ -156,6 +172,7 @@ async function main() {
   const translated = [];
   const orphanedSpecies = [];
   const unresolvedMoves = new Set();
+  const generationCounts = {};
 
   for (const sourceRecord of species) {
     const record = clone(sourceRecord);
@@ -169,6 +186,8 @@ async function main() {
 
     if (!resolved.length) orphanedSpecies.push({ slug: record.slug, sourceId, baseSpeciesSlug: record.baseSpeciesSlug ?? "" });
     record.learnset = resolved;
+    const generation = resolved[0]?.source?.match?.(/gen(\d+)$/)?.[1] ?? "none";
+    generationCounts[generation] = (generationCounts[generation] ?? 0) + 1;
     translated.push(record);
   }
 
@@ -203,22 +222,23 @@ async function main() {
     generatedAt: new Date().toISOString(),
     cutoff: "gen9-sv-dlc-pre-za",
     speciesRecords: translated.length,
-    speciesWithGen9Learnsets: translated.filter(record => record.learnset.length).length,
-    speciesWithoutGen9Learnsets: orphanedSpecies.length,
+    speciesWithCanonicalLearnsets: translated.filter(record => record.learnset.length).length,
+    speciesWithoutCanonicalLearnsets: orphanedSpecies.length,
+    sourceGenerationCounts: generationCounts,
     formProfiles: formProfiles.length,
     totalLearnsetEntries: totalEntries,
     uniqueMoveSlugs: new Set(translated.flatMap(record => record.learnset.map(move => move.moveSlug))).size,
     methodCounts,
     unresolvedMoveSlugs: [...unresolvedMoves].sort(),
     notes: [
-      "Only Generation 9 learnset source codes are included.",
+      "Generation 9 learnsets are used when available; species absent from Gen 9 use their newest available canonical generation.",
       "Level, Egg, Machine, Tutor, Event, and restricted sources are preserved separately.",
       "Forms without direct learnsets inherit from their translated base species when possible.",
       "Mega and Primal profiles inherit the base species learnset rather than creating Z-A-specific movesets."
     ]
   });
 
-  console.log(`Attached Gen 9 learnsets to ${translated.filter(record => record.learnset.length).length} of ${translated.length} species/form records.`);
+  console.log(`Attached canonical learnsets to ${translated.filter(record => record.learnset.length).length} of ${translated.length} species/form records.`);
 }
 
 await main();

@@ -2,7 +2,7 @@
   <header class="commander-section-header">
     <div>
       <h2>Moves</h2>
-      <p>Drag Move Items or library entries into four active slots and two reserve slots. Drag slotted moves to rearrange them.</p>
+      <p>Four active moves, two reserve moves, and an archived library. New moves are accepted only when present in the embedded Species learnset.</p>
     </div>
     <div class="commander-action-pool">
       <span>Main {{actions.sharedMainRemaining}} / 2</span>
@@ -12,21 +12,30 @@
     </div>
   </header>
 
+  {{#if illegalMoveCount}}
+    <article class="commander-card accent-red">
+      <h3>Illegal Move Warning</h3>
+      <p>{{illegalMoveCount}} pre-existing move(s) do not belong to this species' canonical learnset. They remain visible for repair, but cannot be used.</p>
+    </article>
+  {{/if}}
+
   <div class="commander-move-grid">
     <section>
       <h3>Active Moves</h3>
       <div class="commander-move-slots">
         {{#each equippedMoves as |move index|}}
-          <article class="commander-move-slot" data-move-zone="active" data-move-index="{{index}}">
+          <article class="commander-move-slot {{#if move}}{{#unless move.legal}}illegal{{/unless}}{{/if}}" data-move-zone="active" data-move-index="{{index}}">
             {{#if move}}
               <img src="{{move.img}}" alt="{{move.name}}" draggable="true" data-item-uuid="{{move.uuid}}">
               <div class="commander-move-drag" draggable="true" data-item-uuid="{{move.uuid}}">
                 <strong>{{move.name}}</strong>
                 <span>{{move.system.type}} · {{move.system.category}}</span>
-                <small>Power {{move.system.power}} · {{move.system.recharge.category}}</small>
+                <small>Power {{move.system.power}} · Accuracy {{move.system.accuracy}} · {{move.system.range}}</small>
+                <small>{{move.system.recharge.category}} · Targets {{move.system.target.defense}}</small>
+                {{#unless move.legal}}<small>Illegal: {{move.legalityReason}}</small>{{/unless}}
               </div>
               <div class="commander-row-actions">
-                <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}">Roll</button>
+                <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}" {{#unless move.legal}}disabled{{/unless}}>Roll</button>
                 <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
                 {{#if ../editable}}<button type="button" data-action="clearMoveSlot" data-move-zone="active" data-move-index="{{index}}">Clear</button>{{/if}}
               </div>
@@ -42,12 +51,14 @@
       <h3>Reserve Moves</h3>
       <div class="commander-move-slots reserve">
         {{#each reserveMoves as |move index|}}
-          <article class="commander-move-slot" data-move-zone="reserve" data-move-index="{{index}}">
+          <article class="commander-move-slot {{#if move}}{{#unless move.legal}}illegal{{/unless}}{{/if}}" data-move-zone="reserve" data-move-index="{{index}}">
             {{#if move}}
               <img src="{{move.img}}" alt="{{move.name}}" draggable="true" data-item-uuid="{{move.uuid}}">
               <div class="commander-move-drag" draggable="true" data-item-uuid="{{move.uuid}}">
                 <strong>{{move.name}}</strong>
                 <span>{{move.system.type}} · {{move.system.category}}</span>
+                <small>{{move.system.range}} · {{move.system.recharge.category}}</small>
+                {{#unless move.legal}}<small>Illegal: {{move.legalityReason}}</small>{{/unless}}
               </div>
               <div class="commander-row-actions">
                 <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
@@ -67,15 +78,19 @@
     {{#if embeddedMoves.length}}
       <div class="commander-table">
         {{#each embeddedMoves as |move|}}
-          <div class="commander-table-row" data-item-id="{{move.id}}" draggable="true" data-item-uuid="{{move.uuid}}">
+          <div class="commander-table-row {{#unless move.legal}}illegal{{/unless}}" data-item-id="{{move.id}}" draggable="true" data-item-uuid="{{move.uuid}}">
             <img src="{{move.img}}" alt="{{move.name}}">
             <strong>{{move.name}}</strong>
             <span>{{move.system.type}}</span>
             <span>{{move.system.category}}</span>
             <span>Power {{move.system.power}}</span>
+            <span>Accuracy {{move.system.accuracy}}</span>
+            <span>{{move.system.range}}</span>
+            <span>{{move.system.target.defense}}</span>
             <span>{{move.system.recharge.category}}</span>
+            {{#unless move.legal}}<span>Illegal: {{move.legalityReason}}</span>{{/unless}}
             <div class="commander-row-actions">
-              <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}">Roll</button>
+              <button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}" {{#unless move.legal}}disabled{{/unless}}>Roll</button>
               <button type="button" data-action="openDocument" data-uuid="{{move.uuid}}">Open</button>
               {{#if ../editable}}<button type="button" data-action="deleteEmbedded" data-item-id="{{move.id}}">Delete</button>{{/if}}
             </div>
@@ -84,6 +99,30 @@
       </div>
     {{else}}
       <p>No embedded moves yet. Drag a Move Item onto a slot or anywhere on the sheet.</p>
+    {{/if}}
+  </section>
+
+  <section class="commander-move-library">
+    <h3>Canonical Moves Available to Learn</h3>
+    {{#if availableMoves.length}}
+      <div class="commander-table">
+        {{#each availableMoves as |entry|}}
+          <div class="commander-table-row {{#unless entry.available}}locked{{/unless}}">
+            <strong>{{entry.moveSlug}}</strong>
+            <span>{{capitalize entry.method}}</span>
+            <span>{{entry.requirement}}</span>
+            <span>
+              {{#if (eq entry.method "level")}}
+                {{#if entry.available}}Level available{{else}}Future level{{/if}}
+              {{else}}
+                Requires {{capitalize entry.method}} access
+              {{/if}}
+            </span>
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p>No additional canonical moves are listed, or every listed move is already known.</p>
     {{/if}}
   </section>
 </section>

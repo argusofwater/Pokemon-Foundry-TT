@@ -3,6 +3,7 @@ import { CommanderRollService } from "../runtime/roll-service.js";
 import { CommanderConditionService } from "../runtime/condition-service.js";
 import { CommanderSheetAutomation } from "../runtime/sheet-automation.js";
 import { CommanderSpeciesService } from "../runtime/species-service.js";
+import { checkActorMove } from "../runtime/move-legality.js";
 
 function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
@@ -225,6 +226,11 @@ export class CommanderActorSheetBase extends foundry.applications.api.Handlebars
         console.error("Commander species drop failed", error);
         return ui.notifications.error(error.message ?? "Could not create that Pokémon.");
       }
+    }
+
+    if (isPokemonActor(this.actor) && item.type === "move") {
+      const legality = checkActorMove(this.actor, item);
+      if (!legality.legal) return ui.notifications.warn(legality.reason);
     }
 
     return this.actor.createEmbeddedDocuments("Item", [item.toObject()]);

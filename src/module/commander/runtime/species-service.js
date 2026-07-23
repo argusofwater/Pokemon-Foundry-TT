@@ -1,18 +1,12 @@
+import { normalizeLearnset, normalizeMoveSlug, starterMoveSlugs } from "./move-legality.js";
+
 const STAT_KEYS = ["hp", "attack", "defense", "specialAttack", "specialDefense", "speed"];
 
 function clampLevel(level) {
   return Math.max(1, Math.min(100, Number(level) || 1));
 }
 
-function normalizeSlug(value) {
-  return String(value ?? "")
-    .trim()
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[’']/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
+const normalizeSlug = normalizeMoveSlug;
 
 function speciesStats(system = {}) {
   const stats = system.commanderStats ?? system.stats ?? {};
@@ -112,38 +106,10 @@ async function documentsBySlug(packId, slugs) {
   return [...wanted].map(slug => bySlug.get(slug)).filter(Boolean);
 }
 
-function normalizedLearnset(species) {
-  const direct = Array.isArray(species.system.learnset) ? species.system.learnset : [];
-  const legacy = Array.isArray(species.system.moves?.level)
-    ? species.system.moves.level.map(entry => ({
-        moveSlug: entry.moveSlug ?? entry.slug ?? entry.name,
-        method: "level",
-        level: entry.level ?? 1
-      }))
-    : [];
-
-  const merged = new Map();
-  for (const entry of [...direct, ...legacy]) {
-    const moveSlug = normalizeSlug(entry.moveSlug ?? entry.slug ?? entry.name);
-    if (!moveSlug) continue;
-    const method = String(entry.method ?? "level").toLowerCase();
-    if (!merged.has(moveSlug) || method === "level") {
-      merged.set(moveSlug, { moveSlug, method, level: Number(entry.level ?? 1) || 1 });
-    }
-  }
-  return [...merged.values()];
-}
-
-function starterMoveSlugs(species, level = 1) {
-  const entries = normalizedLearnset(species)
-    .filter(entry => entry.method === "level")
-    .sort((a, b) => Number(a.level ?? 1) - Number(b.level ?? 1) || a.moveSlug.localeCompare(b.moveSlug));
-
-  const eligible = entries.filter(entry => Number(entry.level ?? 1) <= level);
-  const selected = eligible.length ? eligible : entries.slice(0, 4);
-  const unique = [];
-  for (const entry of selected) if (entry.moveSlug && !unique.includes(entry.moveSlug)) unique.push(entry.moveSlug);
-  return unique.slice(-6);
+async function speciesWithCanonicalLearnset(species) {
+  if (normalizeLearnset(species).length || !species.system.baseSpeciesSlug) return species;
+  const [base] = await documentsBySlug("ptu.species", [species.system.baseSpeciesSlug]);
+  return base && normalizeLearnset(base).length ? base : species;
 }
 
 function tokenSize(size) {
@@ -192,10 +158,18 @@ export class CommanderSpeciesService {
     const portrait = safePortrait(species);
     const size = tokenSize(sizeClass(species.system));
     const abilityDocuments = await documentsBySlug("ptu.abilities", species.system.abilitySlugs ?? []);
-    const requestedMoveSlugs = starterMoveSlugs(species, resolvedLevel);
+    const learnsetSpecies = await speciesWithCanonicalLearnset(species);
+    const canonicalLearnset = normalizeLearnset(learnsetSpecies);
+    const requestedMoveSlugs = starterMoveSlugs(learnsetSpecies, resolvedLevel);
     const moveDocuments = await documentsBySlug("ptu.moves", requestedMoveSlugs);
     const speciesItem = species.toObject();
     delete speciesItem._id;
+    if (!normalizeLearnset(speciesItem.system).length && canonicalLearnset.length) {
+      speciesItem.system.learnset = canonicalLearnset;
+      speciesItem.flags ??= {};
+      speciesItem.flags.ptu ??= {};
+      speciesItem.flags.ptu.commanderLearnsetInheritedFrom = learnsetSpecies.system.slug;
+    }
 
     if (requestedMoveSlugs.length && moveDocuments.length !== requestedMoveSlugs.length) {
       const resolved = new Set(moveDocuments.map(move => normalizeSlug(move.system?.slug ?? move.name)));
@@ -244,7 +218,7 @@ export class CommanderSpeciesService {
         bond: { level: "wary", progress: 0, caregiverUuid: trainer?.uuid ?? "", notes: "" },
         actions: { mainUsed: false, moveUsed: false, reactionUsed: false, sharedMainRemaining: 2, sharedMoveRemaining: 2, lastCombatRound: null, lastCombatTurn: null },
         loadout: { equippedMoveUuids: ["", "", "", ""], reserveMoveUuids: ["", ""], heldItemUuid: "", activeAbilityUuids: [] },
-        progression: { mode: "milestone", experience: 0, milestone: 0, evolutionEligible: false },
+        progression: { mode: "xp", experience: 0, milestone: 0, evolutionEligible: false, pendingAdvancements: 0 },
         exploration: {
           capabilities: [...(species.system.capabilitySlugs ?? [])],
           mountCapable: (species.system.capabilitySlugs ?? []).includes("mount"),

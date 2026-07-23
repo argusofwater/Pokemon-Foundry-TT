@@ -9,6 +9,7 @@
     "validate:strict": "node tools/validate-system.mjs --strict",
     "audit:commander-runtime": "node tools/audit-commander-runtime.mjs",
     "test:commander-progression": "node --test tools/commander/progression.test.mjs",
+    "test:commander-moves": "node --test tools/commander/move-legality.test.mjs",
     "package": "node tools/package-system.mjs",
     "compendium:validate": "node tools/commander/validate-source.mjs",
     "compendium:build": "node tools/commander/build-compendiums.mjs",

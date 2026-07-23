@@ -15,7 +15,9 @@
       <div class="commander-stat-row"><span>Training Path</span><span class="commander-value">{{system.identity.trainingPath}}</span></div>
       <div class="commander-stat-row"><span>Mode</span><span class="commander-value">{{system.progression.mode}}</span></div>
       <div class="commander-stat-row"><span>Milestone</span><span class="commander-value">{{system.progression.milestone}}</span></div>
-      <div class="commander-stat-row"><span>Experience</span><span class="commander-value">{{system.progression.experience}}</span></div>
+      <div class="commander-stat-row"><span>Experience</span><span class="commander-value">{{system.progression.experience}} / {{nextLevelXp}}</span></div>
+      <div class="commander-stat-row"><span>Pending Choices</span><span class="commander-value">{{system.progression.pendingAdvancements}}</span></div>
+      <div class="commander-stat-row"><span>Evolution Ready</span><span class="commander-value">{{#if system.progression.evolutionEligible}}Yes{{else}}No{{/if}}</span></div>
     </article>
 
     <article class="commander-card accent-red">

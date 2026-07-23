@@ -2,6 +2,22 @@
 
 This file records private-table changes made on top of Pokémon Tabletop Reunited 1e. Upstream attribution remains in `system.json` and the original project documentation.
 
+## 4.4.3-private.55
+
+### Pokémon sheets and canonical moves
+
+- Audited and enforced all ten locked Pokémon sheet tabs.
+- Added evolution stage, typing, linked Trainer, Held Item, lifecycle, and shiny status to the Overview identity panel.
+- Corrected Species size rendering and restored XP progression as the generated-Pokémon default.
+- Added XP threshold, pending advancement, and evolution-readiness information to Growth.
+- New Pokémon now embed up to six level-appropriate canonical starting moves, filling four active slots before two reserve slots.
+- Move drops and direct embedded Move creation are rejected when the move is absent from the Pokémon's embedded Species learnset.
+- Existing illegal moves are retained for repair, visibly warned, and prevented from rolling.
+- Added an Available to Learn list sourced from the canonical Species record.
+- Expanded move cards with accuracy, range, target defense, recharge, and legality information.
+- Species absent from Generation 9 now use their newest available canonical Showdown learnset instead of receiving an empty move pool.
+- Added canonical-move regression tests, including explicit verification that Eevee cannot learn Oblivion Wing.
+
 ## 4.4.3-private.54
 
 ### Pokémon progression

@@ -105,7 +105,7 @@ export class CommanderSpeciesData extends foundry.abstract.TypeDataModel {
       talentSlugs: tagsField(),
       learnset: new fields.ArrayField(new fields.SchemaField({
         moveSlug: new fields.StringField({ required: true, nullable: false, blank: false }),
-        method: new fields.StringField({ required: true, nullable: false, choices: ["level", "tm", "tr", "tutor", "egg", "event", "special"], initial: "level" }),
+        method: new fields.StringField({ required: true, nullable: false, choices: ["level", "machine", "tm", "tr", "tutor", "egg", "event", "restricted", "dream-world", "virtual-console", "special"], initial: "level" }),
         level: new fields.NumberField({ required: false, nullable: true, integer: true, min: 1, initial: null }),
         source: new fields.StringField({ required: true, nullable: false, blank: true, initial: "" })
       }), { required: true, nullable: false, initial: [] }),

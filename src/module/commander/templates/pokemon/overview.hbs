@@ -4,9 +4,15 @@
       <h2>Creature Profile</h2>
       <div class="commander-stat-row"><span>Species</span><span class="commander-value commander-locked-field" title="Species is set only by the Pokémon generator, species drag/drop, or evolution/form automation.">{{system.identity.speciesName}}</span></div>
       <div class="commander-stat-row"><span>Level</span>{{#if (eq mode "edit")}}<input type="number" name="system.identity.level" value="{{system.identity.level}}" min="1" max="100">{{else}}<span class="commander-value">{{system.identity.level}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Evolution Stage</span><span class="commander-value">{{system.identity.evolutionStage}}</span></div>
+      <div class="commander-stat-row"><span>Types</span><span class="commander-value">{{#each system.identity.types as |type|}}{{capitalize type}}{{#unless @last}} / {{/unless}}{{/each}}</span></div>
       <div class="commander-stat-row"><span>Nature</span>{{#if (eq mode "edit")}}<input name="system.identity.nature" value="{{system.identity.nature}}">{{else}}<span class="commander-value">{{system.identity.nature}}</span>{{/if}}</div>
       <div class="commander-stat-row"><span>Training Path</span>{{#if (eq mode "edit")}}<select name="system.identity.trainingPath"><option value="striker" {{#if (eq system.identity.trainingPath "striker")}}selected{{/if}}>Striker</option><option value="specialist" {{#if (eq system.identity.trainingPath "specialist")}}selected{{/if}}>Specialist</option><option value="bulwark" {{#if (eq system.identity.trainingPath "bulwark")}}selected{{/if}}>Bulwark</option><option value="swift" {{#if (eq system.identity.trainingPath "swift")}}selected{{/if}}>Swift</option><option value="balanced" {{#if (eq system.identity.trainingPath "balanced")}}selected{{/if}}>Balanced</option><option value="custom" {{#if (eq system.identity.trainingPath "custom")}}selected{{/if}}>Custom</option></select>{{else}}<span class="commander-value">{{system.identity.trainingPath}}</span>{{/if}}</div>
       <div class="commander-stat-row"><span>Bond</span>{{#if (eq mode "edit")}}<select name="system.bond.level"><option value="wary" {{#if (eq system.bond.level "wary")}}selected{{/if}}>Wary</option><option value="trusting" {{#if (eq system.bond.level "trusting")}}selected{{/if}}>Trusting</option><option value="bonded" {{#if (eq system.bond.level "bonded")}}selected{{/if}}>Bonded</option><option value="devoted" {{#if (eq system.bond.level "devoted")}}selected{{/if}}>Devoted</option></select>{{else}}<span class="commander-value">{{system.bond.level}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Trainer</span><span class="commander-value">{{#if linkedTrainer}}{{linkedTrainer.name}}{{else}}Unassigned{{/if}}</span></div>
+      <div class="commander-stat-row"><span>Held Item</span><span class="commander-value">{{#if heldItem}}{{heldItem.name}}{{else}}None{{/if}}</span></div>
+      <div class="commander-stat-row"><span>Lifecycle</span><span class="commander-value">{{capitalize system.identity.lifecycle}}</span></div>
+      {{#if isShiny}}<div class="commander-stat-row"><span>Variant</span><span class="commander-value">Shiny</span></div>{{/if}}
     </article>
 
     <article class="commander-card wide">
@@ -68,7 +74,7 @@
       <h2>Move Dock</h2>
       <div class="commander-move-grid">
         {{#each equippedMoves as |move index|}}
-          {{#if move}}<div class="commander-move-card" data-item-id="{{move.id}}"><h4>{{move.name}}</h4><span class="commander-type-chip">{{move.system.type}}</span><span class="commander-tag">{{move.system.category}}</span><div class="commander-move-row"><span>Power</span><strong>{{move.system.power}}</strong></div><div class="commander-move-row"><span>Defense</span><strong>{{move.system.target.defense}}</strong></div><button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}">Use Move</button></div>{{else}}<div class="commander-move-card empty">Drop a move here</div>{{/if}}
+          {{#if move}}<div class="commander-move-card {{#unless move.legal}}illegal{{/unless}}" data-item-id="{{move.id}}"><h4>{{move.name}}</h4><span class="commander-type-chip">{{move.system.type}}</span><span class="commander-tag">{{move.system.category}}</span>{{#unless move.legal}}<span class="commander-tag">Illegal: {{move.legalityReason}}</span>{{/unless}}<div class="commander-move-row"><span>Power</span><strong>{{move.system.power}}</strong></div><div class="commander-move-row"><span>Defense</span><strong>{{move.system.target.defense}}</strong></div><button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}" {{#unless move.legal}}disabled{{/unless}}>Use Move</button></div>{{else}}<div class="commander-move-card empty">Drop a move here</div>{{/if}}
         {{/each}}
       </div>
     </article>

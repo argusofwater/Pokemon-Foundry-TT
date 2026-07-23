@@ -1,4 +1,4 @@
-name: Translate Commander Gen 9 learnsets
+name: Translate Commander canonical learnsets
 
 on:
   workflow_dispatch:
@@ -48,5 +48,5 @@ jobs:
             echo "No translated learnset changes to commit."
             exit 0
           fi
-          git commit -m "Attach Gen 9 learnsets to translated species"
+          git commit -m "Attach canonical learnsets to translated species"
           git push origin HEAD:codex/foundry-base-pass

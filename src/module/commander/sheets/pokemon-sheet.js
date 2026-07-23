@@ -2,6 +2,8 @@ import { CommanderActorSheetBase } from "./base-sheet.js";
 import { CommanderActionTracker } from "../runtime/action-tracker.js";
 import { CommanderRollService } from "../runtime/roll-service.js";
 import { CommanderFriendshipService } from "../runtime/friendship-service.js";
+import { availableCanonicalMoves, checkActorMove } from "../runtime/move-legality.js";
+import { xpThreshold } from "../../../scripts/hooks/commander-progression.js";
 
 function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
@@ -75,6 +77,23 @@ function formSummary(form) {
   };
 }
 
+function moveSummary(move, actor) {
+  if (!move) return null;
+  const legality = checkActorMove(actor, move);
+  return {
+    item: move,
+    id: move.id,
+    uuid: move.uuid,
+    name: move.name,
+    img: move.img,
+    system: move.system,
+    legal: legality.legal,
+    legalityReason: legality.reason ?? "",
+    learnMethod: legality.method ?? "",
+    learnLevel: legality.level ?? null
+  };
+}
+
 export class CommanderPokemonSheet extends CommanderActorSheetBase {
   static DEFAULT_OPTIONS = {
     ...super.DEFAULT_OPTIONS,
@@ -112,16 +131,19 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     const context = await super._prepareContext(options);
     const statSource = this.actor.system.commanderStats ?? this.actor.system.stats ?? {};
     const statList = COMMANDER_STAT_KEYS.map(key => normalizeCommanderStat(statSource, key));
-    const equippedMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.equippedMoveUuids ?? [], 4);
-    const reserveMoves = await this.#resolveMoveSlots(this.actor.system.loadout?.reserveMoveUuids ?? [], 2);
-    const embeddedMoves = this.actor.items.filter(item => item.type === "move");
+    const speciesItem = this.actor.itemTypes?.species?.[0] ?? null;
+    const speciesSystem = speciesItem?.system ?? {};
+    const equippedMoves = (await this.#resolveMoveSlots(this.actor.system.loadout?.equippedMoveUuids ?? [], 4)).map(move => moveSummary(move, this.actor));
+    const reserveMoves = (await this.#resolveMoveSlots(this.actor.system.loadout?.reserveMoveUuids ?? [], 2)).map(move => moveSummary(move, this.actor));
+    const embeddedMoves = this.actor.items.filter(item => item.type === "move").map(move => moveSummary(move, this.actor));
     const embeddedAbilities = this.actor.items.filter(item => item.type === "ability").map(itemSummary);
     const talents = this.actor.items.filter(item => TALENT_TYPES.has(item.type)).map(itemSummary);
     const heldItemUuid = this.actor.system.loadout?.heldItemUuid ?? "";
+    const heldItem = heldItemUuid ? await fromUuid(heldItemUuid) : null;
+    const trainerUuid = this.actor.system.identity?.trainerUuid ?? "";
+    const linkedTrainer = trainerUuid ? await fromUuid(trainerUuid) : null;
     const equipment = this.actor.items.filter(item => EQUIPMENT_TYPES.has(item.type)).map(item => ({ ...itemSummary(item), held: item.uuid === heldItemUuid }));
     equipment.sort((a, b) => Number(b.held) - Number(a.held) || a.item.name.localeCompare(b.item.name));
-    const speciesItem = this.actor.itemTypes?.species?.[0] ?? null;
-    const speciesSystem = speciesItem?.system ?? {};
     const evolutions = (speciesSystem.evolutions ?? []).map(evolutionSummary);
     const forms = (speciesSystem.forms ?? []).map(formSummary);
     const capabilityItems = this.actor.items.filter(item => item.type === "capability").map(itemSummary);
@@ -138,11 +160,18 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
       equippedMoves,
       reserveMoves,
       embeddedMoves,
+      illegalMoveCount: embeddedMoves.filter(move => !move.legal).length,
+      availableMoves: availableCanonicalMoves(this.actor),
       embeddedAbilities,
       talents,
       equipment,
+      heldItem,
+      linkedTrainer,
       speciesItem,
       speciesSystem,
+      speciesSize: typeof speciesSystem.size === "string" ? speciesSystem.size : speciesSystem.size?.sizeClass ?? "medium",
+      isShiny: Boolean(this.actor.getFlag("ptu", "commanderShiny")),
+      nextLevelXp: xpThreshold(this.actor.system.identity?.level),
       evolutions,
       forms,
       capabilityItems,
@@ -183,6 +212,8 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     if (data.type !== "Item") return ui.notifications.warn("Only Move Items can be assigned to move slots.");
     const dropped = data.uuid ? await fromUuid(data.uuid) : await Item.implementation.fromDropData(data);
     if (!dropped || dropped.type !== "move") return ui.notifications.warn("Only Move Items can be assigned to move slots.");
+    const legality = checkActorMove(this.actor, dropped);
+    if (!legality.legal) return ui.notifications.warn(legality.reason);
     const item = dropped.parent?.uuid === this.actor.uuid ? dropped : (await this.actor.createEmbeddedDocuments("Item", [dropped.toObject()]))?.[0];
     if (!item) return;
     return this.#assignMoveToSlot(item.uuid, targetZone, targetIndex);
@@ -216,6 +247,8 @@ export class CommanderPokemonSheet extends CommanderActorSheetBase {
     const app = resolveApplication(target, this);
     const item = await fromUuid(target.dataset.itemUuid);
     if (!item) return ui.notifications.warn("Move could not be resolved.");
+    const legality = checkActorMove(app.actor, item);
+    if (!legality.legal) return ui.notifications.warn(legality.reason);
     return CommanderRollService.rollMove({ actor: app.actor, item });
   }
 
