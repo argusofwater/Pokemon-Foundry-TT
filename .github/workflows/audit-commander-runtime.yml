@@ -9,6 +9,7 @@ on:
       - "src/module/commander/**"
       - "src/scripts/hooks/init.js"
       - "tools/audit-commander-runtime.mjs"
+      - "tools/validate-system.mjs"
       - "tools/commander/**"
       - "temp/compendium-translated/learnsets/**"
       - ".github/workflows/audit-commander-runtime.yml"
