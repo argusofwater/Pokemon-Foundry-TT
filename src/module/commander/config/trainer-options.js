@@ -15,16 +15,28 @@ export const COMMANDER_BACKGROUNDS = Object.freeze([
   "Custom"
 ]);
 
+export const COMMANDER_TRAINER_TABS = Object.freeze([
+  "overview",
+  "team",
+  "skills",
+  "talents",
+  "inventory",
+  "exploration",
+  "social",
+  "downtime",
+  "effects",
+  "biography"
+]);
+
+// These are the six locked Commander roles. Specialties remain free-form until
+// their rules lists are finalized; the sheet preserves existing/custom values.
 export const COMMANDER_ROLES = Object.freeze({
-  "Ace Trainer": ["Duelist", "Strategist", "Team Captain", "Tactician"],
-  "Coordinator": ["Choreographer", "Performer", "Stylist", "Showrunner"],
-  "Explorer": ["Guide", "Mountaineer", "Pathfinder", "Scout"],
-  "Handler": ["Breeder", "Caretaker", "Rancher", "Rehabilitator"],
-  "Medic": ["Combat Medic", "Field Doctor", "Herbalist", "Veterinarian"],
-  "Ranger": ["Conservationist", "Rescue Ranger", "Tracker", "Warden"],
-  "Researcher": ["Ecologist", "Historian", "Professor", "Species Analyst"],
-  "Specialist": ["Engineer", "Investigator", "Negotiator", "Technologist"],
-  "Custom": ["Custom"]
+  "Ace": [],
+  "Field Expert": [],
+  "Tactician": [],
+  "Vanguard": [],
+  "Mystic": [],
+  "Performer": []
 });
 
 export function optionList(values, selected = "") {
@@ -38,5 +50,5 @@ export function roleOptions(selected = "") {
 }
 
 export function specialtyOptions(role, selected = "") {
-  return optionList(COMMANDER_ROLES[role] ?? ["Custom"], selected);
+  return optionList(COMMANDER_ROLES[role] ?? [], selected);
 }

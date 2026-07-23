@@ -145,6 +145,38 @@ async function validateCommanderBootstrap() {
   notes.push("Audited Commander bootstrap order and duplicate-hook traps.");
 }
 
+async function validateCommanderTrainerSheet() {
+  const sheetPath = path.join(root, "src/module/commander/sheets/trainer-sheet.js");
+  const optionsPath = path.join(root, "src/module/commander/config/trainer-options.js");
+  const overviewPath = path.join(root, "src/module/commander/templates/trainer/overview.hbs");
+  const [sheet, options, overview] = await Promise.all([
+    readText(sheetPath), readText(optionsPath), readText(overviewPath)
+  ]);
+
+  const requiredTabs = ["overview", "team", "skills", "talents", "inventory", "exploration", "social", "downtime", "effects", "biography"];
+  for (const tab of requiredTabs) {
+    if (!options.includes(`"${tab}"`)) errors.push(`Commander trainer tab list is missing '${tab}'.`);
+    if (!sheet.match(new RegExp(`\\b${tab}:\\s*\\{\\s*template:`))) errors.push(`Commander trainer sheet is missing the '${tab}' part.`);
+
+    const templatePath = tab === "effects"
+      ? path.join(root, "src/module/commander/templates/shared/effects.hbs")
+      : path.join(root, `src/module/commander/templates/trainer/${tab}.hbs`);
+    const template = await readText(templatePath);
+    if (!template.includes(`data-tab="${tab}"`)) errors.push(`Commander trainer '${tab}' template has no matching data-tab.`);
+    if (!template.includes(`activeTab '${tab}'`)) errors.push(`Commander trainer '${tab}' template does not hide when inactive.`);
+  }
+
+  for (const field of ["background", "role", "specialty", "level"]) {
+    if (!overview.includes(`name="system.identity.${field}"`)) errors.push(`Commander trainer Overview is missing identity field '${field}'.`);
+  }
+
+  for (const role of ["Ace", "Field Expert", "Tactician", "Vanguard", "Mystic", "Performer"]) {
+    if (!options.includes(`"${role}"`)) errors.push(`Commander trainer roles are missing '${role}'.`);
+  }
+
+  notes.push("Audited Commander Trainer tabs, identity fields, and locked Roles.");
+}
+
 const manifestPath = path.join(root, "system.json");
 const manifest = await parseJson(manifestPath, "system.json");
 if (!manifest) process.exitCode = 1;
@@ -189,6 +221,7 @@ for (const file of jsFiles) {
 notes.push(`Checked ${checkedJs} JavaScript modules.`);
 
 await validateCommanderBootstrap();
+await validateCommanderTrainerSheet();
 
 console.log("PTR system validation\n=====================");
 for (const note of notes) console.log(`NOTE  ${note}`);

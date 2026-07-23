@@ -1,7 +1,13 @@
 import { CommanderActorSheetBase } from "./base-sheet.js";
 import { CommanderFriendshipService } from "../runtime/friendship-service.js";
 import { CommanderRollService } from "../runtime/roll-service.js";
-import { COMMANDER_BACKGROUNDS, optionList, roleOptions, specialtyOptions } from "../config/trainer-options.js";
+import {
+  COMMANDER_BACKGROUNDS,
+  COMMANDER_TRAINER_TABS,
+  optionList,
+  roleOptions,
+  specialtyOptions
+} from "../config/trainer-options.js";
 
 function resolveApplication(target, fallback) {
   return target?.closest?.(".application")?.application ?? fallback;
@@ -199,7 +205,7 @@ export class CommanderTrainerSheet extends CommanderActorSheetBase {
     return {
       ...context,
       sheetType: "trainer",
-      tabs: ["overview", "team", "skills", "talents", "inventory", "exploration", "social", "downtime", "effects", "biography"],
+      tabs: COMMANDER_TRAINER_TABS,
       activeCompanion,
       team,
       teamCount: team.length,

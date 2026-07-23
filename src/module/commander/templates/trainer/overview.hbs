@@ -13,7 +13,7 @@
         {{/if}}
       </div>
       <div class="commander-stat-row">
-        <span>Role</span>
+        <span>Role <small>(Class)</small></span>
         {{#if (eq mode "edit")}}
           <select name="system.identity.role">
             {{#each roleOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
@@ -25,9 +25,11 @@
       <div class="commander-stat-row">
         <span>Specialty</span>
         {{#if (eq mode "edit")}}
-          <select name="system.identity.specialty">
-            {{#each specialtyOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
-          </select>
+          <input type="text" name="system.identity.specialty" value="{{system.identity.specialty}}"
+            list="commander-specialties" placeholder="Choose or enter a specialty">
+          <datalist id="commander-specialties">
+            {{#each specialtyOptions as |option|}}<option value="{{option.value}}">{{option.label}}</option>{{/each}}
+          </datalist>
         {{else}}
           <span class="commander-value">{{system.identity.specialty}}</span>
         {{/if}}
