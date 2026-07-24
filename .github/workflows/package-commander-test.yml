@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: commander-test-v55
+  group: commander-test-v56
   cancel-in-progress: true
 
 jobs:
@@ -55,8 +55,8 @@ jobs:
       - name: Publish prerelease
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: commander-test-v55
-          name: Commander Build Test v55
+          tag_name: commander-test-v56
+          name: Commander Build Test v56
           prerelease: true
           make_latest: false
           files: build/release/ptu.zip
