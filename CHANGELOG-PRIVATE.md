@@ -2,6 +2,17 @@
 
 This file records private-table changes made on top of Pokémon Tabletop Reunited 1e. Upstream attribution remains in `system.json` and the original project documentation.
 
+## 4.4.3-private.56
+
+### Foundry V14 actor-preparation compatibility
+
+- Restored the complete PTUItem embedded-document lifecycle accidentally omitted during the Commander item-schema conversion.
+- Restored owned Rule Element preparation for Effects, Conditions, Moves, Abilities, and other embedded Items.
+- Restored item creation, deletion, grant cleanup, actor-data preparation, and compendium refresh behavior.
+- Preserved Commander structured range support alongside legacy text ranges.
+- Added runtime-audit assertions that fail the build if the PTUItem lifecycle is truncated again.
+- Fixes the `super.prepareRuleElements is not a function` crash that prevented Trainer actors from preparing and caused legacy-sheet fallback errors.
+
 ## 4.4.3-private.55
 
 ### Pokémon sheets and canonical moves
