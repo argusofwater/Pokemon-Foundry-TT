@@ -6,7 +6,7 @@
     "minimum": "14",
     "verified": "14"
   },
-  "version": "4.4.3-private.55",
+  "version": "4.4.3-private.56",
   "templateVersion": 2,
   "authors": [
     {
@@ -247,6 +247,6 @@
   "background": "systems/ptu/static/images/banner.webp",
   "url": "https://github.com/argusofwater/Pokemon-Foundry-TT",
   "manifest": "https://raw.githubusercontent.com/argusofwater/Pokemon-Foundry-TT/codex/foundry-base-pass/system.json",
-  "download": "https://github.com/argusofwater/Pokemon-Foundry-TT/releases/download/commander-test-v55/ptu.zip",
+  "download": "https://github.com/argusofwater/Pokemon-Foundry-TT/releases/download/commander-test-v56/ptu.zip",
   "changelog": "https://github.com/argusofwater/Pokemon-Foundry-TT/blob/codex/foundry-base-pass/CHANGELOG-PRIVATE.md"
 }
