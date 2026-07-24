@@ -1,0 +1,49 @@
+<section class="commander-tab commander-skills-tab {{#unless (eq activeTab 'skills')}}hidden{{/unless}}" data-tab="skills">
+  <header class="commander-section-header">
+    <div>
+      <h2>Skills</h2>
+      <p>Each total updates from Attribute + Rank + Misc. Favorite skills roll Favored.</p>
+    </div>
+  </header>
+
+  <div class="commander-skill-legend">
+    <span>Attribute</span>
+    <span>Rank</span>
+    <span>Misc</span>
+    <span>Total</span>
+  </div>
+
+  <div class="commander-card">
+    <div class="commander-skill-grid">
+      {{#each skillList as |skill|}}
+        <article class="commander-skill-row {{#if skill.favorite}}favorite{{/if}}">
+          <button type="button" class="commander-skill-roll" data-action="rollSkill" data-skill-key="{{skill.key}}" title="Roll {{skill.label}}">
+            <span class="commander-skill-name">🎲 {{skill.label}}</span>
+            {{#if skill.favorite}}<span class="commander-skill-favorite">★ Favorite</span>{{/if}}
+          </button>
+
+          {{#if (eq ../mode "edit")}}
+            <select name="system.skills.{{skill.key}}.attribute" aria-label="Attribute for {{skill.label}}">
+              {{#each skill.attributeOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+            </select>
+            <select name="system.skills.{{skill.key}}.rank" aria-label="Rank for {{skill.label}}">
+              <option value="untrained" {{#if (eq skill.rank "untrained")}}selected{{/if}}>Untrained +0</option>
+              <option value="novice" {{#if (eq skill.rank "novice")}}selected{{/if}}>Novice +2</option>
+              <option value="adept" {{#if (eq skill.rank "adept")}}selected{{/if}}>Adept +4</option>
+              <option value="expert" {{#if (eq skill.rank "expert")}}selected{{/if}}>Expert +6</option>
+              <option value="master" {{#if (eq skill.rank "master")}}selected{{/if}}>Master +8</option>
+            </select>
+            <input type="number" name="system.skills.{{skill.key}}.misc" value="{{skill.misc}}" aria-label="Miscellaneous modifier for {{skill.label}}">
+            <strong class="commander-skill-total">{{skill.totalSigned}}</strong>
+            <label class="commander-favorite-toggle"><input type="checkbox" name="system.skills.{{skill.key}}.favorite" {{checked skill.favorite}}> Favorite</label>
+          {{else}}
+            <span class="commander-skill-breakdown" title="{{skill.attributeLabel}} {{skill.attributeSigned}}">{{skill.attributeLabel}} {{skill.attributeSigned}}</span>
+            <span class="commander-skill-breakdown" title="{{capitalize skill.rank}} {{skill.rankSigned}}">{{capitalize skill.rank}} {{skill.rankSigned}}</span>
+            <span class="commander-skill-breakdown">Misc {{skill.miscSigned}}</span>
+            <strong class="commander-skill-total">{{skill.totalSigned}}</strong>
+          {{/if}}
+        </article>
+      {{/each}}
+    </div>
+  </div>
+</section>

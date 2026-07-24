@@ -1,0 +1,82 @@
+<section class="commander-content {{#unless (eq activeTab 'overview')}}hidden{{/unless}}" data-tab="overview">
+  <div class="commander-grid">
+    <article class="commander-card accent-red">
+      <h2>Creature Profile</h2>
+      <div class="commander-stat-row"><span>Species</span><span class="commander-value commander-locked-field" title="Species is set only by the Pokémon generator, species drag/drop, or evolution/form automation.">{{system.identity.speciesName}}</span></div>
+      <div class="commander-stat-row"><span>Level</span>{{#if (eq mode "edit")}}<input type="number" name="system.identity.level" value="{{system.identity.level}}" min="1" max="100">{{else}}<span class="commander-value">{{system.identity.level}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Evolution Stage</span><span class="commander-value">{{system.identity.evolutionStage}}</span></div>
+      <div class="commander-stat-row"><span>Types</span><span class="commander-value">{{#each system.identity.types as |type|}}{{capitalize type}}{{#unless @last}} / {{/unless}}{{/each}}</span></div>
+      <div class="commander-stat-row"><span>Nature</span>{{#if (eq mode "edit")}}<input name="system.identity.nature" value="{{system.identity.nature}}">{{else}}<span class="commander-value">{{system.identity.nature}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Training Path</span>{{#if (eq mode "edit")}}<select name="system.identity.trainingPath"><option value="striker" {{#if (eq system.identity.trainingPath "striker")}}selected{{/if}}>Striker</option><option value="specialist" {{#if (eq system.identity.trainingPath "specialist")}}selected{{/if}}>Specialist</option><option value="bulwark" {{#if (eq system.identity.trainingPath "bulwark")}}selected{{/if}}>Bulwark</option><option value="swift" {{#if (eq system.identity.trainingPath "swift")}}selected{{/if}}>Swift</option><option value="balanced" {{#if (eq system.identity.trainingPath "balanced")}}selected{{/if}}>Balanced</option><option value="custom" {{#if (eq system.identity.trainingPath "custom")}}selected{{/if}}>Custom</option></select>{{else}}<span class="commander-value">{{system.identity.trainingPath}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Bond</span>{{#if (eq mode "edit")}}<select name="system.bond.level"><option value="wary" {{#if (eq system.bond.level "wary")}}selected{{/if}}>Wary</option><option value="trusting" {{#if (eq system.bond.level "trusting")}}selected{{/if}}>Trusting</option><option value="bonded" {{#if (eq system.bond.level "bonded")}}selected{{/if}}>Bonded</option><option value="devoted" {{#if (eq system.bond.level "devoted")}}selected{{/if}}>Devoted</option></select>{{else}}<span class="commander-value">{{system.bond.level}}</span>{{/if}}</div>
+      <div class="commander-stat-row"><span>Trainer</span><span class="commander-value">{{#if linkedTrainer}}{{linkedTrainer.name}}{{else}}Unassigned{{/if}}</span></div>
+      <div class="commander-stat-row"><span>Held Item</span><span class="commander-value">{{#if heldItem}}{{heldItem.name}}{{else}}None{{/if}}</span></div>
+      <div class="commander-stat-row"><span>Lifecycle</span><span class="commander-value">{{capitalize system.identity.lifecycle}}</span></div>
+      {{#if isShiny}}<div class="commander-stat-row"><span>Variant</span><span class="commander-value">Shiny</span></div>{{/if}}
+    </article>
+
+    <article class="commander-card wide">
+      <h2>Combat Profile</h2>
+      <p class="commander-card-help">Species values are locked. Level, Path, Nature, and Bonus represent training, growth, and build changes.</p>
+      <div class="commander-grid">
+        {{#each statList as |stat|}}
+          <div class="commander-card">
+            <h3>{{stat.label}}</h3>
+            {{#if (eq ../mode "edit")}}
+              <label>Species <span class="commander-value commander-locked-field" title="Species stats come from the embedded Species item.">{{stat.species}}</span></label>
+              <label>Level <input type="number" name="system.stats.{{stat.key}}.level" value="{{stat.level}}" min="0"></label>
+              <label>Path <input type="number" name="system.stats.{{stat.key}}.path" value="{{stat.path}}"></label>
+              <label>Nature <input type="number" name="system.stats.{{stat.key}}.nature" value="{{stat.nature}}"></label>
+              <label>Bonus <input type="number" name="system.stats.{{stat.key}}.bonus" value="{{stat.bonus}}"></label>
+            {{else}}
+              <div class="commander-value">{{stat.final}}</div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    </article>
+
+    <article class="commander-card">
+      <h2>Defenses</h2>
+      {{#each system.defenses as |defense key|}}
+        <div class="commander-stat-row"><span>{{capitalize key}}</span>{{#if (eq ../mode "edit")}}<span><input type="number" name="system.defenses.{{key}}.base" value="{{defense.base}}"><input type="number" name="system.defenses.{{key}}.bonus" value="{{defense.bonus}}"></span>{{else}}<span class="commander-value">{{defense.final}}</span>{{/if}}</div>
+      {{/each}}
+    </article>
+
+    <article class="commander-card wide accent-red commander-automation-panel">
+      <h2>Player-Light Battle Controls</h2>
+      <div class="commander-automation-grid">
+        <div>
+          <h3>Actions</h3>
+          <div class="commander-action-buttons">
+            <button type="button" data-action="automateSpendAction" data-action-type="main">Use Main</button>
+            <button type="button" data-action="automateSpendAction" data-action-type="move">Use Move</button>
+            <button type="button" data-action="automateSpendAction" data-action-type="reaction">Use Reaction</button>
+            <button type="button" data-action="automateResetActions">Reset Pair Turn</button>
+          </div>
+          <div class="commander-action-pips"><span class="commander-pip {{#if system.actions.mainUsed}}used{{else}}ready{{/if}}">Main</span><span class="commander-pip {{#if system.actions.moveUsed}}used{{else}}ready{{/if}}">Move</span><span class="commander-pip {{#if system.actions.reactionUsed}}used{{else}}ready{{/if}}">Reaction</span><span class="commander-pip ready">Pair Main {{system.actions.sharedMainRemaining}} / 2</span><span class="commander-pip ready">Pair Move {{system.actions.sharedMoveRemaining}} / 2</span></div>
+        </div>
+        <div>
+          <h3>Hit Points</h3>
+          <div class="commander-hp-summary"><strong>{{system.health.hp.value}} / {{system.health.hp.max}}</strong><span>{{hpPercent}}%</span></div>
+          <input type="number" min="0" value="1" data-commander-adjustment aria-label="HP adjustment amount">
+          <div class="commander-action-buttons">
+            <button type="button" data-action="quickDamage">Damage</button>
+            <button type="button" data-action="quickHeal">Heal</button>
+            <button type="button" data-action="fullHeal">Full HP</button>
+            {{#if isGM}}<button type="button" data-action="setZeroHp">Set 0 HP</button>{{/if}}
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="commander-card wide accent-red">
+      <h2>Move Dock</h2>
+      <div class="commander-move-grid">
+        {{#each equippedMoves as |move index|}}
+          {{#if move}}<div class="commander-move-card {{#unless move.legal}}illegal{{/unless}}" data-item-id="{{move.id}}"><h4>{{move.name}}</h4><span class="commander-type-chip">{{move.system.type}}</span><span class="commander-tag">{{move.system.category}}</span>{{#unless move.legal}}<span class="commander-tag">Illegal: {{move.legalityReason}}</span>{{/unless}}<div class="commander-move-row"><span>Power</span><strong>{{move.system.power}}</strong></div><div class="commander-move-row"><span>Defense</span><strong>{{move.system.target.defense}}</strong></div><button type="button" data-action="rollMove" data-item-uuid="{{move.uuid}}" {{#unless move.legal}}disabled{{/unless}}>Use Move</button></div>{{else}}<div class="commander-move-card empty">Drop a move here</div>{{/if}}
+        {{/each}}
+      </div>
+    </article>
+  </div>
+</section>

@@ -1,0 +1,55 @@
+name: Translate Commander species staging data
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/foundry-base-pass
+    paths:
+      - "tools/commander/translate-species.mjs"
+      - "tools/commander/conversion-rules.mjs"
+      - "package.json"
+      - "temp/compendium-raw/pokemon-showdown/data/pokedex.ts"
+      - "temp/compendium-raw/pokeapi/data/v2/csv/pokemon_species.csv"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commander-compendium-writer
+  cancel-in-progress: false
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/foundry-base-pass
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install translation dependency
+        run: npm install --no-audit --no-fund
+
+      - name: Test conversion rules
+        run: npm run compendium:test-conversions
+
+      - name: Translate species and forms
+        run: npm run compendium:translate-species
+
+      - name: Commit translated staging data
+        run: |
+          git config user.name "Commander Build Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add package-lock.json temp/compendium-translated/species
+          if git diff --cached --quiet; then
+            echo "No translated species changes to commit."
+            exit 0
+          fi
+          git commit -m "Translate species and Mega profiles into staging data"
+          git push origin HEAD:codex/foundry-base-pass

@@ -1,0 +1,172 @@
+<section class="commander-content {{#unless (eq activeTab 'overview')}}hidden{{/unless}}" data-tab="overview">
+  <div class="commander-grid">
+    <article class="commander-card accent-red">
+      <h2>Trainer Profile</h2>
+      <div class="commander-stat-row">
+        <span>Background</span>
+        {{#if (eq mode "edit")}}
+          <select name="system.identity.background">
+            {{#each backgroundOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+          </select>
+        {{else}}
+          <span class="commander-value">{{system.identity.background}}</span>
+        {{/if}}
+      </div>
+      <div class="commander-stat-row">
+        <span>Role <small>(Class)</small></span>
+        {{#if (eq mode "edit")}}
+          <select name="system.identity.role">
+            {{#each roleOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+          </select>
+        {{else}}
+          <span class="commander-value">{{system.identity.role}}</span>
+        {{/if}}
+      </div>
+      <div class="commander-stat-row">
+        <span>Specialty</span>
+        {{#if (eq mode "edit")}}
+          <input type="text" name="system.identity.specialty" value="{{system.identity.specialty}}"
+            list="commander-specialties" placeholder="Choose or enter a specialty">
+          <datalist id="commander-specialties">
+            {{#each specialtyOptions as |option|}}<option value="{{option.value}}">{{option.label}}</option>{{/each}}
+          </datalist>
+        {{else}}
+          <span class="commander-value">{{system.identity.specialty}}</span>
+        {{/if}}
+      </div>
+      <div class="commander-stat-row"><span>Level</span>{{#if (eq mode "edit")}}<input type="number" name="system.identity.level" value="{{system.identity.level}}" min="1" max="20">{{else}}<span class="commander-value">{{system.identity.level}}</span>{{/if}}</div>
+    </article>
+
+    <article class="commander-card">
+      <h2>Attributes</h2>
+      <p class="commander-card-help">Attributes feed directly into skills, defenses, and carrying capacity.</p>
+
+      <div class="commander-stat-row">
+        <span>Body</span>
+        {{#if (eq mode "edit")}}
+          <span class="commander-stat-inputs"><input type="number" name="system.attributes.body.base" value="{{system.attributes.body.base}}" title="Base"><input type="number" name="system.attributes.body.bonus" value="{{system.attributes.body.bonus}}" title="Bonus"></span>
+        {{else}}
+          <button type="button" class="commander-value-button" data-action="rollCheck" data-label="Body Check" data-modifier="{{system.attributes.body.final}}">{{system.attributes.body.final}}</button>
+        {{/if}}
+      </div>
+
+      <div class="commander-stat-row">
+        <span>Agility</span>
+        {{#if (eq mode "edit")}}
+          <span class="commander-stat-inputs"><input type="number" name="system.attributes.agility.base" value="{{system.attributes.agility.base}}" title="Base"><input type="number" name="system.attributes.agility.bonus" value="{{system.attributes.agility.bonus}}" title="Bonus"></span>
+        {{else}}
+          <button type="button" class="commander-value-button" data-action="rollCheck" data-label="Agility Check" data-modifier="{{system.attributes.agility.final}}">{{system.attributes.agility.final}}</button>
+        {{/if}}
+      </div>
+
+      <div class="commander-stat-row">
+        <span>Mind</span>
+        {{#if (eq mode "edit")}}
+          <span class="commander-stat-inputs"><input type="number" name="system.attributes.mind.base" value="{{system.attributes.mind.base}}" title="Base"><input type="number" name="system.attributes.mind.bonus" value="{{system.attributes.mind.bonus}}" title="Bonus"></span>
+        {{else}}
+          <button type="button" class="commander-value-button" data-action="rollCheck" data-label="Mind Check" data-modifier="{{system.attributes.mind.final}}">{{system.attributes.mind.final}}</button>
+        {{/if}}
+      </div>
+
+      <div class="commander-stat-row">
+        <span>Presence</span>
+        {{#if (eq mode "edit")}}
+          <span class="commander-stat-inputs"><input type="number" name="system.attributes.presence.base" value="{{system.attributes.presence.base}}" title="Base"><input type="number" name="system.attributes.presence.bonus" value="{{system.attributes.presence.bonus}}" title="Bonus"></span>
+        {{else}}
+          <button type="button" class="commander-value-button" data-action="rollCheck" data-label="Presence Check" data-modifier="{{system.attributes.presence.final}}">{{system.attributes.presence.final}}</button>
+        {{/if}}
+      </div>
+    </article>
+
+    <article class="commander-card">
+      <h2>Defenses</h2>
+      <p class="commander-card-help">Physical uses Body, Special uses Mind, and Reflex uses Agility.</p>
+
+      <div class="commander-stat-row">
+        <span>Physical</span>
+        {{#if (eq mode "edit")}}
+          <span class="commander-defense-editor"><small>10 + Body +</small><input type="number" name="system.defenses.physical.bonus" value="{{system.defenses.physical.bonus}}" title="Defense bonus"></span>
+        {{else}}
+          <span class="commander-value">{{system.defenses.physical.final}}</span>
+        {{/if}}
+      </div>
+
+      <div class="commander-stat-row">
+        <span>Special</span>
+        {{#if (eq mode "edit")}}
+          <span class="commander-defense-editor"><small>10 + Mind +</small><input type="number" name="system.defenses.special.bonus" value="{{system.defenses.special.bonus}}" title="Defense bonus"></span>
+        {{else}}
+          <span class="commander-value">{{system.defenses.special.final}}</span>
+        {{/if}}
+      </div>
+
+      <div class="commander-stat-row">
+        <span>Reflex</span>
+        {{#if (eq mode "edit")}}
+          <span class="commander-defense-editor"><small>10 + Agility +</small><input type="number" name="system.defenses.reflex.bonus" value="{{system.defenses.reflex.bonus}}" title="Defense bonus"></span>
+        {{else}}
+          <span class="commander-value">{{system.defenses.reflex.final}}</span>
+        {{/if}}
+      </div>
+    </article>
+
+    <article class="commander-card wide accent-red commander-automation-panel">
+      <h2>Player-Light Command Center</h2>
+      <div class="commander-automation-grid">
+        <div>
+          <h3>Trainer Actions</h3>
+          <div class="commander-action-buttons">
+            <button type="button" data-action="automateSpendAction" data-action-type="main">Use Main</button>
+            <button type="button" data-action="automateSpendAction" data-action-type="move">Use Move</button>
+            <button type="button" data-action="automateSpendAction" data-action-type="reaction">Use Reaction</button>
+            <button type="button" data-action="automateResetActions">Reset Pair Turn</button>
+          </div>
+          <div class="commander-action-pips">
+            <span class="commander-pip {{#if system.actions.mainUsed}}used{{else}}ready{{/if}}">Trainer Main</span>
+            <span class="commander-pip {{#if system.actions.moveUsed}}used{{else}}ready{{/if}}">Trainer Move</span>
+            <span class="commander-pip {{#if system.actions.reactionUsed}}used{{else}}ready{{/if}}">Reaction</span>
+            <span class="commander-pip ready">Pair Main {{system.actions.sharedMainRemaining}} / 2</span>
+            <span class="commander-pip ready">Pair Move {{system.actions.sharedMoveRemaining}} / 2</span>
+          </div>
+        </div>
+
+        <div>
+          <h3>Trainer HP</h3>
+          <div class="commander-hp-summary"><strong>{{system.health.hp.value}} / {{system.health.hp.max}}</strong><span>{{hpPercent}}%</span></div>
+          <input type="number" min="0" value="1" data-commander-adjustment aria-label="HP adjustment amount">
+          <div class="commander-action-buttons">
+            <button type="button" data-action="quickDamage">Damage</button>
+            <button type="button" data-action="quickHeal">Heal</button>
+            <button type="button" data-action="fullHeal">Full HP</button>
+            {{#if isGM}}<button type="button" data-action="setZeroHp">Set 0 HP</button>{{/if}}
+          </div>
+        </div>
+
+        {{#if activeCompanion}}
+          <div>
+            <h3>Active Pokémon</h3>
+            <div class="commander-resource-row"><span><strong>{{activeCompanion.name}}</strong><br>{{activeCompanion.system.identity.speciesName}}</span><span class="commander-value">{{activeCompanion.system.health.hp.value}} / {{activeCompanion.system.health.hp.max}} HP</span></div>
+            <input type="number" min="0" value="1" data-active-pokemon-adjustment aria-label="Active Pokémon HP adjustment amount">
+            <div class="commander-action-buttons">
+              <button type="button" data-action="quickDamage" data-target-actor="activePokemon" data-amount-selector="[data-active-pokemon-adjustment]">Damage</button>
+              <button type="button" data-action="quickHeal" data-target-actor="activePokemon" data-amount-selector="[data-active-pokemon-adjustment]">Heal</button>
+              <button type="button" data-action="fullHeal" data-target-actor="activePokemon">Full HP</button>
+              <button type="button" data-action="automateSpendAction" data-target-actor="activePokemon" data-action-type="main">Use Main</button>
+              <button type="button" data-action="automateSpendAction" data-target-actor="activePokemon" data-action-type="move">Use Move</button>
+            </div>
+          </div>
+        {{else}}
+          <div class="commander-empty-state">Drop a Pokémon actor onto the Team tab, then set it active.</div>
+        {{/if}}
+      </div>
+    </article>
+
+    <article class="commander-card">
+      <h2>Resources</h2>
+      <div class="commander-resource-row"><span>Supply Units</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.supplyUnits" value="{{system.inventory.supplyUnits}}" min="0">{{else}}<span class="commander-value">{{system.inventory.supplyUnits}}</span>{{/if}}</div>
+      <div class="commander-resource-row"><span>Medical Supplies</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.medicalSupplies" value="{{system.inventory.medicalSupplies}}" min="0">{{else}}<span class="commander-value">{{system.inventory.medicalSupplies}}</span>{{/if}}</div>
+      <div class="commander-resource-row"><span>Downtime Actions</span>{{#if (eq mode "edit")}}<input type="number" name="system.campaign.downtimeActions" value="{{system.campaign.downtimeActions}}" min="0">{{else}}<span class="commander-value">{{system.campaign.downtimeActions}}</span>{{/if}}</div>
+      <div class="commander-resource-row"><span>Bulk Capacity</span>{{#if (eq mode "edit")}}<input type="number" name="system.inventory.bulkCapacityBonus" value="{{system.inventory.bulkCapacityBonus}}">{{else}}<span class="commander-value">{{system.inventory.bulkCapacity}}</span>{{/if}}</div>
+    </article>
+  </div>
+</section>

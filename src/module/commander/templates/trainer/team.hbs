@@ -1,0 +1,77 @@
+<section class="commander-tab commander-team-tab {{#unless (eq activeTab 'team')}}hidden{{/unless}}" data-tab="team">
+  <header class="commander-section-header">
+    <div>
+      <h2>Pokémon Team</h2>
+      <p>Drag Pokémon actors onto this sheet to add them. The active Pokémon shares the Trainer's initiative and action pool.</p>
+    </div>
+    <div class="commander-team-count {{#if teamFull}}full{{/if}}">{{teamCount}} / {{maxTeamSize}}</div>
+  </header>
+
+  {{#if teamFull}}
+    <div class="commander-team-notice">Team capacity reached. Remove or store a Pokémon before adding another.</div>
+  {{/if}}
+
+  {{#if team.length}}
+    <div class="commander-team-grid">
+      {{#each team as |member|}}
+        <article class="commander-team-card {{#if member.isActive}}active{{/if}} {{#if member.isFainted}}fainted{{/if}}">
+          <div class="commander-team-portrait-wrap">
+            <img class="commander-team-portrait" src="{{member.actor.img}}" alt="{{member.actor.name}}">
+            {{#if member.isActive}}<span class="commander-team-active-badge">Active</span>{{/if}}
+            {{#if member.isFainted}}<span class="commander-team-fainted-badge">Fainted</span>{{/if}}
+          </div>
+
+          <div class="commander-team-details">
+            <div class="commander-team-name-row">
+              <strong>{{member.actor.name}}</strong>
+              <span>Lv. {{member.actor.system.identity.level}}</span>
+            </div>
+            <span class="commander-team-species">{{member.actor.system.identity.speciesName}}</span>
+            <div class="commander-team-types">
+              {{#each member.types as |type|}}<span class="commander-type-chip">{{type}}</span>{{/each}}
+            </div>
+
+            <div class="commander-team-hp-row">
+              <span>HP {{member.actor.system.health.hp.value}} / {{member.actor.system.health.hp.max}}</span>
+              <span>{{member.actor.system.identity.lifecycle}}</span>
+            </div>
+            <div class="commander-team-hp-meter">
+              <span style="width: {{member.hpPercent}}%;"></span>
+            </div>
+
+            <div class="commander-team-friendship">
+              <span>♥ {{member.friendship.value}}</span>
+              <span>{{member.friendship.tier}}</span>
+            </div>
+
+            <div class="commander-team-status-row">
+              <span>{{member.conditionCount}} condition{{#unless (eq member.conditionCount 1)}}s{{/unless}}</span>
+              <span>Main {{#if member.actionState.mainUsed}}Used{{else}}Ready{{/if}}</span>
+              <span>Move {{#if member.actionState.moveUsed}}Used{{else}}Ready{{/if}}</span>
+            </div>
+          </div>
+
+          <div class="commander-team-quick-controls">
+            <input type="number" min="0" value="1" data-team-adjustment="{{member.actor.id}}" aria-label="HP adjustment for {{member.actor.name}}">
+            <button type="button" data-action="quickDamage" data-actor-uuid="{{member.actor.uuid}}" data-amount-selector="[data-team-adjustment='{{member.actor.id}}']">Damage</button>
+            <button type="button" data-action="quickHeal" data-actor-uuid="{{member.actor.uuid}}" data-amount-selector="[data-team-adjustment='{{member.actor.id}}']">Heal</button>
+            <button type="button" data-action="fullHeal" data-actor-uuid="{{member.actor.uuid}}">Full HP</button>
+          </div>
+
+          <div class="commander-team-actions">
+            <button type="button" data-action="openPokemon" data-uuid="{{member.actor.uuid}}">Open</button>
+            {{#unless member.isActive}}
+              {{#if ../editable}}<button type="button" data-action="setActivePokemon" data-uuid="{{member.actor.uuid}}" {{#if member.isFainted}}disabled{{/if}}>Make Active</button>{{/if}}
+            {{/unless}}
+            {{#if ../editable}}<button type="button" class="danger" data-action="removePokemon" data-uuid="{{member.actor.uuid}}">Remove</button>{{/if}}
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="commander-empty-state">
+      <strong>No Pokémon assigned.</strong>
+      <p>Drag a Pokémon Actor from the sidebar onto this Trainer sheet.</p>
+    </div>
+  {{/if}}
+</section>

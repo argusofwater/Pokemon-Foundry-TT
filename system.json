@@ -1,12 +1,12 @@
 {
   "id": "ptu",
-  "title": "Pokemon Tabletop Reunited",
-  "description": "A re-imagining of the Pokemon Tabletop United TTRPG System now made with FoundryVTT as a central pilar.",
+  "title": "Pokémon Tabletop Reunited — Commander Build",
+  "description": "A private Foundry VTT modernization of Pokémon Tabletop Reunited, preserving the original creators’ work while improving usability, automation, and table-specific rules support.",
   "compatibility": {
-    "minimum": "13.345",
-    "verified": "13.350"
+    "minimum": "14",
+    "verified": "14"
   },
-  "version": "4.4.3",
+  "version": "4.4.3-private.56",
   "templateVersion": 2,
   "authors": [
     {
@@ -34,6 +34,10 @@
     {
       "name": "UmcaraAí",
       "url": "https://github.com/p-arth"
+    },
+    {
+      "name": "Commander Build Maintainers",
+      "url": "https://github.com/argusofwater/Pokemon-Foundry-TT"
     }
   ],
   "esmodules": [
@@ -44,6 +48,7 @@
     "static/css/fonts.css",
     "static/css/utils.css",
     "static/css/main.css",
+    "static/css/commander-friendship.css",
     "static/css/tooltipster.css",
     "static/css/progress-bar.css",
     "static/css/tagify.css",
@@ -162,8 +167,8 @@
       "label": "PTR Spirit Actions",
       "type": "Item",
       "name": "spirit-actions",
-      "system": "ptu",
-      "path": "packs/spirit-actions"
+      "path": "packs/spirit-actions",
+      "system": "ptu"
     },
     {
       "label": "PTR Journals",
@@ -240,8 +245,8 @@
     }
   ],
   "background": "systems/ptu/static/images/banner.webp",
-  "url": "https://github.com/pokemon-tabletop-reunited/ptr1e",
-  "manifest": "https://github.com/pokemon-tabletop-reunited/ptr1e/releases/latest/download/system.json",
-  "changelog": "https://github.com/pokemon-tabletop-reunited/ptr1e/raw/master/changelog.md",
-  "download": "https://github.com/pokemon-tabletop-reunited/ptr1e/releases/latest/download/system.zip"
+  "url": "https://github.com/argusofwater/Pokemon-Foundry-TT",
+  "manifest": "https://raw.githubusercontent.com/argusofwater/Pokemon-Foundry-TT/codex/foundry-base-pass/system.json",
+  "download": "https://github.com/argusofwater/Pokemon-Foundry-TT/releases/download/commander-test-v56/ptu.zip",
+  "changelog": "https://github.com/argusofwater/Pokemon-Foundry-TT/blob/codex/foundry-base-pass/CHANGELOG-PRIVATE.md"
 }

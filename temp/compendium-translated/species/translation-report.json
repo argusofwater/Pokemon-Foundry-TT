@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-07-08T13:29:10.436Z",
+  "cutoff": "gen9-sv-dlc-pre-za",
+  "speciesRecords": 1245,
+  "uniqueNationalDexSpecies": 1025,
+  "megaProfiles": 74,
+  "primalProfiles": 2,
+  "excludedGigantamax": 34,
+  "notes": [
+    "Canonical main-series base stats are preserved alongside Commander-scale species stats.",
+    "Movement and tabletop capabilities remain placeholders until legacy PTR data is merged.",
+    "Learnsets are merged during compendium normalization.",
+    "Mega profiles include records present in the frozen raw source, including newer Mega forms."
+  ]
+}

@@ -1,14 +1,34 @@
 <ol class="combat-tracker plain">
     {{#each turns}}
-    <li class="combatant {{ css }}" data-combatant-id="{{ id }}" data-action="activateCombatant">
-        {{!-- TODO: Targets --}}
-
-        {{!-- Image --}}
+    <li class="combatant {{ css }} {{#if commander}}commander-combatant{{/if}}" data-combatant-id="{{ id }}" data-action="activateCombatant">
         <img class="token-image" src="{{ img }}" alt="{{ name }}" loading="lazy">
 
-        {{!-- Name & Controls --}}
         <div class="token-name">
             <strong class="name">{{ name }}</strong>
+            {{#if commander}}
+            <div class="commander-combat-state">
+                {{#if commander.linkedInitiative}}
+                <span class="commander-combat-pill linked">Linked Initiative</span>
+                {{/if}}
+                <span class="commander-combat-pill">Main {{commander.mainRemaining}}/2</span>
+                <span class="commander-combat-pill">Move {{commander.moveRemaining}}/2</span>
+                <span class="commander-combat-pill {{#if commander.reactionReady}}ready{{else}}used{{/if}}">Reaction {{#if commander.reactionReady}}Ready{{else}}Used{{/if}}</span>
+                {{#if commander.friendship}}
+                <span class="commander-combat-pill friendship">♥ {{commander.friendship.value}}</span>
+                {{/if}}
+            </div>
+            {{#if isOwner}}
+            <div class="commander-combat-actions">
+                <button type="button" data-action="spendCommanderAction" data-action-type="main" title="Spend Main Action">M−</button>
+                <button type="button" data-action="restoreCommanderAction" data-action-type="main" title="Restore Main Action">M+</button>
+                <button type="button" data-action="spendCommanderAction" data-action-type="move" title="Spend Move Action">V−</button>
+                <button type="button" data-action="restoreCommanderAction" data-action-type="move" title="Restore Move Action">V+</button>
+                <button type="button" data-action="spendCommanderAction" data-action-type="reaction" title="Spend Reaction">R−</button>
+                <button type="button" data-action="restoreCommanderAction" data-action-type="reaction" title="Restore Reaction">R+</button>
+                <button type="button" data-action="resetCommanderActions" title="Reset Commander Actions">Reset</button>
+            </div>
+            {{/if}}
+            {{/if}}
             <div class="combatant-controls">
                 {{#if @root.user.isGM}}
                 <button type="button" class="inline-control combatant-control icon fa-solid fa-eye-slash {{#if hidden}}active{{/if}}"
@@ -32,7 +52,6 @@
                         data-action="panToCombatant" data-tooltip
                         aria-label="{{ localize "COMBAT.PanToCombatant" }}"></button>
                 {{/unless}}
-                {{!-- TODO: Target Control --}}
                 <div class="token-effects" data-tooltip-html="{{ effects.tooltip }}">
                     {{#each effects.icons}}
                     <img class="token-effect" src="{{ img }}" alt="{{ name }}">
@@ -41,29 +60,20 @@
             </div>
         </div>
 
-        {{!-- Resource --}}
         {{#if resource includeZero=true}}
         <div class="token-resource">
             <span class="resource">{{ resource }}</span>
         </div>
         {{/if}}
 
-        {{!-- Initiative --}}
         <div class="token-initiative">
             {{#if initiative includeZero=true}}
-
-            {{!-- Decimal Initiative --}}
             {{#if @root.hasDecimals}}
             <span>{{ initiative }}</span>
-
-            {{!-- Simple Initiative --}}
             {{else}}
             <input type="text" class="initiative-input" inputmode="numeric" pattern="^[+=\-]?\d*" value="{{initiative}}"
                    aria-label="{{localize "COMBAT.InitiativeScore"}}" {{#unless @root.user.isGM}}readonly{{/unless}}>
-
             {{/if}}
-
-            {{!-- Roll Initiative --}}
             {{else if isOwner}}
             <button type="button" class="combatant-control roll" data-action="rollInitiative" data-tooltip
                     aria-label="{{ localize "COMBAT.InitiativeRoll" }}"

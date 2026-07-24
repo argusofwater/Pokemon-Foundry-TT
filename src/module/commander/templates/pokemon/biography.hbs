@@ -1,0 +1,47 @@
+<section class="commander-tab commander-biography-tab {{#unless (eq activeTab 'biography')}}hidden{{/unless}}" data-tab="biography">
+  <header class="commander-section-header">
+    <div>
+      <h2>Biography</h2>
+      <p>Quick identity notes for roleplay and table memory. Species remains locked.</p>
+    </div>
+    <button type="button" data-action="postPokemonSummary">Post Summary</button>
+  </header>
+
+  <div class="commander-grid">
+    <article class="commander-card accent-red">
+      <h3>Identity</h3>
+      <div class="commander-stat-row"><span>Name</span><span class="commander-value">{{actor.name}}</span></div>
+      <div class="commander-stat-row"><span>Species</span><span class="commander-value">{{system.identity.speciesName}}</span></div>
+      <div class="commander-stat-row"><span>Level</span><span class="commander-value">{{system.identity.level}}</span></div>
+      <div class="commander-stat-row"><span>Nature</span><span class="commander-value">{{system.identity.nature}}</span></div>
+      <div class="commander-stat-row"><span>Types</span><span class="commander-value">{{#each system.identity.types as |type|}}{{type}} {{/each}}</span></div>
+    </article>
+
+    <article class="commander-card accent-blue">
+      <h3>Bond Snapshot</h3>
+      <div class="commander-stat-row"><span>Bond</span><span class="commander-value">{{system.bond.level}}</span></div>
+      <div class="commander-stat-row"><span>Friendship</span><span class="commander-value">{{friendship.value}} / 255</span></div>
+      <div class="commander-stat-row"><span>Resolve</span><span class="commander-value">{{#if friendship.canUseResolve}}Ready{{else if friendship.heldOnUsed}}Used{{else}}Locked{{/if}}</span></div>
+    </article>
+  </div>
+
+  <article class="commander-card wide">
+    <h3>Species Entry</h3>
+    {{#if speciesSystem.description}}
+      <div class="commander-rich-text">{{{speciesSystem.description}}}</div>
+    {{else if speciesSystem.dexentry}}
+      <div class="commander-rich-text">{{{speciesSystem.dexentry}}}</div>
+    {{else}}
+      <p>No species description is embedded yet.</p>
+    {{/if}}
+  </article>
+
+  <article class="commander-card wide">
+    <h3>Bond Notes</h3>
+    {{#if editable}}
+      <prose-mirror name="system.bond.notes" value="{{system.bond.notes}}" toggled></prose-mirror>
+    {{else}}
+      <div class="commander-rich-text">{{{system.bond.notes}}}</div>
+    {{/if}}
+  </article>
+</section>

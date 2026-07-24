@@ -1,5 +1,33 @@
 import { sluggify } from '../../../util/misc.js';
 import { PTUCondition, PTUItem } from '../index.js';
+
+function coerceText(value, fallback = '') {
+    if (typeof value === 'string') return value;
+    if (value === null || value === undefined) return fallback;
+    return String(value);
+}
+
+function coerceRangeList(range, commanderRange) {
+    if (typeof range === 'string') return range.split(',').map(r => r.trim()).filter(Boolean);
+    const source = range && typeof range === 'object' ? range : commanderRange;
+    if (!source || typeof source !== 'object') return [];
+    const value = Number(source.value ?? 0);
+    const unit = coerceText(source.unit, '').trim();
+    const shape = coerceText(source.shape, '').trim();
+    const area = Number(source.area ?? 0);
+    const parts = [];
+    if (unit) parts.push(value ? `${value} ${unit}` : unit);
+    if (shape && shape !== 'single') parts.push(shape);
+    if (area) parts.push(String(area));
+    return parts.length ? [parts.join(' ')] : [];
+}
+
+function coerceKeywords(keywords) {
+    if (Array.isArray(keywords)) return keywords;
+    if (typeof keywords === 'string') return keywords.split(',').map(k => k.trim()).filter(Boolean);
+    return [];
+}
+
 class PTUMove extends PTUItem {
     get rollable() {
         return !(isNaN(Number(this.system.ac ?? undefined)) && isNaN(Number(this.system.damageBase ?? undefined)));
@@ -26,9 +54,11 @@ class PTUMove extends PTUItem {
             options.all[`move:damage-base:${this.damageBase.postStab}`] = true;
             options.item[`move:damage-base:${this.damageBase.postStab}`] = true;
         }
-        for(const keyword of this.system.keywords) {
-            options.all[`move:${sluggify(keyword)}`] = true;
-            options.item[`move:${sluggify(keyword)}`] = true;
+        for(const keyword of coerceKeywords(this.system.keywords ?? this.system.tags)) {
+            const slug = sluggify(coerceText(keyword));
+            if (!slug) continue;
+            options.all[`move:${slug}`] = true;
+            options.item[`move:${slug}`] = true;
         }
         return options;
     }
@@ -36,7 +66,7 @@ class PTUMove extends PTUItem {
     /** @override */
     get realId() {
         return this.system.isStruggle
-            ? `struggle-${this.system.type.toLocaleLowerCase(game.i18n.lang)}-${this.system.category.toLocaleLowerCase(game.i18n.lang)}${this.system.isRangedStruggle ? "-ranged" : ""}`
+            ? `struggle-${coerceText(this.system.type, 'normal').toLocaleLowerCase(game.i18n.lang)}-${coerceText(this.system.category, 'status').toLocaleLowerCase(game.i18n.lang)}${this.system.isRangedStruggle ? "-ranged" : ""}`
             : super.realId;
     }
 
@@ -64,17 +94,21 @@ class PTUMove extends PTUItem {
     prepareBaseData() {
         super.prepareBaseData();
 
+        const typeSlug = sluggify(coerceText(this.system.type, 'normal'));
+        const categorySlug = sluggify(coerceText(this.system.category, 'status'));
+        const frequencySlug = sluggify(coerceText(this.system.frequency, 'at-will'));
         const rollOptions = {
             all: {
-                [`move:type:${sluggify(this.system.type)}`]: true,
-                [`move:category:${sluggify(this.system.category)}`]: true,
-                [`move:frequency:${sluggify(this.system.frequency)}`]: true,
+                [`move:type:${typeSlug}`]: true,
+                [`move:category:${categorySlug}`]: true,
+                [`move:frequency:${frequencySlug}`]: true,
             },
         }
 
-        const ranges = this.system.range?.split(",").map(r => r.trim()) ?? [];
+        const ranges = coerceRangeList(this.system.range, this.system.commanderRange);
         for (const range of ranges) {
-            rollOptions.all[`move:range:${sluggify(range)}`] = true;
+            const slug = sluggify(coerceText(range));
+            if (slug) rollOptions.all[`move:range:${slug}`] = true;
         }
 
         if (this.isDamaging) {
@@ -118,23 +152,11 @@ class PTUMove extends PTUItem {
             if (results.length > 0) {
                 const statements = results.map((effect) =>
                     game.i18n.format("PTU.Broadcast.ApplyEffect", { actor: effect.actor.link, effect: effect.link, source: this.actor.link })
-                ).filter(s => s).join("<br/>")
-                const enrichedHtml = await foundry.applications.ux.TextEditor.implementation.enrichHTML(statements, { async: true })
-                const chatData = {
-                    user: game.user.id,
-                    speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-                    content: await foundry.applications.handlebars.renderTemplate("systems/ptu/static/templates/chat/effect-applied.hbs", { statements: enrichedHtml }),
-                    type: CONST.CHAT_MESSAGE_STYLES.OTHER,
-                    whisper: this.actor.hasPlayerOwner ? [game.user.id] : game.users.filter(u => u.isGM).map(u => u.id),
-                };
-                await ChatMessage.create(chatData);
-                didSomething = true;
+                );
+                await ChatMessage.create({ content: statements.join("<br>") });
             }
         }
-
-        if (!didSomething) {
-            ui.notifications.warn(game.i18n.localize("PTU.Notifications.NoEffect"));
-        }
+        return didSomething;
     }
 }
 

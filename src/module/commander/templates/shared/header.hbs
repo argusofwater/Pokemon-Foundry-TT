@@ -1,0 +1,70 @@
+<header class="commander-header">
+  <img class="commander-portrait" src="{{actor.img}}" alt="{{actor.name}}" data-edit="img">
+
+  <div class="commander-identity">
+    <p class="commander-kicker">Commander Build</p>
+    {{#if (eq mode "edit")}}
+      <input class="commander-name-input" type="text" name="name" value="{{actor.name}}" aria-label="Actor name">
+    {{else}}
+      <h1>{{actor.name}}</h1>
+    {{/if}}
+
+    {{#if (eq sheetType "trainer")}}
+      <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.role}} • {{system.identity.specialty}}</p>
+    {{else}}
+      <div class="commander-friendship-header {{#if friendship.canUseResolve}}resolve-ready{{/if}}" title="Friendship {{friendship.value}} / 255 • {{friendship.tier}}">
+        <div class="commander-friendship-hearts" role="meter" aria-label="Friendship" aria-valuemin="0" aria-valuemax="255" aria-valuenow="{{friendship.value}}">
+          {{#each friendshipHearts as |heart|}}
+            <span class="commander-heart" aria-hidden="true">
+              <span class="commander-heart-fill" style="width: {{heart.percent}}%;"></span>
+              <span class="commander-heart-outline">♥</span>
+            </span>
+          {{/each}}
+        </div>
+        <div class="commander-friendship-caption">
+          <span>{{friendship.tier}}</span>
+          <span>{{friendship.value}} / 255</span>
+        </div>
+      </div>
+      <p class="commander-subtitle">Level {{system.identity.level}} • {{system.identity.speciesName}} • {{system.identity.trainingPath}}</p>
+      <div>
+        {{#each system.identity.types as |type|}}<span class="commander-type-chip">{{type}}</span>{{/each}}
+      </div>
+    {{/if}}
+  </div>
+
+  <div>
+    <div class="commander-header-stats">
+      <div class="commander-orb">
+        {{#if (eq mode "edit")}}
+          <input type="number" name="system.health.hp.value" value="{{system.health.hp.value}}" min="0" aria-label="Current HP">
+          <span>/</span>
+          <input type="number" name="system.health.hp.max" value="{{system.health.hp.max}}" min="1" aria-label="Maximum HP">
+        {{else}}
+          <strong>{{system.health.hp.value}} / {{system.health.hp.max}}</strong>
+        {{/if}}
+        <span>HP</span>
+      </div>
+      <div class="commander-orb">
+        {{#if (eq mode "edit")}}<input type="number" name="system.health.wounds" value="{{system.health.wounds}}" min="0" max="5">{{else}}<strong>{{system.health.wounds}}</strong>{{/if}}
+        <span>Wounds</span>
+      </div>
+      <div class="commander-orb">
+        {{#if (eq mode "edit")}}
+          <select name="system.health.fatigue">
+            <option value="fresh" {{#if (eq system.health.fatigue "fresh")}}selected{{/if}}>Fresh</option>
+            <option value="tired" {{#if (eq system.health.fatigue "tired")}}selected{{/if}}>Tired</option>
+            <option value="exhausted" {{#if (eq system.health.fatigue "exhausted")}}selected{{/if}}>Exhausted</option>
+            <option value="spent" {{#if (eq system.health.fatigue "spent")}}selected{{/if}}>Spent</option>
+          </select>
+        {{else}}
+          <strong>{{system.health.fatigue}}</strong>
+        {{/if}}
+        <span>Fatigue</span>
+      </div>
+    </div>
+    <button type="button" class="commander-mode-toggle" data-action="toggleMode">
+      {{#if (eq mode "play")}}Edit Mode{{else}}Play Mode{{/if}}
+    </button>
+  </div>
+</header>

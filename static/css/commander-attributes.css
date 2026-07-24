@@ -1,0 +1,35 @@
+.commander-card-help {
+  margin: -0.25rem 0 0.55rem;
+  color: var(--commander-muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+.commander-stat-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 3.5rem);
+  gap: 0.35rem;
+}
+
+.commander-stat-inputs input,
+.commander-defense-editor input {
+  width: 100%;
+  text-align: center;
+  font-weight: 800;
+}
+
+.commander-defense-editor {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.commander-defense-editor small {
+  color: var(--commander-muted);
+  white-space: nowrap;
+}
+
+.commander-defense-editor input {
+  width: 3.5rem;
+}

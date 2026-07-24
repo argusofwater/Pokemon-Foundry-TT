@@ -1,0 +1,195 @@
+.commander-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 0.75rem;
+}
+
+.commander-team-count {
+  min-width: 4rem;
+  padding: 0.35rem 0.7rem;
+  text-align: center;
+  font-weight: 900;
+  background: var(--commander-panel);
+  border: 1px solid var(--commander-line);
+  border-radius: 999px;
+}
+
+.commander-team-count.full {
+  color: #fff;
+  background: var(--commander-danger);
+  border-color: var(--commander-danger);
+}
+
+.commander-team-notice {
+  margin-bottom: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  color: #7a1f28;
+  background: #ffe7e9;
+  border: 1px solid #d88a91;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.commander-team-card {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 0.7rem;
+  padding: 0.7rem;
+  background: var(--commander-panel);
+  border: 2px solid var(--commander-line);
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(34, 49, 58, 0.09);
+}
+
+.commander-team-card.active {
+  border-color: var(--commander-gold);
+  box-shadow: 0 0 0 2px rgba(240, 198, 79, 0.22), 0 5px 14px rgba(34, 49, 58, 0.13);
+}
+
+.commander-team-card.fainted {
+  opacity: 0.72;
+  border-color: var(--commander-danger);
+}
+
+.commander-team-portrait-wrap {
+  position: relative;
+}
+
+.commander-team-portrait {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  background: #fff;
+  border: 2px solid var(--commander-line);
+  border-radius: 50%;
+}
+
+.commander-team-card.active .commander-team-portrait {
+  border-color: var(--commander-gold);
+}
+
+.commander-team-active-badge,
+.commander-team-fainted-badge {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  padding: 0.12rem 0.4rem;
+  color: var(--commander-ink);
+  background: var(--commander-gold);
+  border: 1px solid #fff;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.commander-team-fainted-badge {
+  color: #fff;
+  background: var(--commander-danger);
+}
+
+.commander-team-details {
+  min-width: 0;
+}
+
+.commander-team-name-row,
+.commander-team-hp-row,
+.commander-team-friendship,
+.commander-team-status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.commander-team-name-row strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commander-team-species,
+.commander-team-hp-row,
+.commander-team-friendship,
+.commander-team-status-row {
+  color: var(--commander-muted);
+  font-size: 0.75rem;
+}
+
+.commander-team-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.25rem 0;
+}
+
+.commander-team-hp-meter {
+  height: 8px;
+  margin: 0.3rem 0;
+  overflow: hidden;
+  background: #dce4e9;
+  border: 1px solid #aebcc6;
+  border-radius: 999px;
+}
+
+.commander-team-hp-meter > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--commander-ready), #75c58b);
+}
+
+.commander-team-card.fainted .commander-team-hp-meter > span {
+  background: var(--commander-danger);
+}
+
+.commander-team-friendship {
+  color: var(--commander-friendship-pink-dark, #c93d78);
+  font-weight: 800;
+}
+
+.commander-team-status-row {
+  margin-top: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.commander-team-quick-controls,
+.commander-team-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.commander-team-quick-controls {
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--commander-line);
+}
+
+.commander-team-quick-controls input {
+  width: 4.5rem;
+  text-align: center;
+  font-weight: 800;
+}
+
+.commander-team-actions button,
+.commander-team-quick-controls button {
+  flex: 1 1 auto;
+}
+
+.commander-team-actions button.danger {
+  color: #fff;
+  background: var(--commander-danger);
+}
+
+.commander-team-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 520px) {
+  .commander-team-grid {
+    grid-template-columns: 1fr;
+  }
+}

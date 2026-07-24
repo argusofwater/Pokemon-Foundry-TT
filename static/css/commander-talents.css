@@ -1,0 +1,103 @@
+.commander-talent-count {
+  padding: 0.35rem 0.7rem;
+  color: var(--commander-muted);
+  background: var(--commander-panel);
+  border: 1px solid var(--commander-line);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.commander-talent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.75rem;
+}
+
+.commander-talent-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 0.75rem;
+  background: var(--commander-panel);
+  border: 1px solid var(--commander-line);
+  border-radius: 12px;
+}
+
+.commander-talent-card.pinned {
+  border-color: var(--commander-gold);
+  box-shadow: inset 4px 0 0 var(--commander-gold), 0 3px 10px rgba(34, 49, 58, 0.08);
+}
+
+.commander-talent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.commander-talent-header h3 {
+  margin: 0;
+}
+
+.commander-talent-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+}
+
+.commander-talent-tags span {
+  padding: 0.16rem 0.45rem;
+  color: #1f5279;
+  background: #e9f3fa;
+  border: 1px solid #b7d0e1;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.commander-pin-button {
+  min-width: 2.1rem;
+  min-height: 2.1rem;
+  color: #9a6c00;
+  background: #fff7d7;
+  border: 1px solid #d7b64b;
+  border-radius: 50%;
+  font-size: 1.1rem;
+}
+
+.commander-talent-prerequisites,
+.commander-talent-description {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.commander-talent-description {
+  flex: 1;
+  max-height: 12rem;
+  overflow: auto;
+}
+
+.commander-talent-description.muted {
+  color: var(--commander-muted);
+  font-style: italic;
+}
+
+.commander-talent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--commander-line);
+}
+
+.commander-talent-actions button {
+  flex: 1 1 auto;
+}
+
+.commander-talent-actions button.danger {
+  color: #fff;
+  background: var(--commander-danger);
+}

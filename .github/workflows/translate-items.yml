@@ -1,0 +1,50 @@
+name: Translate Commander item staging data
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/foundry-base-pass
+    paths:
+      - "tools/commander/translate-items.mjs"
+      - "package.json"
+      - "temp/compendium-raw/pokemon-showdown/data/items.ts"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commander-compendium-writer
+  cancel-in-progress: false
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/foundry-base-pass
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install translation dependency
+        run: npm install --no-audit --no-fund
+
+      - name: Translate items
+        run: npm run compendium:translate-items
+
+      - name: Commit translated staging data
+        run: |
+          git config user.name "Commander Build Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add package-lock.json temp/compendium-translated/items
+          if git diff --cached --quiet; then
+            echo "No translated item changes to commit."
+            exit 0
+          fi
+          git commit -m "Translate Gen 9 items into staging data"
+          git push origin HEAD:codex/foundry-base-pass

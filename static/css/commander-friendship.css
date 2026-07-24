@@ -1,0 +1,126 @@
+@import url("./commander-combat.css");
+@import url("./commander-team.css");
+@import url("./commander-moves.css");
+@import url("./commander-effects.css");
+@import url("./commander-automation.css");
+@import url("./commander-skills.css");
+@import url("./commander-talents.css");
+@import url("./commander-inventory.css");
+@import url("./commander-exploration.css");
+@import url("./commander-social.css");
+@import url("./commander-downtime.css");
+@import url("./commander-biography.css");
+@import url("./commander-layout.css");
+@import url("./commander-attributes.css");
+
+:root {
+  --commander-friendship-pink: #ff6fae;
+  --commander-friendship-pink-light: #ffb6d2;
+  --commander-friendship-pink-dark: #c93d78;
+  --commander-friendship-empty: rgba(255, 255, 255, 0.24);
+}
+
+.commander-friendship-header {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  margin-top: 0.35rem;
+  padding: 0.28rem 0.45rem 0.22rem;
+  background: rgba(30, 17, 35, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 10px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.commander-friendship-hearts {
+  display: flex;
+  gap: 0.22rem;
+  align-items: center;
+  min-height: 18px;
+}
+
+.commander-heart {
+  position: relative;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  overflow: hidden;
+  font-size: 18px;
+  line-height: 18px;
+  text-align: center;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35));
+}
+
+.commander-heart-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  overflow: hidden;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.commander-heart-fill::before {
+  content: "♥";
+  display: block;
+  width: 18px;
+  height: 18px;
+  color: var(--commander-friendship-pink);
+  font-size: 18px;
+  line-height: 18px;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.45);
+}
+
+.commander-heart-outline {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  color: var(--commander-friendship-empty);
+  -webkit-text-stroke: 1px rgba(255, 223, 237, 0.9);
+  text-shadow: 0 1px 1px rgba(78, 22, 49, 0.5);
+  pointer-events: none;
+}
+
+.commander-friendship-caption {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.6rem;
+  color: #ffe3ef;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.commander-friendship-header.resolve-ready .commander-heart-fill::before {
+  animation: commander-friendship-pulse 1.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(255, 117, 177, 0.85));
+}
+
+@keyframes commander-friendship-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commander-friendship-header.resolve-ready .commander-heart-fill::before {
+    animation: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .commander-friendship-hearts {
+    gap: 0.12rem;
+  }
+
+  .commander-heart,
+  .commander-heart-fill::before {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+    line-height: 15px;
+  }
+}

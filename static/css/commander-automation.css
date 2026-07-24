@@ -1,0 +1,67 @@
+.commander-automation-panel {
+  grid-column: 1 / -1;
+}
+
+.commander-automation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+.commander-automation-grid > div {
+  border: 1px solid var(--commander-line, #b8c7d3);
+  border-radius: 10px;
+  padding: 0.7rem;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.commander-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.45rem 0;
+}
+
+.commander-action-buttons button,
+.commander-value-button,
+.commander-move-card button {
+  border: 1px solid #2f6f9f;
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+  background: #f7fbff;
+  color: #1e4f74;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.commander-action-buttons button:hover,
+.commander-value-button:hover,
+.commander-move-card button:hover {
+  background: #2f6f9f;
+  color: white;
+}
+
+.commander-automation-panel input[data-commander-adjustment],
+.commander-automation-panel input[data-active-pokemon-adjustment] {
+  width: 5.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.commander-hp-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.4rem;
+  font-size: 1.05rem;
+}
+
+.commander-value-button {
+  min-width: 3.3rem;
+}
+
+@media (max-width: 700px) {
+  .commander-automation-grid {
+    grid-template-columns: 1fr;
+  }
+}

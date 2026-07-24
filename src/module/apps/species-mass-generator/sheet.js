@@ -1,4 +1,4 @@
-import { PokemonGenerator } from "../../actor/pokemon/generator.js";
+import { CommanderPokemonGenerator } from "../../commander/runtime/pokemon-generator.js";
 import { SpeciesGeneratorData } from "./document.js";
 
 export class PTUSpeciesMassGenerator extends FormApplication {
@@ -158,15 +158,12 @@ export class PTUSpeciesMassGenerator extends FormApplication {
             for (const result of results) {
                 let species = null;
                 
-                // Handle Foundry VTT v13 table result structure
                 if (result.type === "document" || result.type === "compendium") {
-                    // Use documentUuid for both document and compendium types in v13
                     if (result.documentUuid) {
                         species = await fromUuid(result.documentUuid);
                     }
                 }
                 
-                // Fallback for older table result structures
                 if (!species) {
                     switch (result.type) {
                         case CONST.TABLE_RESULT_TYPES?.DOCUMENT: {
@@ -180,7 +177,6 @@ export class PTUSpeciesMassGenerator extends FormApplication {
                     }
                 }
                 
-                // Check if species was found
                 if (!species) {
                     console.error("Species not found for result:", result);
                     continue;
@@ -198,7 +194,7 @@ export class PTUSpeciesMassGenerator extends FormApplication {
 
         const actorsToGenerate = [];
         for(const mon of monsToGenerate) {
-            const generator = new PokemonGenerator(mon.species);
+            const generator = new CommanderPokemonGenerator(mon.species);
             generator.level = mon.level;
             generator.shiny = mon.shiny;
             await generator.prepare();

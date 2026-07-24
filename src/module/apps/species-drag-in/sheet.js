@@ -1,4 +1,4 @@
-import { PokemonGenerator } from "../../actor/pokemon/generator.js";
+import { CommanderPokemonGenerator } from "../../commander/runtime/pokemon-generator.js";
 import { PTUSpecies } from "../../item/index.js";
 
 export class PTUSpeciesDragOptionsPrompt extends FormApplication {
@@ -14,7 +14,7 @@ export class PTUSpeciesDragOptionsPrompt extends FormApplication {
     }
 
     constructor(species, options) {
-        if(!(species instanceof PTUSpecies)) throw new Error("Species must be a valid PTUSPecies instance");
+        if(!(species instanceof PTUSpecies) && species?.type !== "species") throw new Error("Species must be a valid PTUSpecies instance");
         super(species, options);
         
         this.species = species;
@@ -54,7 +54,7 @@ export class PTUSpeciesDragOptionsPrompt extends FormApplication {
     async _updateObject(event, formData) {
         event.preventDefault();
 
-        const generator = new PokemonGenerator(this.species, { x: this.x, y: this.y })
+        const generator = new CommanderPokemonGenerator(this.species, { x: this.x, y: this.y });
         await generator.prepare({
             minLevel: formData["level.min"],
             maxLevel: formData["level.max"],
@@ -62,7 +62,7 @@ export class PTUSpeciesDragOptionsPrompt extends FormApplication {
             statRandomness: formData["stat-randomness"],
             preventEvolution: formData["prevent-evolution"],
             saveDefault: false
-        })
+        });
         await generator.create();
     }
 }

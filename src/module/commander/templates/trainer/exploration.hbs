@@ -1,0 +1,99 @@
+<section class="commander-tab commander-exploration-tab {{#unless (eq activeTab 'exploration')}}hidden{{/unless}}" data-tab="exploration">
+  <header class="commander-section-header">
+    <div>
+      <h2>Exploration</h2>
+      <p>Run travel, field checks, supply use, expedition roles, and Pokémon capabilities from one place.</p>
+    </div>
+    <button type="button" data-action="postExpeditionStatus">Post Status</button>
+  </header>
+
+  <div class="commander-exploration-grid">
+    <article class="commander-card accent-red">
+      <h3>Expedition Role</h3>
+      {{#if (eq mode "edit")}}
+        <select name="system.campaign.expeditionRole">
+          {{#each expeditionRoleOptions as |option|}}<option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>{{/each}}
+        </select>
+      {{else}}
+        <strong>{{capitalize system.campaign.expeditionRole}}</strong>
+      {{/if}}
+      <p class="commander-exploration-help">Guide handles routes, Scout handles danger, Quartermaster manages resources, Medic handles recovery, Researcher identifies discoveries, and Handler coordinates Pokémon support.</p>
+    </article>
+
+    <article class="commander-card">
+      <h3>Travel Resources</h3>
+      <div class="commander-expedition-resource">
+        <span>Supply Units</span>
+        <strong>{{system.inventory.supplyUnits}}</strong>
+        <div>
+          <button type="button" data-action="adjustExpeditionResource" data-resource="supplyUnits" data-amount="-1">Spend 1</button>
+          {{#if editable}}<button type="button" data-action="adjustExpeditionResource" data-resource="supplyUnits" data-amount="1">Add 1</button>{{/if}}
+        </div>
+      </div>
+      <div class="commander-expedition-resource">
+        <span>Medical Supplies</span>
+        <strong>{{system.inventory.medicalSupplies}}</strong>
+        <div>
+          <button type="button" data-action="adjustExpeditionResource" data-resource="medicalSupplies" data-amount="-1">Spend 1</button>
+          {{#if editable}}<button type="button" data-action="adjustExpeditionResource" data-resource="medicalSupplies" data-amount="1">Add 1</button>{{/if}}
+        </div>
+      </div>
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Field Checks</h3>
+      <div class="commander-field-checks">
+        <button type="button" data-action="rollExpeditionSkill" data-skill-key="survival">Survival</button>
+        <button type="button" data-action="rollExpeditionSkill" data-skill-key="perception">Perception</button>
+        <button type="button" data-action="rollExpeditionSkill" data-skill-key="nature">Nature</button>
+        <button type="button" data-action="rollExpeditionSkill" data-skill-key="pokemonLore">Pokémon Lore</button>
+        <button type="button" data-action="rollExpeditionSkill" data-skill-key="medicine">Medicine</button>
+        <button type="button" data-action="rollExpeditionSkill" data-skill-key="technology">Technology</button>
+      </div>
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Active Pokémon Support</h3>
+      {{#if activeCompanion}}
+        <div class="commander-active-expedition-pokemon">
+          <img src="{{activeCompanion.img}}" alt="{{activeCompanion.name}}">
+          <div>
+            <strong>{{activeCompanion.name}}</strong>
+            <span>{{activeCompanion.system.identity.speciesName}}</span>
+            <div class="commander-capability-list">
+              {{#each activeCompanion.system.exploration.capabilities as |capability|}}<span>{{capability}}</span>{{else}}<span class="muted">No capabilities recorded</span>{{/each}}
+            </div>
+            {{#if activeCompanion.system.exploration.mountCapable}}<span class="commander-mount-badge">Mount Capable</span>{{/if}}
+          </div>
+        </div>
+      {{else}}
+        <p class="muted">No active Pokémon is assigned.</p>
+      {{/if}}
+    </article>
+
+    <article class="commander-card">
+      <h3>Team Capabilities</h3>
+      <div class="commander-capability-list">
+        {{#each explorationCapabilities as |capability|}}<span>{{capability}}</span>{{else}}<span class="muted">No team capabilities recorded</span>{{/each}}
+      </div>
+    </article>
+
+    <article class="commander-card">
+      <h3>Mounts</h3>
+      {{#each mountTeam as |member|}}
+        <div class="commander-mount-row"><span>{{member.actor.name}}</span><strong>{{member.actor.system.identity.speciesName}}</strong></div>
+      {{else}}
+        <p class="muted">No mount-capable Pokémon recorded.</p>
+      {{/each}}
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Expedition Notes</h3>
+      {{#if (eq mode "edit")}}
+        <textarea name="system.campaign.notes" rows="6">{{system.campaign.notes}}</textarea>
+      {{else}}
+        <div class="commander-expedition-notes">{{{system.campaign.notes}}}</div>
+      {{/if}}
+    </article>
+  </div>
+</section>

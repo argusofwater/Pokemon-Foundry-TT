@@ -1,0 +1,7 @@
+<nav class="commander-nav" aria-label="Sheet sections">
+  {{#each tabs as |tab|}}
+    <button type="button" class="{{#if (eq ../activeTab tab)}}active{{/if}}" data-action="changeTab" data-tab="{{tab}}">
+      {{capitalize tab}}
+    </button>
+  {{/each}}
+</nav>

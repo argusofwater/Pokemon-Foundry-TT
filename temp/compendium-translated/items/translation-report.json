@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-07-08T13:30:02.883Z",
+  "cutoff": "gen9-sv-dlc-pre-za",
+  "itemRecords": 561,
+  "excludedRecords": 2,
+  "byCategory": {
+    "tool": 184,
+    "evolution": 73,
+    "held": 95,
+    "consumable": 77,
+    "pokeball": 32,
+    "tr": 100
+  },
+  "byAutomation": {
+    "manual": 427,
+    "prompted": 134
+  },
+  "megaStones": 73,
+  "berries": 77,
+  "zCrystals": 35,
+  "formChangeItems": 61,
+  "reviewRequired": 561,
+  "notes": [
+    "Mega Stones and form items use the valid prompted automation state.",
+    "Type boosters use the locked Commander +2 flat damage rule.",
+    "Structured effects and source metadata are retained in the runtime item document.",
+    "CAP-only items are excluded; canonical nonstandard items are retained and tagged."
+  ]
+}

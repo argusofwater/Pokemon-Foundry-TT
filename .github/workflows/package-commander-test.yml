@@ -1,0 +1,62 @@
+name: Package Commander Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/foundry-base-pass]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commander-test-v56
+  cancel-in-progress: true
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install LevelDB writer
+        run: npm install --no-save classic-level@2
+
+      - name: Restore unchanged upstream compendiums
+        run: |
+          curl --fail --location --output /tmp/ptr-system.zip \
+            https://github.com/pokemon-tabletop-reunited/ptr1e/releases/download/4.4.3/system.zip
+          unzip -q /tmp/ptr-system.zip 'packs/*' -d /tmp/ptr-upstream
+          mkdir -p packs
+          cp -a /tmp/ptr-upstream/packs/. packs/
+
+      - name: Build Commander compendiums
+        run: |
+          node tools/commander/normalize-translated-sources.mjs
+          npm run compendium:build
+          node tools/commander/write-leveldb-packs.mjs
+
+      - name: Build Foundry package
+        run: |
+          mkdir -p build/release
+          zip -r build/release/ptu.zip . -x '.git/*' '.github/*' 'build/*' 'node_modules/*' 'temp/*' '*.zip'
+          unzip -l build/release/ptu.zip | grep 'system.json'
+          unzip -l build/release/ptu.zip | grep 'packs/species/'
+          for pack in abilities moves feats edges items capabilities poke-edges habitats rolltables effects species macros references spirit-actions journals; do
+            unzip -l build/release/ptu.zip | grep -q "packs/$pack/" || {
+              echo "::error::Missing declared compendium packs/$pack"
+              exit 1
+            }
+          done
+
+      - name: Publish prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: commander-test-v56
+          name: Commander Build Test v56
+          prerelease: true
+          make_latest: false
+          files: build/release/ptu.zip

@@ -1,0 +1,54 @@
+name: Translate Commander ability staging data
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/foundry-base-pass
+    paths:
+      - "tools/commander/translate-abilities.mjs"
+      - "tools/commander/conversion-rules.mjs"
+      - "package.json"
+      - "temp/compendium-raw/pokemon-showdown/data/abilities.ts"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commander-compendium-writer
+  cancel-in-progress: false
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/foundry-base-pass
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install translation dependency
+        run: npm install --no-audit --no-fund
+
+      - name: Test conversion rules
+        run: npm run compendium:test-conversions
+
+      - name: Translate abilities
+        run: npm run compendium:translate-abilities
+
+      - name: Commit translated staging data
+        run: |
+          git config user.name "Commander Build Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add package-lock.json temp/compendium-translated/abilities
+          if git diff --cached --quiet; then
+            echo "No translated ability changes to commit."
+            exit 0
+          fi
+          git commit -m "Translate Gen 9 abilities into staging data"
+          git push origin HEAD:codex/foundry-base-pass

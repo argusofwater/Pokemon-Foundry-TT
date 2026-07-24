@@ -11,13 +11,9 @@ export class SpeciesGeneratorData {
         };
         this.table = undefined;
         this.tableSelect = {
-            value: undefined,
+            value: "",
             updated: false,
             options: game.tables.map(t => ({ label: t.name, uuid: t.uuid }))
-        }
-        if (this.tableSelect.options?.length > 0) {
-            this.tableSelect.value = this.tableSelect.options[0].uuid;
-            this.tableSelect.updated = true;
         }
         this.folder = undefined;
         this.folderField = {
@@ -37,13 +33,13 @@ export class SpeciesGeneratorData {
 
     async refresh() {
         if (this.speciesField.updated) {
-            if (this.speciesField.value.includes("Item.")) {
+            if (this.speciesField.value?.includes?.("Item.")) {
                 this.species = await fromUuid(this.speciesField.value);
             }
-            else if (!isNaN(Number(this.speciesField.value))) {
-                this.species = (await querySpeciesCompendium((species) => species.system.number == Number(this.speciesField.value))).find(s => !s.system.form);
+            else if (!isNaN(Number(this.speciesField.value)) && String(this.speciesField.value).trim() !== "") {
+                this.species = (await querySpeciesCompendium((species) => Number(species.system.number ?? species.system.nationalDex) == Number(this.speciesField.value))).find(s => !s.system.form && !s.system.formSlug);
             }
-            else {
+            else if (String(this.speciesField.value ?? "").trim()) {
                 this.species = await (async () => {
                     const compendiums = Object.entries(game.settings.get("ptu", "compendiumBrowserPacks")?.species ?? { "ptu.species": { load: true } }).filter(([k, v]) => v.load).map(([k, v]) => k);
                     for (const compendium of compendiums) {
@@ -52,10 +48,12 @@ export class SpeciesGeneratorData {
                     }
                 })()
             }
+            else this.species = undefined;
             this.speciesField.updated = false;
         }
         if (this.tableSelect.updated) {
-            if (!isNaN(Number(this.tableSelect.value))) {
+            if (!this.tableSelect.value) this.table = undefined;
+            else if (!isNaN(Number(this.tableSelect.value))) {
                 this.table = game.tables.get(this.tableSelect.value);
             }
             else if (this.tableSelect.value.includes("RollTable.")) {
@@ -64,28 +62,26 @@ export class SpeciesGeneratorData {
             this.tableSelect.updated = false;
         }
         if (this.folderField.updated) {
-            if (this.folderField.value.includes("Item.")) {
+            if (this.folderField.value?.includes?.("Folder.")) {
                 const result = await fromUuid(this.folderField.value);
                 this.folder = result ? result.type == "Actor" ? result : "invalid" : undefined;
             }
-            else if (!isNaN(Number(this.folderField.value))) {
+            else if (!isNaN(Number(this.folderField.value)) && String(this.folderField.value).trim() !== "") {
                 const result = game.folders.get(this.folderField.value);
                 this.folder = result ? result.type == "Actor" ? result : "invalid" : undefined;
             }
-            else {
+            else if (String(this.folderField.value ?? "").trim()) {
                 this.folder = game.folders.find(f => f.name == this.folderField.value && f.type == "Actor");
             }
+            else this.folder = undefined;
             this.folderField.updated = false;
         }
 
-        if (this.tableSelect.options?.length == 0) {
-            await game.packs.get("ptu.habitats").importAll()
-            this.tableSelect.options = game.tables.map(t => ({ label: t.name, uuid: t.uuid }))
-            if (this.tableSelect.options?.length > 0) {
-                this.tableSelect.value = this.tableSelect.options[0].uuid;
-                this.tableSelect.updated = true;
-            }
-        }
+        this.tableSelect.options = game.tables.map(t => ({ label: t.name, uuid: t.uuid }));
+
+        this.helpText.species = undefined;
+        this.helpText.table = undefined;
+        this.helpText.folder = undefined;
 
         if (this.species) {
             this.helpText.species = `<span>${game.i18n.localize("PTU.MassGenerator.FoundSpecies")} <span class="linked-item">@UUID[${this.species.uuid}]</span></span>`
@@ -97,8 +93,11 @@ export class SpeciesGeneratorData {
         if (this.table) {
             this.helpText.table = `<span>${game.i18n.localize("PTU.MassGenerator.FoundTable")} <span class="linked-item">@UUID[${this.table.uuid}]</span></span>`
         }
-        else if (this.tableSelect.value) {
+        else if (this.speciesTab == "table" && this.tableSelect.value) {
             this.helpText.table = `<span>${game.i18n.format("PTU.MassGenerator.CouldNotFindTable", { table: this.tableSelect.value })}</span>`
+        }
+        else if (this.speciesTab == "table" && !this.tableSelect.options?.length) {
+            this.helpText.table = `<span>No roll tables are currently loaded. Create or import a roll table, or use the Species tab.</span>`
         }
 
         if (this.folder == "invalid") {

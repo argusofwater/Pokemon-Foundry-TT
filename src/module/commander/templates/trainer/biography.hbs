@@ -1,0 +1,77 @@
+<section class="commander-tab commander-biography-tab {{#unless (eq activeTab 'biography')}}hidden{{/unless}}" data-tab="biography">
+  <header class="commander-section-header">
+    <div>
+      <h2>Biography</h2>
+      <p>Keep the Trainer’s identity, values, relationships, and history in one place.</p>
+    </div>
+    <div class="commander-biography-header-actions">
+      <button type="button" data-action="postBiography">Post Summary</button>
+      {{#if editable}}<button type="button" data-action="saveBiography">Save Biography</button>{{/if}}
+    </div>
+  </header>
+
+  <div class="commander-biography-grid">
+    <article class="commander-card accent-red">
+      <h3>Identity</h3>
+      <label>Pronouns <input type="text" data-biography-field="pronouns" value="{{biography.pronouns}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label>Age <input type="text" data-biography-field="age" value="{{biography.age}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label>Hometown <input type="text" data-biography-field="hometown" value="{{biography.hometown}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label>Occupation <input type="text" data-biography-field="occupation" value="{{biography.occupation}}" {{#unless editable}}disabled{{/unless}}></label>
+    </article>
+
+    <article class="commander-card">
+      <h3>Trainer Creed</h3>
+      <textarea rows="8" data-biography-field="trainerCreed" placeholder="What does this Trainer believe about Pokémon, people, and partnership?" {{#unless editable}}disabled{{/unless}}>{{biography.trainerCreed}}</textarea>
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Appearance</h3>
+      <textarea rows="5" data-biography-field="appearance" {{#unless editable}}disabled{{/unless}}>{{biography.appearance}}</textarea>
+    </article>
+
+    <article class="commander-card">
+      <h3>Personality</h3>
+      <textarea rows="7" data-biography-field="personality" {{#unless editable}}disabled{{/unless}}>{{biography.personality}}</textarea>
+    </article>
+
+    <article class="commander-card">
+      <h3>Ideals</h3>
+      <textarea rows="7" data-biography-field="ideals" {{#unless editable}}disabled{{/unless}}>{{biography.ideals}}</textarea>
+    </article>
+
+    <article class="commander-card">
+      <h3>Bonds</h3>
+      <textarea rows="7" data-biography-field="bonds" {{#unless editable}}disabled{{/unless}}>{{biography.bonds}}</textarea>
+    </article>
+
+    <article class="commander-card">
+      <h3>Flaws</h3>
+      <textarea rows="7" data-biography-field="flaws" {{#unless editable}}disabled{{/unless}}>{{biography.flaws}}</textarea>
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Goals</h3>
+      <textarea rows="6" data-biography-field="goals" {{#unless editable}}disabled{{/unless}}>{{biography.goals}}</textarea>
+    </article>
+
+    <article class="commander-card wide">
+      <h3>History</h3>
+      <textarea rows="10" data-biography-field="history" {{#unless editable}}disabled{{/unless}}>{{biography.history}}</textarea>
+    </article>
+
+    <article class="commander-card">
+      <h3>Allies and Contacts</h3>
+      <textarea rows="8" data-biography-field="allies" {{#unless editable}}disabled{{/unless}}>{{biography.allies}}</textarea>
+    </article>
+
+    <article class="commander-card">
+      <h3>Rivals and Enemies</h3>
+      <textarea rows="8" data-biography-field="rivals" {{#unless editable}}disabled{{/unless}}>{{biography.rivals}}</textarea>
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Additional Notes</h3>
+      <textarea rows="8" data-biography-field="notes" {{#unless editable}}disabled{{/unless}}>{{biography.notes}}</textarea>
+    </article>
+  </div>
+</section>

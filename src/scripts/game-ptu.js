@@ -1,4 +1,4 @@
-import { PokemonGenerator } from "../module/actor/pokemon/generator.js"
+import { CommanderPokemonGenerator } from "../module/commander/runtime/pokemon-generator.js"
 import { CompendiumBrowser } from "../module/apps/compendium-browser/index.js"
 import { MigrationSummary } from "../module/apps/migration-summary.js"
 import { TokenPanel } from "../module/apps/token-panel.js"
@@ -22,7 +22,7 @@ const GamePTU = {
             species: {
                 get: getSpeciesData,
                 query: querySpeciesCompendium,
-                generator: PokemonGenerator
+                generator: CommanderPokemonGenerator
             },
             item: {
                 get: (name, type) => findItemInCompendium({ type, name }),
@@ -51,7 +51,7 @@ const GamePTU = {
                     if (game.folders.getName("Actor Notes")) {
                         return game.settings.set("ptu", "worldNotesFolder", game.folders.getName("Actor Notes").id)
                     }
-        
+
                     const folder = await Folder.create({ name: "Actor Notes", type: "JournalEntry" });
                     return game.settings.set("ptu", "worldNotesFolder", folder.id)
                 }),
@@ -84,14 +84,11 @@ const GamePTU = {
             if (!game.settings.get("ptu", "worldNotesFolder")) {
                 game.ptu.macros.initializeWorldNotes();
             }
-            // Else if necessary since initializeWorldNotes is async and we don't want to wait for it
             else if (game.folders.get(game.settings.get("ptu", "worldNotesFolder")) === null) {
                 game.ptu.macros.initializeWorldNotes();
             }
         }
 
-        // Reset pokemon that have reloadOnReady marked as true
-        // This is due to having a temporary species override
         game.actors.filter(a => a.type === "pokemon" && a.reloadOnReady).forEach(a => a.reset())
     }
 }

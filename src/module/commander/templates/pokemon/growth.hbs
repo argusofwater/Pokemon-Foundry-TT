@@ -1,0 +1,74 @@
+<section class="commander-tab commander-growth-tab {{#unless (eq activeTab 'growth')}}hidden{{/unless}}" data-tab="growth">
+  <header class="commander-section-header">
+    <div>
+      <h2>Growth</h2>
+      <p>Locked species identity, level growth, evolution hooks, and available form data.</p>
+    </div>
+    <button type="button" data-action="postPokemonSummary">Post Summary</button>
+  </header>
+
+  <div class="commander-grid">
+    <article class="commander-card accent-blue">
+      <h3>Progression</h3>
+      <div class="commander-stat-row"><span>Species</span><span class="commander-value">{{system.identity.speciesName}}</span></div>
+      <div class="commander-stat-row"><span>Level</span><span class="commander-value">{{system.identity.level}}</span></div>
+      <div class="commander-stat-row"><span>Training Path</span><span class="commander-value">{{system.identity.trainingPath}}</span></div>
+      <div class="commander-stat-row"><span>Mode</span><span class="commander-value">{{system.progression.mode}}</span></div>
+      <div class="commander-stat-row"><span>Milestone</span><span class="commander-value">{{system.progression.milestone}}</span></div>
+      <div class="commander-stat-row"><span>Experience</span><span class="commander-value">{{system.progression.experience}} / {{nextLevelXp}}</span></div>
+      <div class="commander-stat-row"><span>Pending Choices</span><span class="commander-value">{{system.progression.pendingAdvancements}}</span></div>
+      <div class="commander-stat-row"><span>Evolution Ready</span><span class="commander-value">{{#if system.progression.evolutionEligible}}Yes{{else}}No{{/if}}</span></div>
+    </article>
+
+    <article class="commander-card accent-red">
+      <h3>Species Record</h3>
+      {{#if speciesItem}}
+        <div class="commander-stat-row"><span>Dex No.</span><span class="commander-value">{{speciesSystem.nationalDex}}</span></div>
+        <div class="commander-stat-row"><span>Rarity</span><span class="commander-value">{{speciesSystem.rarity}}</span></div>
+        <div class="commander-stat-row"><span>Capture</span><span class="commander-value">{{speciesSystem.captureDifficulty}}</span></div>
+        <div class="commander-row-actions"><button type="button" data-action="openDocument" data-uuid="{{speciesItem.uuid}}">Open Species</button></div>
+      {{else}}
+        <p>No embedded Species item found. Freshly generated Pokémon should include one.</p>
+      {{/if}}
+    </article>
+  </div>
+
+  <div class="commander-grid">
+    <article class="commander-card wide">
+      <h3>Evolution Options</h3>
+      {{#if evolutions.length}}
+        <div class="commander-table">
+          {{#each evolutions as |evo|}}
+            <div class="commander-table-row">
+              <strong>{{evo.target}}</strong>
+              <span>{{evo.method}}</span>
+              <span>{{#if evo.level}}Level {{evo.level}}{{else}}No level listed{{/if}}</span>
+              <span>{{evo.itemSlug}}</span>
+              <span>{{evo.condition}}</span>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <p>No evolution data is embedded for this species.</p>
+      {{/if}}
+    </article>
+
+    <article class="commander-card wide">
+      <h3>Forms</h3>
+      {{#if forms.length}}
+        <div class="commander-table">
+          {{#each forms as |form|}}
+            <div class="commander-table-row">
+              <strong>{{form.name}}</strong>
+              <span>{{form.family}}</span>
+              <span>{{#if form.temporary}}Temporary{{else}}Permanent{{/if}}</span>
+              <span>{{#each form.types as |type|}}{{type}} {{/each}}</span>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <p>No alternate forms are embedded for this species.</p>
+      {{/if}}
+    </article>
+  </div>
+</section>

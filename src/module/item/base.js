@@ -3,6 +3,20 @@ import { processGrantDeletions } from "../rules/rule-element/grant-item/helper.j
 import { sluggify } from "../../util/misc.js"
 import { GrantItemRuleElement } from "../rules/rule-element/grant-item/rule-element.js";
 
+function coerceRangeList(range) {
+    if (typeof range === "string") return range.split(",").map(r => r.trim()).filter(Boolean);
+    if (!range || typeof range !== "object") return [];
+    const value = Number(range.value ?? 0);
+    const unit = String(range.unit ?? "").trim();
+    const shape = String(range.shape ?? "").trim();
+    const area = Number(range.area ?? 0);
+    const parts = [];
+    if (unit) parts.push(value ? `${value} ${unit}` : unit);
+    if (shape && shape !== "single") parts.push(shape);
+    if (area) parts.push(String(area));
+    return parts.length ? [parts.join(" ")] : [];
+}
+
 class PTUItem extends Item {
 
     get sourceId() {
@@ -52,15 +66,11 @@ class PTUItem extends Item {
     }
 
     get range() {
-        return this.system.range?.split(",").map(r => r.trim()) ?? [];
+        return coerceRangeList(this.system.range ?? this.system.commanderRange);
     }
 
     get referenceEffect() {
         return this.system.referenceEffect ?? null;
-    }
-
-    get schemaVersion() {
-        return Number(this.system.schema?.version) || null;
     }
 
     get isClass() {
@@ -465,7 +475,7 @@ class PTUItem extends Item {
 const PTUItemProxy = new Proxy(PTUItem, {
     construct(_target, args) {
         const subType = args[0]?.system?.subtype;
-        if (subType && subType != "item") {
+        if (subType && subType !== "item") {
             return new CONFIG.PTU.Item.documentClasses[subType](...args);
         }
 

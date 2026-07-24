@@ -1,0 +1,72 @@
+<section class="commander-tab commander-inventory-tab {{#unless (eq activeTab 'inventory')}}hidden{{/unless}}" data-tab="inventory">
+  <header class="commander-section-header">
+    <div>
+      <h2>Inventory</h2>
+      <p>Drag items onto this tab. Consumables can be used directly and automatically reduce quantity when configured.</p>
+    </div>
+    <div class="commander-inventory-summary {{#if overBulkCapacity}}over{{/if}}">
+      <span>{{inventoryCount}} items</span>
+      <strong>Bulk {{carriedBulk}} / {{bulkCapacity}}</strong>
+    </div>
+  </header>
+
+  <div class="commander-resource-strip">
+    <div><span>Supply Units</span><strong>{{system.inventory.supplyUnits}}</strong></div>
+    <div><span>Medical Supplies</span><strong>{{system.inventory.medicalSupplies}}</strong></div>
+    <div><span>Bulk Capacity</span><strong>{{bulkCapacity}}</strong></div>
+  </div>
+
+  {{#if overBulkCapacity}}
+    <div class="commander-inventory-warning">Over capacity. The Trainer is carrying {{carriedBulk}} Bulk against a capacity of {{bulkCapacity}}.</div>
+  {{/if}}
+
+  {{#if inventoryItems.length}}
+    <div class="commander-inventory-grid">
+      {{#each inventoryItems as |entry|}}
+        <article class="commander-inventory-card">
+          <img src="{{entry.item.img}}" alt="{{entry.item.name}}">
+          <div class="commander-inventory-details">
+            <header>
+              <div>
+                <h3>{{entry.item.name}}</h3>
+                <div class="commander-inventory-tags">
+                  <span>{{capitalize entry.category}}</span>
+                  <span>{{capitalize entry.rarity}}</span>
+                  {{#if entry.slot}}<span>{{entry.slot}}</span>{{/if}}
+                  <span>{{entry.automationState}}</span>
+                </div>
+              </div>
+              <div class="commander-quantity-badge">×{{entry.quantity}}</div>
+            </header>
+
+            <div class="commander-inventory-stats">
+              <span>Bulk {{entry.bulk}} each</span>
+              <span>Total {{entry.totalBulk}}</span>
+              {{#if entry.consumedOnUse}}<span>Consumed on use</span>{{/if}}
+            </div>
+
+            {{#if entry.description}}
+              <div class="commander-inventory-description">{{{entry.description}}}</div>
+            {{/if}}
+
+            <footer class="commander-inventory-actions">
+              <button type="button" data-action="useInventoryItem" data-item-id="{{entry.item.id}}" {{#unless entry.quantity}}disabled{{/unless}}>Use</button>
+              <button type="button" data-action="postInventoryItem" data-item-id="{{entry.item.id}}">Post</button>
+              <button type="button" data-action="openDocument" data-item-id="{{entry.item.id}}">Open</button>
+              {{#if ../editable}}
+                <button type="button" data-action="adjustItemQuantity" data-item-id="{{entry.item.id}}" data-amount="-1">−1</button>
+                <button type="button" data-action="adjustItemQuantity" data-item-id="{{entry.item.id}}" data-amount="1">+1</button>
+                <button type="button" class="danger" data-action="deleteEmbedded" data-item-id="{{entry.item.id}}">Remove</button>
+              {{/if}}
+            </footer>
+          </div>
+        </article>
+      {{/each}}
+    </div>
+  {{else}}
+    <div class="commander-empty-state">
+      <strong>No inventory items assigned.</strong>
+      <p>Drag an Item from a compendium onto this tab.</p>
+    </div>
+  {{/if}}
+</section>

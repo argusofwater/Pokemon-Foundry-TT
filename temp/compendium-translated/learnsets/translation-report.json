@@ -1,0 +1,33 @@
+{
+  "generatedAt": "2026-07-23T23:46:37.064Z",
+  "cutoff": "gen9-sv-dlc-pre-za",
+  "speciesRecords": 1245,
+  "speciesWithCanonicalLearnsets": 1245,
+  "speciesWithoutCanonicalLearnsets": 0,
+  "sourceGenerationCounts": {
+    "4": 1,
+    "6": 7,
+    "7": 52,
+    "8": 303,
+    "9": 882
+  },
+  "formProfiles": 76,
+  "totalLearnsetEntries": 68193,
+  "uniqueMoveSlugs": 800,
+  "methodCounts": {
+    "level": 18365,
+    "egg": 2441,
+    "machine": 45842,
+    "event": 31,
+    "tutor": 984,
+    "virtual-console": 514,
+    "restricted": 16
+  },
+  "unresolvedMoveSlugs": [],
+  "notes": [
+    "Generation 9 learnsets are used when available; species absent from Gen 9 use their newest available canonical generation.",
+    "Level, Egg, Machine, Tutor, Event, and restricted sources are preserved separately.",
+    "Forms without direct learnsets inherit from their translated base species when possible.",
+    "Mega and Primal profiles inherit the base species learnset rather than creating Z-A-specific movesets."
+  ]
+}

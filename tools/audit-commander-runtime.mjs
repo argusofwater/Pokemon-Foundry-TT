@@ -1,0 +1,171 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+
+const ROOT = process.cwd();
+const failures = [];
+const warnings = [];
+
+async function exists(relative) {
+  try {
+    await fs.access(path.join(ROOT, relative));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function read(relative) {
+  return fs.readFile(path.join(ROOT, relative), "utf8");
+}
+
+function assert(condition, message) {
+  if (!condition) failures.push(message);
+}
+
+function warn(condition, message) {
+  if (!condition) warnings.push(message);
+}
+
+const requiredFiles = [
+  "src/module/commander/runtime/action-tracker.js",
+  "src/module/commander/runtime/combat-integration.js",
+  "src/module/commander/runtime/combat-service.js",
+  "src/module/commander/runtime/condition-mechanics.js",
+  "src/module/commander/runtime/condition-service.js",
+  "src/module/commander/runtime/damage-service.js",
+  "src/module/commander/runtime/fainting-service.js",
+  "src/module/commander/runtime/friendship-service.js",
+  "src/module/commander/runtime/hooks.js",
+  "src/module/commander/runtime/roll-service.js",
+  "src/module/commander/sheets/base-sheet.js",
+  "src/module/commander/sheets/pokemon-sheet.js",
+  "src/module/commander/sheets/trainer-sheet.js",
+  "src/module/commander/templates/chat/check-card.hbs",
+  "src/module/commander/templates/chat/move-card.hbs",
+  "src/module/commander/templates/shared/effects.hbs",
+  "src/module/commander/templates/shared/header.hbs",
+  "src/module/commander/templates/pokemon/bond.hbs",
+  "src/module/commander/templates/pokemon/moves.hbs",
+  "src/module/commander/templates/trainer/team.hbs",
+  "static/css/commander-combat.css",
+  "static/css/commander-effects.css",
+  "static/css/commander-friendship.css",
+  "static/css/commander-moves.css",
+  "static/css/commander-team.css"
+];
+
+for (const file of requiredFiles) assert(await exists(file), `Missing required runtime file: ${file}`);
+
+const itemBase = await read("src/module/item/base.js");
+assert(itemBase.includes("static async createDocuments"), "PTUItem embedded-document creation lifecycle is missing.");
+assert(itemBase.includes("static async deleteDocuments"), "PTUItem embedded-document deletion lifecycle is missing.");
+assert(itemBase.includes("prepareActorData()"), "PTUItem actor-data preparation is missing.");
+assert(itemBase.includes("prepareRuleElements(options = {})"), "PTUItem rule-element preparation is missing.");
+assert(itemBase.includes("RuleElements.fromOwnedItem"), "PTUItem no longer instantiates owned rule elements.");
+assert(itemBase.includes("processGrantDeletions"), "PTUItem grant cleanup lifecycle is missing.");
+assert(itemBase.includes("coerceRangeList"), "PTUItem Commander range compatibility adapter is missing.");
+
+const init = await read("src/scripts/hooks/init.js");
+assert(init.includes("registerCommanderRuntimeHooks"), "Commander runtime hooks are not imported into init.js.");
+assert(init.includes("registerCommanderRuntimeHooks();"), "Commander runtime hooks are not registered during init.");
+
+const pokemonSheet = await read("src/module/commander/sheets/pokemon-sheet.js");
+assert(pokemonSheet.includes('bond: { template: "systems/ptu/src/module/commander/templates/pokemon/bond.hbs" }'), "Pokemon bond part is not registered.");
+assert(pokemonSheet.includes('effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" }'), "Pokemon effects part is not registered.");
+assert(pokemonSheet.includes("CommanderFriendshipService"), "Pokemon sheet does not expose Friendship state.");
+assert(pokemonSheet.includes("Only the GM can change Friendship"), "Friendship controls are not explicitly GM restricted.");
+assert(pokemonSheet.includes("buildFriendshipHearts"), "Pokemon sheet does not build gradual Friendship hearts.");
+assert(pokemonSheet.includes("friendshipHearts"), "Friendship heart data is not added to sheet context.");
+
+const trainerSheet = await read("src/module/commander/sheets/trainer-sheet.js");
+assert(trainerSheet.includes('team: { template: "systems/ptu/src/module/commander/templates/trainer/team.hbs" }'), "Trainer team part is not registered.");
+assert(trainerSheet.includes('effects: { template: "systems/ptu/src/module/commander/templates/shared/effects.hbs" }'), "Trainer effects part is not registered.");
+assert(trainerSheet.includes("setActivePokemon"), "Trainer sheet lacks active Pokemon selection.");
+assert(trainerSheet.includes('"system.identity.trainerUuid"'), "Trainer team assignment does not back-link Pokemon.");
+assert(trainerSheet.includes('"system.team.activePokemonUuid"'), "Trainer sheet does not persist active Pokemon selection.");
+assert(trainerSheet.includes("removePokemon"), "Trainer sheet lacks team removal controls.");
+
+const teamTemplate = await read("src/module/commander/templates/trainer/team.hbs");
+assert(teamTemplate.includes('data-action="setActivePokemon"'), "Team template lacks Make Active control.");
+assert(teamTemplate.includes('data-action="removePokemon"'), "Team template lacks Remove control.");
+assert(teamTemplate.includes("member.friendship.value"), "Team cards do not display Friendship.");
+assert(teamTemplate.includes("member.actor.system.health.hp.value"), "Team cards do not display HP.");
+
+const header = await read("src/module/commander/templates/shared/header.hbs");
+assert(header.includes("commander-friendship-hearts"), "Pokemon header does not display Friendship hearts.");
+assert(header.includes('aria-valuemax="255"'), "Friendship heart meter lacks a 0-255 accessibility scale.");
+assert(header.includes("heart.percent"), "Friendship hearts do not support partial fill percentages.");
+assert(header.includes('name="system.health.hp.value"'), "Commander header does not expose editable current HP.");
+
+const friendshipCss = await read("static/css/commander-friendship.css");
+assert(friendshipCss.includes("--commander-friendship-pink"), "Friendship heart palette is missing.");
+assert(friendshipCss.includes("commander-heart-fill"), "Friendship heart fill styling is missing.");
+assert(friendshipCss.includes("prefers-reduced-motion"), "Friendship Resolve animation lacks reduced-motion support.");
+assert(friendshipCss.includes("commander-team.css"), "Trainer team stylesheet is not imported.");
+assert(friendshipCss.includes("commander-effects.css"), "Condition stylesheet is not imported.");
+
+const damage = await read("src/module/commander/runtime/damage-service.js");
+assert(damage.includes("confirmResolve"), "Lethal damage does not check Friendship Resolve.");
+assert(damage.includes("nextHp = 1"), "Friendship Resolve does not preserve 1 HP.");
+assert(damage.includes("temporaryHp"), "Damage application does not account for temporary HP.");
+assert(damage.includes("CommanderConditionService.hasCondition"), "Damage checks do not account for condition defense penalties.");
+assert(damage.includes("damageType"), "Damage application does not forward elemental type to condition mechanics.");
+
+const friendship = await read("src/module/commander/runtime/friendship-service.js");
+assert(friendship.includes("value >= 180"), "Friendship Resolve threshold is not locked at 180.");
+assert(friendship.includes("heldOnUsed"), "Friendship Resolve usage is not persisted.");
+assert(friendship.includes("game.user?.isGM"), "Friendship mutation is not GM gated.");
+
+const conditionMechanics = await read("src/module/commander/runtime/condition-mechanics.js");
+assert(conditionMechanics.includes('has(actor, "burned")'), "Burn damage automation is missing.");
+assert(conditionMechanics.includes("commanderPoisonStage"), "Poison escalation tracking is missing.");
+assert(conditionMechanics.includes("Paralysis Check"), "Paralysis turn-start check is missing.");
+assert(conditionMechanics.includes("Frozen Recovery"), "Frozen recovery automation is missing.");
+assert(conditionMechanics.includes("Sleep Recovery"), "Sleep recovery automation is missing.");
+assert(conditionMechanics.includes("commanderConfusionSuccesses"), "Confusion success tracking is missing.");
+assert(conditionMechanics.includes("getDefensePenalty"), "Condition defense adjustment helper is missing.");
+assert(conditionMechanics.includes("getMovementMultiplier"), "Restrained movement helper is missing.");
+
+const combat = await read("src/module/commander/runtime/combat-service.js");
+assert(combat.includes("getInitiativeGroup"), "Commander combat does not group Trainer and active Pokemon initiative.");
+assert(combat.includes("isLinkedActivePokemon"), "Commander combat does not prevent duplicate linked turn resets.");
+assert(combat.includes("CommanderConditionMechanics.onTurnStart"), "Condition turn-start processing is not wired.");
+assert(combat.includes("CommanderConditionMechanics.onTurnEnd"), "Condition turn-end processing is not wired.");
+
+const integration = await read("src/module/commander/runtime/combat-integration.js");
+assert(integration.includes("originalEndTurn"), "Commander combat does not intercept turn-end processing.");
+assert(integration.includes("commander.endTurn"), "Commander end-turn hook is missing.");
+
+const rollService = await read("src/module/commander/runtime/roll-service.js");
+assert(rollService.includes("beforeMainAction"), "Confusion and action lock checks are not applied before moves.");
+assert(rollService.includes("getRollAdjustments"), "Condition hindrance is not applied to Commander rolls.");
+
+const movesTemplate = await read("src/module/commander/templates/pokemon/moves.hbs");
+assert(!movesTemplate.includes('data-action="openEmbedded"'), "Moves template still references removed openEmbedded action.");
+assert(movesTemplate.includes('data-action="openDocument"'), "Moves template does not use openDocument action.");
+assert(movesTemplate.includes("data-move-zone"), "Move slots are not configured as drag-and-drop targets.");
+
+const moveCard = await read("src/module/commander/templates/chat/move-card.hbs");
+assert(moveCard.includes("data-damage-type"), "Move damage controls do not include elemental type.");
+
+const baseSheet = await read("src/module/commander/sheets/base-sheet.js");
+assert(baseSheet.includes("function resolveApplication"), "Sheet actions do not use the hardened application resolver.");
+assert(baseSheet.includes("if (!parts[tab])"), "Tab changes do not guard missing sheet parts.");
+assert(baseSheet.includes("CommanderConditionService"), "Commander sheets do not expose condition controls.");
+assert(baseSheet.includes("return app.render();"), "Changing sheet mode does not trigger a full rerender.");
+
+const hooks = await read("src/module/commander/runtime/hooks.js");
+assert(hooks.includes('Hooks.on("renderChatMessageHTML"'), "V14 chat render hook is missing.");
+warn(hooks.includes('Hooks.on("renderChatMessage"'), "Legacy chat render compatibility hook is missing.");
+assert(hooks.includes("button.dataset.damageType"), "Chat damage controls do not forward elemental type.");
+
+const system = JSON.parse(await read("system.json"));
+assert(system.styles?.includes("static/css/commander-friendship.css"), "Friendship heart stylesheet is not loaded by system.json.");
+warn(Number(system.compatibility?.verified ?? 0) >= 14, "system.json is not yet verified for Foundry V14.");
+warn(Number(system.compatibility?.minimum ?? 0) >= 14, "system.json still permits pre-V14 installation.");
+
+console.log(`Commander runtime audit: ${failures.length} failure(s), ${warnings.length} warning(s).`);
+for (const message of warnings) console.warn(`WARNING: ${message}`);
+for (const message of failures) console.error(`FAILURE: ${message}`);
+
+if (failures.length) process.exitCode = 1;

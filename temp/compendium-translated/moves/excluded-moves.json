@@ -1,0 +1,277 @@
+[
+  {
+    "key": "gmaxbefuddle",
+    "name": "G-Max Befuddle",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxcannonade",
+    "name": "G-Max Cannonade",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxcentiferno",
+    "name": "G-Max Centiferno",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxchistrike",
+    "name": "G-Max Chi Strike",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxcuddle",
+    "name": "G-Max Cuddle",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxdepletion",
+    "name": "G-Max Depletion",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxdrumsolo",
+    "name": "G-Max Drum Solo",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxfinale",
+    "name": "G-Max Finale",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxfireball",
+    "name": "G-Max Fireball",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxfoamburst",
+    "name": "G-Max Foam Burst",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxgoldrush",
+    "name": "G-Max Gold Rush",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxgravitas",
+    "name": "G-Max Gravitas",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxhydrosnipe",
+    "name": "G-Max Hydrosnipe",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxmalodor",
+    "name": "G-Max Malodor",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxmeltdown",
+    "name": "G-Max Meltdown",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxoneblow",
+    "name": "G-Max One Blow",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxrapidflow",
+    "name": "G-Max Rapid Flow",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxreplenish",
+    "name": "G-Max Replenish",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxresonance",
+    "name": "G-Max Resonance",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxsandblast",
+    "name": "G-Max Sandblast",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxsmite",
+    "name": "G-Max Smite",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxsnooze",
+    "name": "G-Max Snooze",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxsteelsurge",
+    "name": "G-Max Steelsurge",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxstonesurge",
+    "name": "G-Max Stonesurge",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxstunshock",
+    "name": "G-Max Stun Shock",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxsweetness",
+    "name": "G-Max Sweetness",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxtartness",
+    "name": "G-Max Tartness",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxterror",
+    "name": "G-Max Terror",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxvinelash",
+    "name": "G-Max Vine Lash",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxvolcalith",
+    "name": "G-Max Volcalith",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxvoltcrash",
+    "name": "G-Max Volt Crash",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxwildfire",
+    "name": "G-Max Wildfire",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "gmaxwindrage",
+    "name": "G-Max Wind Rage",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxairstream",
+    "name": "Max Airstream",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxdarkness",
+    "name": "Max Darkness",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxflare",
+    "name": "Max Flare",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxflutterby",
+    "name": "Max Flutterby",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxgeyser",
+    "name": "Max Geyser",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxguard",
+    "name": "Max Guard",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxhailstorm",
+    "name": "Max Hailstorm",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxknuckle",
+    "name": "Max Knuckle",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxlightning",
+    "name": "Max Lightning",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxmindstorm",
+    "name": "Max Mindstorm",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxooze",
+    "name": "Max Ooze",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxovergrowth",
+    "name": "Max Overgrowth",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxphantasm",
+    "name": "Max Phantasm",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxquake",
+    "name": "Max Quake",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxrockfall",
+    "name": "Max Rockfall",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxstarfall",
+    "name": "Max Starfall",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxsteelspike",
+    "name": "Max Steelspike",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxstrike",
+    "name": "Max Strike",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "maxwyrmwind",
+    "name": "Max Wyrmwind",
+    "reason": "max-or-gmax"
+  },
+  {
+    "key": "paleowave",
+    "name": "Paleo Wave",
+    "reason": "cap-content"
+  },
+  {
+    "key": "polarflare",
+    "name": "Polar Flare",
+    "reason": "cap-content"
+  },
+  {
+    "key": "shadowstrike",
+    "name": "Shadow Strike",
+    "reason": "cap-content"
+  }
+]
