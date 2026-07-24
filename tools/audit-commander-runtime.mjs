@@ -56,6 +56,15 @@ const requiredFiles = [
 
 for (const file of requiredFiles) assert(await exists(file), `Missing required runtime file: ${file}`);
 
+const itemBase = await read("src/module/item/base.js");
+assert(itemBase.includes("static async createDocuments"), "PTUItem embedded-document creation lifecycle is missing.");
+assert(itemBase.includes("static async deleteDocuments"), "PTUItem embedded-document deletion lifecycle is missing.");
+assert(itemBase.includes("prepareActorData()"), "PTUItem actor-data preparation is missing.");
+assert(itemBase.includes("prepareRuleElements(options = {})"), "PTUItem rule-element preparation is missing.");
+assert(itemBase.includes("RuleElements.fromOwnedItem"), "PTUItem no longer instantiates owned rule elements.");
+assert(itemBase.includes("processGrantDeletions"), "PTUItem grant cleanup lifecycle is missing.");
+assert(itemBase.includes("coerceRangeList"), "PTUItem Commander range compatibility adapter is missing.");
+
 const init = await read("src/scripts/hooks/init.js");
 assert(init.includes("registerCommanderRuntimeHooks"), "Commander runtime hooks are not imported into init.js.");
 assert(init.includes("registerCommanderRuntimeHooks();"), "Commander runtime hooks are not registered during init.");
